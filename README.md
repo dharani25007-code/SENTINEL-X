@@ -55,6 +55,36 @@
 
 ---
 
+### 🛡️ Why the Name "SENTINEL-X"? (Origin & Meaning)
+
+The name **SENTINEL-X** embodies the shift from passive industrial safety logging to **Autonomous Fatal Precursor Interception**:
+
+```
+             ┌────────────────────────────────────────────────────────┐
+             │                     SENTINEL-X                         │
+             │  "The Autonomous Watchman for Hidden Fatal Precursors" │
+             └───────────────┬────────────────────────┬───────────────┘
+                             │                        │
+             ┌───────────────┴────────┐      ┌────────┴───────────────┐
+             │       SENTINEL         │      │           X            │
+             │ - 24/7 Safety Guardian │      │ - Variable X (Precursor│
+             │ - Proactive Look-Out   │      │ - Explainable AI (XAI) │
+             │ - Real-Time Interception│     │ - 'X' Out Fatalities   │
+             └────────────────────────┘      └────────────────────────┘
+```
+
+1. **🛡️ SENTINEL (The Autonomous 24/7 Guardian)**:
+   * A *Sentinel* is an unwavering, continuous lookout stationed to detect threats before they breach safety perimeters.
+   * Traditional industrial safety systems act as passive *recorders* (counting injuries after workers are hurt). **SENTINEL** acts as an active, 24/7 intelligent watchman that monitors thousands of raw text cards in real-time, detecting high-energy danger before energy is released.
+
+2. **⚡ X (The 4 Core Dimensions)**:
+   * **Variable $X$ (The Hidden Precursor)**: In mathematics and science, '$X$' represents the unknown, invisible variable. In oilfield safety, fatal SIF precursors are the invisible '$X$' factor buried under thousands of routine near-misses.
+   * **XAI (Explainable Artificial Intelligence)**: Represents transparent, auditable intelligence (LIME token perturbation and transparent causality), ensuring field inspectors know *why* an alert triggered.
+   * **Target Zero ('X' Out Fatalities)**: Symbolizes crossing out ('X') fatal incidents and severing the causal chain before a catastrophe occurs.
+   * **Next-Gen Multiplier**: Signifies the exponential leap from passive lagging dashboards to proactive predictive interception.
+
+---
+
 ## 📑 Table of Contents
 
 - [Official SIH Problem Statement Details (PS ID: 26165)](#️-official-sih-problem-statement-details-ps-id-26165)
