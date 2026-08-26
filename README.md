@@ -64,7 +64,6 @@
 - [Intervention Simulator: Mathematical & Engineering Proof](#-intervention-simulator-mathematical--engineering-proof-real-vs-random)
 - [The 9 IOGP Life-Saving Rules (IOGP Report 459 Standard)](#-the-9-iogp-life-saving-rules-iogp-report-459-standard--comprehensive-field-guide)
 - [Command Center Chart Mechanics & Axis Breakdown](#-command-center-chart-mechanics--axis-breakdown)
-- [Role-Based Access Control (RBAC) & Scoped Permissions](#-role-based-access-control-rbac--scoped-permissions)
 - [End-to-End System Architecture](#-end-to-end-system-architecture)
 - [Quickstart & Installation Guide](#-quickstart--installation-guide)
 - [5-Minute Hackathon Pitch Script](#-5-minute-hackathon-pitch--presentation-script)
@@ -352,28 +351,6 @@ The **International Association of Oil & Gas Producers (IOGP Report 459)** stand
 3. **🔵 Cyan Area (`Total Reports`)**: Total volume of field observations submitted across Assam.
 4. **🔴 Red Area (`SIF Precursors`)**: High-energy fatal precursor subset identified by the AI.
 5. **When the Red Line Drops to 0**: Represents **Controlled Steady-State Operations** where all submitted logs were minor routine observations with zero life-threatening hazard exposure.
-
----
-
-## 🛡️ Role-Based Access Control (RBAC) & Scoped Permissions
-
-```
-┌──────────────────────────────────────┬────────────────────────────────────────────────────────────┐
-│ PERSONNEL & BADGE ID                 │ OPERATIONAL CLEARANCE & SCOPE BOUNDARY                     │
-├──────────────────────────────────────┼────────────────────────────────────────────────────────────┤
-│ 👑 Dr. B. K. Gogoi                   │ 🌐 FLEET-WIDE EXECUTIVE COMMAND: All 6 OIL Assets          │
-│    HSE Fleet Director (OIL-DIR-101)  │ • Full authority to switch & analyze any facility in Assam │
-│    Passkey: director101 / oil123     │ • Strategic Command Center & Risk Universe view            │
-├──────────────────────────────────────┼────────────────────────────────────────────────────────────┤
-│ 🛡️ Rajesh Barua                      │ 🔒 SCOPED ASSET LEAD: Duliajan Central Complex             │
-│    Site Safety Engineer (OIL-HSE-9041│ • Scoped strictly to Duliajan refinery & turnaround ops     │
-│    Passkey: duliajan9041 / oil123    │ • Dispatches and resolves LOTO audit work orders           │
-├──────────────────────────────────────┼────────────────────────────────────────────────────────────┤
-│ 👷 Arun Phukan                       │ 🔒 SCOPED FIELD SPECIALIST: Moran Drilling Rig #4          │
-│    Field Inspector (OIL-OPS-4412)    │ • Scoped strictly to Moran upstream drilling floor         │
-│    Passkey: moran4412 / oil123       │ • Submits & inspects raw rig floor tripping observations   │
-└──────────────────────────────────────┴────────────────────────────────────────────────────────────┘
-```
 
 ---
 
