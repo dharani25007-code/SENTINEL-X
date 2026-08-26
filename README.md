@@ -25,7 +25,7 @@
 - [The 4-Screen Core Intelligence & Action Loop](#-the-4-screen-core-intelligence--action-loop)
 - [12-Year Real Indian Oil & Gas Historical Dataset (2014–2026)](#-12-year-real-indian-oil--gas-historical-dataset-20142026)
 - [Intervention Simulator: Mathematical & Engineering Proof](#-intervention-simulator-mathematical--engineering-proof-real-vs-random)
-- [What is LOTO? (Energy Isolation - IOGP Rule #4)](#-what-is-loto-energy-isolation---iogp-rule-4)
+- [The 9 IOGP Life-Saving Rules (IOGP Report 459 Standard)](#-the-9-iogp-life-saving-rules-iogp-report-459-standard--comprehensive-field-guide)
 - [Command Center Chart Mechanics & Axis Breakdown](#-command-center-chart-mechanics--axis-breakdown)
 - [Role-Based Access Control (RBAC) & Scoped Permissions](#-role-based-access-control-rbac--scoped-permissions)
 - [End-to-End System Architecture](#-end-to-end-system-architecture)
@@ -172,17 +172,127 @@ const riskReduction = Math.round((baseRisk - simulatedRisk) * 10) / 10;
 
 ---
 
-## 🔒 What is LOTO? (Energy Isolation - IOGP Rule #4)
+## 📖 The 9 IOGP Life-Saving Rules (IOGP Report 459 Standard) — Comprehensive Field Guide
 
-**LOTO** stands for **Lockout / Tagout** (standardized under **IOGP Life-Saving Rule #4: Energy Isolation**).
+The **International Association of Oil & Gas Producers (IOGP Report 459)** standardized 9 Life-Saving Rules to prevent Serious Injuries and Fatalities (SIFs) in oil and gas operations. Sentinel-X uses automated vector embeddings (`all-MiniLM-L6-v2`) and LLM reasoning to map every raw field narrative to these 9 rules in real-time.
 
-### The 3 Mandatory Steps:
-1. **LOCKOUT (Lock)**: A heavy physical padlock is attached to the electrical circuit breaker or pipe block valve so nobody can turn it on.
-2. **TAGOUT (Tag)**: A prominent warning tag is hung: *"DANGER: DO NOT OPERATE — Worker Inside."*
-3. **ZERO-ENERGY TEST**: The technician bleeds residual pressure (confirming 0 bar) or uses a voltmeter (confirming 0 Volts) before touching the equipment.
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                           THE 9 IOGP LIFE-SAVING RULES TAXONOMY                             │
+├──────────────────────────────┬──────────────────────────────┬───────────────────────────────┤
+│ 1. 🛡️ Bypassing Safety Controls│ 2. 📦 Confined Space Entry  │ 3. 🚗 Driving Safety          │
+├──────────────────────────────┼──────────────────────────────┼───────────────────────────────┤
+│ 4. ⚡ Energy Isolation (LOTO)│ 5. 🔥 Hot Work & Ignition    │ 6. 🎯 Line of Fire            │
+├──────────────────────────────┼──────────────────────────────┼───────────────────────────────┤
+│ 7. 🏗️ Safe Mechanical Lifting│ 8. 📝 Work Authorisation(PTW)│ 9. 🧗 Working at Height       │
+└──────────────────────────────┴──────────────────────────────┴───────────────────────────────┘
+```
 
-### Why LOTO Breaches are Fatal in Oilfields:
-If a technician unbolts a crude export pump without LOTO, an operator in the control room might inadvertently restart the pump, exposing the technician to **415V electrical arc flash or 80-bar pressurized hydrocarbon jet release**, resulting in instantaneous fatality or severe burns.
+### 1. 🛡️ Bypassing Safety Controls
+* **Core Rule**: *"Obtain authorization before overriding or disabling safety controls."*
+* **Simple Explanation**: Safety devices (like gas detectors, automatic shutdown valves, pressure relief valves, and fire alarms) are the last line of defense against catastrophic failure. Never bypass, jumper, or silence them without formal risk assessment and managerial approval.
+* **Real Oilfield Scenario**: At *Duliajan Central Complex*, an instrument technician installs a jumper wire across a high-level separator trip switch to stop a nuisance alarm during shift change. If crude overfills the vessel, unmonitored gas vents into open areas, risking a massive vapor cloud explosion.
+* **Key Mandatory Safeguards**:
+  * Formal override / bypass log signed by the Asset Lead.
+  * Continuous compensatory manual monitoring while the device is disabled.
+  * Time-limited override with an active timer for reinstatement.
+* **Sentinel-X AI Detection**: Identifies terms like *"jumper wire", "bridged contact", "alarm silenced", "interlock bypassed", "relief valve gagged"*.
+
+---
+
+### 2. 📦 Confined Space Entry
+* **Core Rule**: *"Obtain authorization before entering a confined space."*
+* **Simple Explanation**: Confined spaces (tanks, vessels, sumps, flare knockout drums, underground trenches) can accumulate deadly toxic gas ($H_2S$, $CO$), flammable vapors, or lack oxygen. Never put your head or body inside without continuous atmospheric testing, forced ventilation, and a designated standby attendant.
+* **Real Oilfield Scenario**: At *Naharkatiya Gas Plant*, contract workers step inside an empty condensate storage tank to scrape sludge without testing for $H_2S$ or wearing breathing apparatus. A pocket of trapped sour gas releases, causing instant knockdown and asphyxiation within 10 seconds.
+* **Key Mandatory Safeguards**:
+  * Confined Space Entry Permit (CSEP) + Multi-Gas atmospheric test ($O_2 > 19.5\%$, $LEL < 1\%$, $H_2S < 5\text{ ppm}$).
+  * Continuous forced mechanical ventilation.
+  * Dedicated, trained Standby Person (Hole Watcher) with rescue equipment stationed outside.
+* **Sentinel-X AI Detection**: Identifies terms like *"tank entry", "vessel cleaning", "H2S buildup", "oxygen deficiency", "no hole watcher"*.
+
+---
+
+### 3. 🚗 Driving Safety
+* **Core Rule**: *"Follow safe driving rules."*
+* **Simple Explanation**: Vehicle collisions are among the highest causes of fatalities in oilfield exploration and logistics. Always wear seatbelts, adhere to speed limits, avoid mobile phone distractions, and follow Journey Management Plans (JMP) on unpaved rig access roads.
+* **Real Oilfield Scenario**: A 20-ton crude oil tanker moving from *Moran Drilling Rig #4* to *Digboi Refinery* speeds on a narrow Assam corridor during monsoon rains. The driver loses traction on slick mud, rolling the tanker into a roadside ditch with crude leakage.
+* **Key Mandatory Safeguards**:
+  * 100% seatbelt usage by all vehicle occupants.
+  * In-Vehicle Monitoring System (IVMS) tracking speed, harsh braking, and driver fatigue.
+  * Approved Journey Management Plan (JMP) for remote drilling rig transit.
+* **Sentinel-X AI Detection**: Identifies terms like *"tanker rollover", "overspeeding", "no seatbelt", "IVMS alert", "slick rig road"*.
+
+---
+
+### 4. ⚡ Energy Isolation / LOTO (Lockout / Tagout)
+* **Core Rule**: *"Verify isolation and zero energy before work begins."*
+* **Simple Explanation**: Before working on any electrical circuit, pressurized pipe, rotating motor, or hydraulic system, physically lock the switch/valve, tag it with a danger sign, and test to confirm that 100% of stored energy is dead (Zero-Energy Verification).
+* **Real Oilfield Scenario**: At *Duliajan Central Complex*, a maintenance crew unbolts a high-pressure crude export pump without applying physical padlocks (LOTO) or bleeding residual 80-bar line pressure. An operator in the control room accidentally starts the pump, spraying pressurized hydrocarbon jet fuel over the workers.
+* **The 3 Mandatory Steps**:
+  1. **LOCKOUT (Lock)**: Physical heavy padlocks on breakers and block valves with unique keys.
+  2. **TAGOUT (Tag)**: Prominent red warning tag (*"DANGER: WORKER INSIDE — DO NOT OPERATE"*).
+  3. **ZERO-ENERGY TEST**: Voltmeter check (0V) or pressure bleed-off (0 bar) before placing hands on equipment.
+* **Sentinel-X AI Detection**: Identifies terms like *"no padlock", "valve closed by hand only", "not bled down", "LOTO skipped", "live busbar"*.
+
+---
+
+### 5. 🔥 Hot Work & Ignition Control
+* **Core Rule**: *"Control flammables and ignition sources."*
+* **Simple Explanation**: Any work creating sparks, open flames, or extreme heat (welding, torch cutting, angle grinding) in a hydrocarbon zone can ignite invisible gas leaks. Always inspect the area, cover sewers/drains, perform continuous gas testing, and maintain a dedicated fire watch.
+* **Real Oilfield Scenario**: At *Digboi Refinery Unit #2*, contractors perform angle grinding near a crude heat exchanger without sealing nearby open sewer drains. Hot sparks fall into oily residue, igniting a flash fire that scorches the maintenance scaffolding.
+* **Key Mandatory Safeguards**:
+  * Hot Work Permit (HWP) + continuous Lower Explosive Limit ($LEL$) monitoring with calibrated gas detectors ($LEL = 0\%$).
+  * Fire-retardant blankets covering all drains, vents, and flammable materials within a 15-meter radius.
+  * Dedicated Fire Watch personnel equipped with pressurized water/foam extinguishers for 30 minutes post-work.
+* **Sentinel-X AI Detection**: Identifies terms like *"welding spark", "hot grinding", "open drain", "flammable gas pocket", "fire watch absent"*.
+
+---
+
+### 6. 🎯 Line of Fire
+* **Core Rule**: *"Keep yourself and others out of the line of fire."*
+* **Simple Explanation**: Position yourself so that if equipment fails, pressure releases, tensioned cables snap, or heavy objects swing, you will not be in the direct flight path of injury.
+* **Real Oilfield Scenario**: At *Pipeline Pump Station 7*, a technician stands directly in front of a 100-bar hydrostatic test blind flange while tightening bolts under pressure. The gasket blows out, propelling the steel flange directly into the operator's chest.
+* **Key Mandatory Safeguards**:
+  * Never position body parts directly in line with pressurized blinds, relief exhausts, or tensioned winch lines.
+  * Red Line-of-Fire Barricading and physical exclusion zones around hydrostatic test manifolds.
+  * Securement of whip-checks on high-pressure air and hydraulic hoses.
+* **Sentinel-X AI Detection**: Identifies terms like *"stood in front of flange", "winch wire tension", "snapped air line", "rebounding pipe", "blind blowout"*.
+
+---
+
+### 7. 🏗️ Safe Mechanical Lifting
+* **Core Rule**: *"Plan lifting operations and control the area."*
+* **Simple Explanation**: When cranes, hoists, or forklifts move heavy equipment, the load can swing, cables can snap, or rigging hardware can fail. Never exceed crane load limits, never walk under a suspended load, and maintain strict barricaded exclusion zones.
+* **Real Oilfield Scenario**: On the rig floor at *Moran Drilling Rig #4*, a crane lifts a 4-ton Blowout Preventer (BOP) stack without securing tag lines. A roughneck steps into the red exclusion zone directly underneath the swinging 4-ton load to adjust a guide rope by hand.
+* **Key Mandatory Safeguards**:
+  * Rigorous Lift Plan calculating center of gravity, boom radius, and Safe Working Load (SWL).
+  * Color-coded certified slings, shackles, and lifting lugs inspected prior to hoisting.
+  * 100% barricaded **Red Exclusion Zones** with physical barriers and tag-line guidance (zero workers under loads).
+* **Sentinel-X AI Detection**: Identifies terms like *"suspended drill pipe", "walked under crane boom", "uninspected sling", "overloaded hoist", "swung load"*.
+
+---
+
+### 8. 📝 Work Authorisation (Permit to Work - PTW)
+* **Core Rule**: *"Work with a valid permit when required."*
+* **Simple Explanation**: Hazardous tasks require an authorized Permit to Work (PTW) that identifies all simultaneous operations (SIMOPS), confirms risk controls, and ensures cross-department communication before any tool touches metal.
+* **Real Oilfield Scenario**: An electrical contractor begins replacing lighting fixtures inside a classified hazardous compressor building without a valid Cold Work Permit. Meanwhile, operations teams start gas purging in the adjacent line, creating an uncoordinated explosive hazard.
+* **Key Mandatory Safeguards**:
+  * Joint Job Safety Analysis (JSA) conducted and signed by Performing and Issuing Authorities.
+  * Tool-Box Talk (TBT) communicating hazards and emergency escape routes to all crew members.
+  * Deconfliction of Simultaneous Operations (SIMOPS) across adjacent plant zones.
+* **Sentinel-X AI Detection**: Identifies terms like *"worked without PTW", "expired permit", "no JSA signed", "SIMOPS clash", "unauthorized work"*.
+
+---
+
+### 9. 🧗 Working at Height
+* **Core Rule**: *"Protect yourself against a fall when working at height."*
+* **Simple Explanation**: Falls from heights greater than 1.8 meters (6 feet) are a leading cause of industrial fatalities. Always wear a full-body harness, maintain 100% tie-off with dual lanyards, ensure certified scaffolding with green inspection tags, and prevent tools from falling.
+* **Real Oilfield Scenario**: At *Digboi Refinery Unit #2*, an insulation technician climbs a 12-meter tube-and-coupler scaffold lacking guardrails and mid-rails. The worker disconnects his harness lanyard to walk along a bare steel beam and slips on condensate grease.
+* **Key Mandatory Safeguards**:
+  * Full-Body Safety Harness with 100% continuous tie-off to certified anchor points ($\ge 22.2\text{ kN}$).
+  * Scaffolding certified with valid Green Scaff-Tag, complete with toe-boards, mid-rails, and top-rails.
+  * Tool lanyards and drop-prevention netting to prevent dropped object hazards below.
+* **Sentinel-X AI Detection**: Identifies terms like *"unclipped harness", "missing toe board", "scaffold without green tag", "unprotected edge", "monkey board slip"*.
 
 ---
 
