@@ -1,6 +1,8 @@
 # 🛡️ SENTINEL-X — Autonomous Safety Precursor Intelligence Engine
 
-### Problem Statement SIH26165: Oil India Limited (OIL) • Predictive HSE Decision-Support & Interception Platform
+### Smart India Hackathon 2026 • Problem Statement ID: 26165 (SIH26165)
+**AI/NLP Engine to Detect Serious Injury & Fatality (SIF) Precursors in OIL's Unsafe-Act/Unsafe-Condition and Near-Miss Reports**  
+*Organization: Oil India Limited (OIL) • Ministry of Petroleum & Natural Gas (MoPNG) • Theme: Smart Automation*
 
 ---
 
@@ -19,8 +21,43 @@
 
 ---
 
+## 🏷️ Official SIH Problem Statement Details (PS ID: 26165)
+
+| Parameter | Official Specification |
+|:---|:---|
+| **Hackathon** | **Smart India Hackathon 2026 (SIH 2026)** |
+| **Problem Statement ID** | **26165** (SIH26165) |
+| **Problem Statement Title** | **AI/NLP Engine to Detect Serious Injury & Fatality (SIF) Precursors in OIL's Unsafe-Act/Unsafe-Condition and Near-Miss Reports** |
+| **Organization** | **Oil India Limited (OIL)** |
+| **Department** | **Oil India Limited (Ministry of Petroleum & Natural Gas - MoPNG)** |
+| **Category / Theme** | **Software / Smart Automation** |
+| **Relevant Data** | OIL's UA/UC observations, near-miss and incident reports |
+| **Project Solution** | **SENTINEL-X** *(Autonomous Safety Precursor Intelligence & Interception Platform)* |
+| **Team Name** | **THE NEURAL VANGUARD** |
+
+---
+
+### 📜 Problem Statement Background & Industry Context
+> **Background Provided by Oil India Limited:**  
+> *"OIL collects large volumes of Unsafe-Act / Unsafe-Condition (UA/UC) observations, near-miss, and incident reports through its HSSE platform, but these are triaged manually after certain time intervals such as monthly, quarterly, etc.*  
+> *However, global best practice (**DEKRA Martin & Black 2015; EEI SIF Precursor model; VelocityEHS 2024 PSIF classifier**) has established that low-severity incidents do not share the same causes as fatalities — non-fatal US accidents fell 51% over 15 years while fatalities fell only 25.5%. Leading operators therefore separately flag the ~20–25% of reports carrying genuine fatal potential."*
+
+---
+
+### 🎯 Core Problem Requirements & How SENTINEL-X Delivers:
+
+| Official Problem Mandate | How SENTINEL-X Solves It | Technical Implementation |
+|:---|:---|:---|
+| **a) Classify SIF vs. Non-SIF Potential** | Ingests free-text safety reports in real-time ($< 800\text{ms}$) and isolates life-threatening precursors with **96%+ model confidence**. | **Groq LLM Zero-Shot Inference + LIME Token Attribution** separating high-energy release from minor slips. |
+| **b) Tag to IOGP Life-Saving Rules** | Automatically tags each report to the relevant **IOGP Report 459 standard** (*Energy Isolation, Hot Work, Confined Space, Line of Fire, Mechanical Lifting, etc.*). | **Cosine Semantic Vector Embeddings (`all-MiniLM-L6-v2`)** matched against international 9 Life-Saving Rules. |
+| **c) Surface Recurring Precursor Patterns** | Automatically extracts and correlates **Activity, Location/Asset, and Barrier Failure** chains across all operational installations. | **Interactive Causal Chain Graph & Safety DNA Profile** (Energy, Exposure, Barrier, Severity, Controls). |
+| **Expected Outcome: Interactive HSE Dashboard** | Multi-facility command center ranking OIL sites by **SIF Precursor Density** and auto-mapping Life-Saving Rules to prioritize interventions where fatal potential is highest. | **Command Center, Risk Universe, 30-Day Safety Time Machine, and Counterfactual Intervention Simulator**. |
+
+---
+
 ## 📑 Table of Contents
 
+- [Official SIH Problem Statement Details (PS ID: 26165)](#️-official-sih-problem-statement-details-ps-id-26165)
 - [Executive Overview & The Industrial Challenge](#-executive-overview--the-industrial-challenge)
 - [The 4-Screen Core Intelligence & Action Loop](#-the-4-screen-core-intelligence--action-loop)
 - [12-Year Real Indian Oil & Gas Historical Dataset (2014–2026)](#-12-year-real-indian-oil--gas-historical-dataset-20142026)
