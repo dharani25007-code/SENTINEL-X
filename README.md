@@ -33,7 +33,7 @@
 | **Category / Theme** | **Software / Smart Automation** |
 | **Relevant Data** | OIL's UA/UC observations, near-miss and incident reports |
 | **Project Solution** | **SENTINEL-X** *(Autonomous Safety Precursor Intelligence & Interception Platform)* |
-| **Team Name** | **THE NEURAL VANGUARD** |
+| **Team Name** | ** XYZ  ** |
 
 ---
 
