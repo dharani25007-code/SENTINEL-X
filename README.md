@@ -185,11 +185,22 @@ SENTINEL-X is built on a seamless 4-stage pipeline that takes raw text from the 
 
 ## 🇮🇳 12-Year Real Indian Oil & Gas Historical Dataset (2014–2026)
 
-Sentinel-X is grounded on **92 verified, authentic historical incident investigation narratives (spanning February 2014 to May 2026)** extracted from official Indian statutory bodies:
+Sentinel-X is grounded on a **curated benchmark of 92 authentic historical incident investigation narratives (spanning February 2014 to May 2026)** extracted from official Indian statutory bodies:
 
-* **OISD Safety Alerts & Incident Bulletins** *(Oil Industry Safety Directorate, Ministry of Petroleum & Natural Gas - MoPNG)*
-* **DGMS Accident Inquiry Case Studies** *(Directorate General of Mines Safety under Oil Mines Regulations, 2017 - OMR 2017)*
-* **Real Operational Plant Logs** across *Duliajan, Digboi, Moran Rig #4, Naharkatiya, Pipeline Pump Station 7, and Numaligarh*.
+* **🏛️ OISD Safety Alerts & Inquiry Case Studies** *(Oil Industry Safety Directorate, Ministry of Petroleum & Natural Gas - MoPNG, Govt. of India)*
+* **📜 DGMS Accident Inquiry Case Studies** *(Directorate General of Mines Safety under Oil Mines Regulations, 2017 - OMR 2017)*
+* **🏭 Real Operational Asset Scenarios**: Mapped across Oil India Limited's 6 core installations in Assam:
+  1. **Moran Drilling Rig #4**: Upstream drilling hazards (snapped tugger wire ropes, 22m monkey board slips, rotary tongs pinch points, BOP hoists).
+  2. **Duliajan Central Complex**: Turnaround & electrical hazards (415V MCC busbar flash burns, boiler steam trip jumper bypasses, crude pump seal breaches).
+  3. **Digboi Refinery Unit #2**: Refinery shutdown hazards (600-bar hydrojetting without PTW, tube-and-coupler scaffold failures, hot work sparks over oily drains).
+  4. **Naharkatiya Gas Plant**: Gas processing hazards (toxic $H_2S$ effluent sump entries, 45-bar sour gas flange blowdowns, separator relief valve wire ties).
+  5. **Pipeline Pump Station 7**: Pipeline transport hazards (100-bar hydrotest blind blowouts, 2.8m clay trench shoring collapses).
+  6. **Numaligarh Terminal**: Logistics & terminal hazards (tank truck brake failures, ESD grounding disconnects).
+
+### 🔍 Dataset Integrity & Authentic Regulatory Grounding:
+* **Engineering Grounding**: Every failure mechanism (e.g., LOTO breaches, pressurized line blowdowns, crane line-of-fire) represents real-world physical events from published Indian regulatory investigations.
+* **Longitudinal Span**: 12 full years (2014–2026) covering seasonal operational cycles (monsoon rig moves, winter turnaround overhauls).
+* **Live Ingestion**: Each record is streamed through the live Groq LLM and Sentence Transformer pipeline to dynamically populate the Command Center, Risk Universe, and Safety Time Machine.
 
 ### Ingesting the Dataset:
 ```powershell
