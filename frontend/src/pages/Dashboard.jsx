@@ -88,7 +88,7 @@ export default function Dashboard() {
 
   const rawTrend = stats?.trend || []
 
-  // 1. Yearly Aggregation (2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024)
+  // 1. Yearly Aggregation across all years (2015 to 2026)
   const yearlyMap = {}
   rawTrend.forEach(t => {
     if (!t.month) return
@@ -110,7 +110,7 @@ export default function Dashboard() {
       density: d.total > 0 ? ((d.sif / d.total) * 100).toFixed(1) : '0.0'
     }))
 
-  // 2. Full Monthly Timeline
+  // 2. High-Resolution Monthly Horizon (Focus on recent 14-month operational period)
   const formatMonthLabel = (mStr) => {
     if (!mStr) return ''
     const parts = mStr.split('-')
@@ -123,7 +123,9 @@ export default function Dashboard() {
     return mStr
   }
 
-  const monthlyTrendData = rawTrend.map(t => ({
+  // Slices the most recent 14 months so monthly view is clean, spacious, and legible
+  const monthlySlice = rawTrend.length > 14 ? rawTrend.slice(-14) : rawTrend
+  const monthlyTrendData = monthlySlice.map(t => ({
     rawMonth: t.month,
     month: formatMonthLabel(t.month),
     total: t.total,
