@@ -7,7 +7,7 @@ import {
 } from 'lucide-react'
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, Cell, AreaChart, Area
+  Tooltip, ResponsiveContainer, Cell, AreaChart, Area, LabelList
 } from 'recharts'
 
 function CustomTrajectoryTooltip({ active, payload, label }) {
@@ -346,44 +346,44 @@ export default function Dashboard() {
         <div className="chart-card-elevated">
           <div className="chart-header">
             <div>
-              <h3>IOGP Life-Saving Rules Breakdown</h3>
-              <p>Fatal hazard distribution categorized under IOGP Report 459</p>
+              <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>IOGP Life-Saving Rules Breakdown</h3>
+              <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '3px 0 0 0' }}>
+                Top fatal hazard categories categorized under Report 459 taxonomy
+              </p>
             </div>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--cyan-ai)', background: 'rgba(33, 212, 253, 0.1)', padding: '2px 8px', borderRadius: 4, border: '1px solid rgba(33, 212, 253, 0.2)' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--cyan-ai)', fontWeight: 600, background: 'rgba(33, 212, 253, 0.1)', padding: '3px 8px', borderRadius: 4, border: '1px solid rgba(33, 212, 253, 0.2)' }}>
               9 CONTROLS
             </span>
           </div>
-          <div style={{ height: 310, width: '100%', marginTop: 14 }}>
+          <div style={{ height: 305, width: '100%', marginTop: 12 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={ruleData} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
+              <BarChart data={ruleData} layout="vertical" margin={{ top: 4, right: 38, left: 4, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#162932" horizontal={false} />
                 <XAxis type="number" tick={{ fill: '#7E95A0', fontSize: 10.5, fontFamily: 'var(--font-mono)' }} axisLine={false} tickLine={false} />
                 <YAxis 
                   type="category" 
                   dataKey="name" 
-                  tick={{ fill: '#C5D6DF', fontSize: 11, fontWeight: 500, fontFamily: 'var(--font-sans)' }} 
+                  tick={{ fill: '#C5D6DF', fontSize: 11.5, fontWeight: 500 }} 
                   width={185} 
                   axisLine={false} 
                   tickLine={false} 
                 />
                 <Tooltip
-                  contentStyle={{ background: '#0B171C', border: '1px solid #1B323D', borderRadius: 8, color: '#E8F1F5', fontFamily: 'var(--font-mono)', fontSize: 12 }}
+                  contentStyle={{ background: '#0B171C', border: '1px solid #1B323D', borderRadius: 8, color: '#E8F1F5', fontFamily: 'var(--font-mono)' }}
                   formatter={(value, name, props) => [`${value} Precursors`, props.payload.fullName]}
                 />
-                <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={13}>
+                <Bar dataKey="count" radius={[0, 5, 5, 0]} barSize={15}>
+                  <LabelList 
+                    dataKey="count" 
+                    position="right" 
+                    fill="#E8F1F5" 
+                    fontSize={11} 
+                    fontFamily="var(--font-mono)" 
+                    fontWeight={700} 
+                    offset={8} 
+                  />
                   {ruleData.map((entry, i) => {
-                    const colors = [
-                      '#FF4655', // Line of Fire (Critical Red)
-                      '#FF5E4D', // Hot Work (Deep Coral)
-                      '#FF7B47', // Working at Height (Coral Amber)
-                      '#FFA733', // Energy Isolation (Amber)
-                      '#21D4FD', // Confined Space (Cyan)
-                      '#00C2FF', // Safe Mechanical Lifting
-                      '#00ADC7', // Bypassing Controls
-                      '#0096AD', // Driving
-                      '#4A7B8C'  // Work Authorisation
-                    ]
-                    const color = colors[i] || '#21D4FD'
+                    const color = i === 0 ? '#FF4655' : i === 1 ? '#FF6B4A' : i === 2 ? '#FFB020' : '#21D4FD'
                     return <Cell key={i} fill={color} />
                   })}
                 </Bar>
