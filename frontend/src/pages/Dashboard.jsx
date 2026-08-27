@@ -52,6 +52,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [timelineMode, setTimelineMode] = useState('yearly') // 'yearly' or 'monthly'
 
   useEffect(() => {
     getDashboardStats()
@@ -85,12 +86,36 @@ export default function Dashboard() {
     )
   }
 
-  // Format multi-year timeline data cleanly with smart smoothing
+  const rawTrend = stats?.trend || []
+
+  // 1. Yearly Aggregation (2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024)
+  const yearlyMap = {}
+  rawTrend.forEach(t => {
+    if (!t.month) return
+    const yr = t.month.split('-')[0]
+    if (!yearlyMap[yr]) {
+      yearlyMap[yr] = { year: yr, label: yr, total: 0, sif: 0 }
+    }
+    yearlyMap[yr].total += t.total
+    yearlyMap[yr].sif += t.sif_count
+  })
+
+  const yearlyTrendData = Object.values(yearlyMap)
+    .sort((a, b) => a.year.localeCompare(b.year))
+    .map(d => ({
+      rawMonth: d.year,
+      month: d.year,
+      total: d.total,
+      sif: d.sif,
+      density: d.total > 0 ? ((d.sif / d.total) * 100).toFixed(1) : '0.0'
+    }))
+
+  // 2. Full Monthly Timeline
   const formatMonthLabel = (mStr) => {
     if (!mStr) return ''
     const parts = mStr.split('-')
     if (parts.length === 2) {
-      const yr = parts[0].substring(2) // '15', '24'
+      const yr = parts[0].substring(2)
       const mo = parseInt(parts[1], 10)
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       return `${monthNames[mo - 1]} '${yr}`
@@ -98,40 +123,15 @@ export default function Dashboard() {
     return mStr
   }
 
-  // Aggregate sparse multi-year months into smooth quarters if > 24 raw points
-  const rawTrend = stats.trend || []
-  let trendData = []
+  const monthlyTrendData = rawTrend.map(t => ({
+    rawMonth: t.month,
+    month: formatMonthLabel(t.month),
+    total: t.total,
+    sif: t.sif_count,
+    density: t.total > 0 ? ((t.sif_count / t.total) * 100).toFixed(1) : '0.0'
+  }))
 
-  if (rawTrend.length > 24) {
-    // Group by Quarter (e.g. 2018-Q1) for a clean, elegant multi-year trendline
-    const quarterMap = {}
-    rawTrend.forEach(t => {
-      if (!t.month) return
-      const [yr, moStr] = t.month.split('-')
-      const mo = parseInt(moStr, 10)
-      const q = Math.ceil(mo / 3)
-      const qKey = `${yr}-Q${q}`
-      const qLabel = `Q${q} '${yr.substring(2)}`
-      
-      if (!quarterMap[qKey]) {
-        quarterMap[qKey] = { rawMonth: qKey, month: qLabel, total: 0, sif: 0 }
-      }
-      quarterMap[qKey].total += t.total
-      quarterMap[qKey].sif += t.sif_count
-    })
-    trendData = Object.values(quarterMap).map(d => ({
-      ...d,
-      density: d.total > 0 ? ((d.sif / d.total) * 100).toFixed(1) : '0.0'
-    }))
-  } else {
-    trendData = rawTrend.map(t => ({
-      rawMonth: t.month,
-      month: formatMonthLabel(t.month),
-      total: t.total,
-      sif: t.sif_count,
-      density: t.total > 0 ? ((t.sif_count / t.total) * 100).toFixed(1) : '0.0'
-    }))
-  }
+  const trendData = timelineMode === 'yearly' && yearlyTrendData.length > 1 ? yearlyTrendData : monthlyTrendData
 
   const ruleData = stats.by_rule.map(r => ({
     name: r.rule,
@@ -250,14 +250,64 @@ export default function Dashboard() {
       <div className="charts-grid-spacious">
         {/* Left: Trend Chart */}
         <div className="chart-card-elevated">
-          <div className="chart-header">
+          <div className="chart-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
             <div>
-              <h3>SIF Precursor Trajectory</h3>
-              <p>Monthly distribution of total field reports vs. fatal precursors</p>
+              <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>SIF Precursor Trajectory</h3>
+              <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '3px 0 0 0' }}>
+                {timelineMode === 'yearly' ? 'Multi-year annual fleet distribution (2015–2026)' : 'Continuous monthly observation telemetry'}
+              </p>
             </div>
-            <div className="chart-legend">
-              <span className="legend-item"><span className="dot cyan" /> Total</span>
-              <span className="legend-item"><span className="dot red" /> SIF Precursor</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'nowrap' }}>
+              {/* Sleek Segmented Pill Toggle */}
+              <div style={{ display: 'inline-flex', background: '#071318', padding: 2, borderRadius: 6, border: '1px solid #162932' }}>
+                <button
+                  type="button"
+                  onClick={() => setTimelineMode('yearly')}
+                  style={{
+                    padding: '4px 11px',
+                    fontSize: 11,
+                    fontFamily: 'var(--font-mono)',
+                    fontWeight: 600,
+                    borderRadius: 4,
+                    border: 'none',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    background: timelineMode === 'yearly' ? 'var(--cyan-ai)' : 'transparent',
+                    color: timelineMode === 'yearly' ? '#040D12' : '#7E95A0',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  Year
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTimelineMode('monthly')}
+                  style={{
+                    padding: '4px 11px',
+                    fontSize: 11,
+                    fontFamily: 'var(--font-mono)',
+                    fontWeight: 600,
+                    borderRadius: 4,
+                    border: 'none',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    background: timelineMode === 'monthly' ? 'var(--cyan-ai)' : 'transparent',
+                    color: timelineMode === 'monthly' ? '#040D12' : '#7E95A0',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  Month
+                </button>
+              </div>
+
+              <div className="chart-legend" style={{ display: 'flex', alignItems: 'center', gap: 12, margin: 0 }}>
+                <span className="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#A0B4BE', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
+                  <span className="dot cyan" /> Total
+                </span>
+                <span className="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#A0B4BE', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
+                  <span className="dot red" /> SIF Precursor
+                </span>
+              </div>
             </div>
           </div>
           <div style={{ height: 280, width: '100%', marginTop: 16 }}>
@@ -276,11 +326,12 @@ export default function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#162932" vertical={false} />
                 <XAxis 
                   dataKey="month" 
-                  tick={{ fill: '#7E95A0', fontSize: 11, fontFamily: 'var(--font-mono)' }} 
-                  axisLine={false} 
+                  tick={{ fill: '#7E95A0', fontSize: 10.5, fontFamily: 'var(--font-mono)' }} 
+                  axisLine={{ stroke: '#1B323D' }} 
                   tickLine={false} 
                   interval="preserveStartEnd"
-                  minTickGap={35}
+                  minTickGap={20}
+                  dy={6}
                 />
                 <YAxis tick={{ fill: '#7E95A0', fontSize: 11, fontFamily: 'var(--font-mono)' }} axisLine={false} tickLine={false} allowDecimals={false} />
                 <Tooltip content={<CustomTrajectoryTooltip />} />
