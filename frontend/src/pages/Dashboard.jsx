@@ -10,6 +10,43 @@ import {
   Tooltip, ResponsiveContainer, Cell, AreaChart, Area
 } from 'recharts'
 
+function CustomTrajectoryTooltip({ active, payload, label }) {
+  if (active && payload && payload.length) {
+    const data = payload[0]?.payload || {}
+    return (
+      <div style={{
+        background: '#0B171C',
+        border: '1px solid #1B323D',
+        borderRadius: 8,
+        padding: '10px 14px',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.6)',
+        fontFamily: 'var(--font-mono)',
+        fontSize: 12,
+        minWidth: 190
+      }}>
+        <div style={{ fontWeight: 700, color: '#E8F1F5', marginBottom: 6, fontSize: 13, borderBottom: '1px solid #162932', paddingBottom: 4 }}>
+          {label}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, color: '#21D4FD', marginBottom: 4 }}>
+          <span>Total Reports:</span>
+          <span style={{ fontWeight: 700 }}>{data.total}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, color: '#FF4655', marginBottom: 4 }}>
+          <span>SIF Precursors:</span>
+          <span style={{ fontWeight: 700 }}>{data.sif}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, color: '#7E95A0', borderTop: '1px solid #162932', paddingTop: 4, marginTop: 4 }}>
+          <span>Precursor Rate:</span>
+          <span style={{ fontWeight: 700, color: Number(data.density) > 25 ? '#FF4655' : '#00E5FF' }}>
+            {data.density}%
+          </span>
+        </div>
+      </div>
+    )
+  }
+  return null
+}
+
 export default function Dashboard() {
   const { user } = useAuth()
   const [stats, setStats] = useState(null)
@@ -48,12 +85,12 @@ export default function Dashboard() {
     )
   }
 
-  // Format multi-year timeline data cleanly
+  // Format multi-year timeline data cleanly with smart smoothing
   const formatMonthLabel = (mStr) => {
     if (!mStr) return ''
     const parts = mStr.split('-')
     if (parts.length === 2) {
-      const yr = parts[0].substring(2) // '14' or '24'
+      const yr = parts[0].substring(2) // '15', '24'
       const mo = parseInt(parts[1], 10)
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       return `${monthNames[mo - 1]} '${yr}`
@@ -61,12 +98,40 @@ export default function Dashboard() {
     return mStr
   }
 
-  const trendData = stats.trend.map(t => ({
-    rawMonth: t.month,
-    month: formatMonthLabel(t.month),
-    total: t.total,
-    sif: t.sif_count,
-  }))
+  // Aggregate sparse multi-year months into smooth quarters if > 24 raw points
+  const rawTrend = stats.trend || []
+  let trendData = []
+
+  if (rawTrend.length > 24) {
+    // Group by Quarter (e.g. 2018-Q1) for a clean, elegant multi-year trendline
+    const quarterMap = {}
+    rawTrend.forEach(t => {
+      if (!t.month) return
+      const [yr, moStr] = t.month.split('-')
+      const mo = parseInt(moStr, 10)
+      const q = Math.ceil(mo / 3)
+      const qKey = `${yr}-Q${q}`
+      const qLabel = `Q${q} '${yr.substring(2)}`
+      
+      if (!quarterMap[qKey]) {
+        quarterMap[qKey] = { rawMonth: qKey, month: qLabel, total: 0, sif: 0 }
+      }
+      quarterMap[qKey].total += t.total
+      quarterMap[qKey].sif += t.sif_count
+    })
+    trendData = Object.values(quarterMap).map(d => ({
+      ...d,
+      density: d.total > 0 ? ((d.sif / d.total) * 100).toFixed(1) : '0.0'
+    }))
+  } else {
+    trendData = rawTrend.map(t => ({
+      rawMonth: t.month,
+      month: formatMonthLabel(t.month),
+      total: t.total,
+      sif: t.sif_count,
+      density: t.total > 0 ? ((t.sif_count / t.total) * 100).toFixed(1) : '0.0'
+    }))
+  }
 
   const ruleData = stats.by_rule.map(r => ({
     name: r.rule,
@@ -218,9 +283,7 @@ export default function Dashboard() {
                   minTickGap={35}
                 />
                 <YAxis tick={{ fill: '#7E95A0', fontSize: 11, fontFamily: 'var(--font-mono)' }} axisLine={false} tickLine={false} allowDecimals={false} />
-                <Tooltip
-                  contentStyle={{ background: '#0B171C', border: '1px solid #1B323D', borderRadius: 8, color: '#E8F1F5', fontFamily: 'var(--font-mono)' }}
-                />
+                <Tooltip content={<CustomTrajectoryTooltip />} />
                 <Area type="monotone" dataKey="total" stroke="#21D4FD" strokeWidth={2.5} fillOpacity={1} fill="url(#colorTotal)" name="Total Reports" />
                 <Area type="monotone" dataKey="sif" stroke="#FF4655" strokeWidth={2.5} fillOpacity={1} fill="url(#colorSif)" name="SIF Precursors" />
               </AreaChart>
