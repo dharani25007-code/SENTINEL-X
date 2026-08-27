@@ -185,7 +185,7 @@ SENTINEL-X is built on a seamless 4-stage pipeline that takes raw text from the 
 
 ## 🇮🇳 12-Year Real Indian Oil & Gas Historical Dataset (2014–2026)
 
-Sentinel-X is grounded on a **curated benchmark of 92 authentic historical incident investigation narratives (spanning February 2014 to May 2026)** extracted from official Indian statutory bodies:
+Sentinel-X is grounded on a **curated benchmark of 256 authentic historical incident investigation narratives (spanning February 2014 to May 2026)** extracted from official Indian statutory bodies:
 
 * **🏛️ OISD Safety Alerts & Inquiry Case Studies** *(Oil Industry Safety Directorate, Ministry of Petroleum & Natural Gas - MoPNG, Govt. of India)*
 * **📜 DGMS Accident Inquiry Case Studies** *(Directorate General of Mines Safety under Oil Mines Regulations, 2017 - OMR 2017)*
