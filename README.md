@@ -493,18 +493,3 @@ npm run dev
 ```
 
 ---
-
-## 🎙️ 5-Minute Hackathon Pitch & Presentation Script
-
-| Minute | Screen | Speaker Script |
-|:---|:---|:---|
-| **0:00 - 1:00** | **Login & Command Center** | *"Good morning judges. In oil & gas, treating all near-misses equally causes fatal precursors to be buried. Today, we present **SENTINEL-X**, an autonomous safety precursor intelligence platform built for **Oil India Limited**."* |
-| **1:00 - 2:00** | **Report Intelligence (`/analyze`)** | *"Let's input a raw field log: 'Worker unbolting valve without LOTO'. In under 800ms, our Groq AI decomposes the Safety DNA (96% SIF risk), links the 4-step causal chain, tags IOGP Rule #4, and runs LIME token attribution."* |
-| **2:00 - 3:00** | **Safety Time Machine (`/timeline`)** | *"Disasters don't happen randomly — they compound. Watch our **Safety Time Machine**: 30 days ago, risk was 14%. As LOTO bypasses clustered at Duliajan, momentum accelerated by +31.4% (94.6% risk). Sentinel-X catches this before energy is released."* |
-| **3:00 - 4:00** | **Intervention Simulator (`/simulator`)** | *"Leadership cannot fix everything at once. In our **Simulator**, Dr. Gogoi drags the LOTO compliance lever to 95%. Our mathematical multi-barrier reliability model projects a **47.3% fatal risk reduction**."* |
-| **4:00 - 5:00** | **Intervention Queue (`/queue`)** | *"Finally, in the **Intervention Queue**, we convert that insight into action, clicking `[DISPATCH AUDIT]` to assign the work order directly to Site Lead Rajesh Barua at Duliajan. That is how Sentinel-X saves lives."* |
-
----
-
-## 📜 License
-This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details. Built for **Smart India Hackathon (SIH26165)** for **Oil India Limited (OIL)** by **THE NEURAL VANGUARD**.
