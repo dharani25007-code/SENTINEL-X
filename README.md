@@ -393,3 +393,119 @@ The **International Association of Oil & Gas Producers (IOGP Report 459)** stand
   * Scaffolding certified with valid Green Scaff-Tag, complete with toe-boards, mid-rails, and top-rails.
   * Tool lanyards and drop-prevention netting to prevent dropped object hazards below.
 
+* **Sentinel-X AI Detection**: Identifies terms like *"unclipped harness", "missing toe board", "scaffold without green tag", "unprotected edge", "monkey board slip"*.
+
+---
+
+## 📊 Command Center Chart Mechanics & Axis Breakdown
+
+```
+  Y-Axis (Vertical ↑)
+  Incident Reports (Count)
+    ▲
+  4 │
+  3 │                          /───\       /───\     ─── 🔵 Cyan: Total Field Observations
+  2 │                         /     \     /     \
+  1 │      /\        /───\   /       \───/       \   ─── 🔴 Red: Fatal SIF Precursors
+  0 ┴──────┴──────────┴─────/─────────────────────\► X-Axis (Horizontal →)
+       Feb'14      Aug'18        Jan'24      May'26    Time (Month & Year)
+```
+
+1. **X-Axis (Horizontal $\rightarrow$)**: **Time (Month & Year)** spanning **2014 to 2026** (formatted with dynamic spacing to prevent clutter).
+2. **Y-Axis (Vertical $\uparrow$)**: **Number of Incident Reports** ($0, 1, 2, 3, 4$). Locked strictly to whole integers (`allowDecimals={false}`).
+3. **🔵 Cyan Area (`Total Reports`)**: Total volume of field observations submitted across Assam.
+4. **🔴 Red Area (`SIF Precursors`)**: High-energy fatal precursor subset identified by the AI.
+5. **When the Red Line Drops to 0**: Represents **Controlled Steady-State Operations** where all submitted logs were minor routine observations with zero life-threatening hazard exposure.
+
+---
+
+## 🏗️ End-to-End System Architecture
+
+```
+                                  SENTINEL-X SYSTEM TOPOLOGY
+                                  
+  [ Mobile / Web App ]       [ Field Tablets ]        [ SCADA / Incident Feeds ]
+           │                         │                             │
+           └─────────────────────────┼─────────────────────────────┘
+                                     ▼
+                      ┌──────────────────────────────┐
+                      │  FastAPI INGESTION ENDPOINT  │
+                      │       POST /classify         │
+                      └──────────────┬───────────────┘
+                                     │
+           ┌─────────────────────────┴─────────────────────────┐
+           ▼                                                   ▼
+┌──────────────────────────────┐                    ┌──────────────────────────────┐
+│    GROQ LLM INFERENCE        │                    │    IOGP RULE MATCHING        │
+│  - Zero-Shot SIF Potential   │                    │  - Cosine Semantic Search    │
+│  - Causal Chain Extraction   │                    │  - All-MiniLM-L6-v2 Embed    │
+│  - Precursor DNA Score       │                    │  - Report 459 Taxonomy       │
+└──────────┬───────────────────┘                    └──────────┬───────────────────┘
+           │                                                   │
+           └─────────────────────────┬─────────────────────────┘
+                                     ▼
+                      ┌──────────────────────────────┐
+                      │    EXPLAINABLE AI (XAI)      │
+                      │  - LIME Token Perturbation   │
+                      │  - SIF/Routine Feature Mass  │
+                      └──────────────┬───────────────┘
+                                     │
+                                     ▼
+                      ┌──────────────────────────────┐
+                      │     PERSISTENCE LAYER        │
+                      │  - SQLite (WAL Mode)         │
+                      │  - Indexed Analytics Tables  │
+                      └──────────────┬───────────────┘
+                                     │
+           ┌─────────────────────────┴─────────────────────────┐
+           ▼                                                   ▼
+┌──────────────────────────────┐                    ┌──────────────────────────────┐
+│    EXECUTIVE COMMAND         │                    │    PRECURSOR INTERCEPTION    │
+│  - Macro Telemetry Cards     │                    │  - Risk Universe Graph       │
+│  - Multi-Year Trajectory     │                    │  - Safety Time Machine       │
+│  - Facility Risk Matrix      │                    │  - Intervention Simulator    │
+└──────────────────────────────┘                    └──────────────────────────────┘
+```
+
+---
+
+## 🚀 Quickstart & Installation Guide
+
+### 1. Backend Setup (FastAPI + Groq)
+```bash
+cd backend
+python -m venv venv
+
+# Windows:
+.\venv\Scripts\Activate.ps1
+
+# Dependencies:
+pip install -r requirements.txt
+
+# Start Backend Server:
+uvicorn app.main:app --reload --port 8000
+```
+
+### 2. Frontend Setup (React 19 + Vite)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## 🎙️ 5-Minute Hackathon Pitch & Presentation Script
+
+| Minute | Screen | Speaker Script |
+|:---|:---|:---|
+| **0:00 - 1:00** | **Login & Command Center** | *"Good morning judges. In oil & gas, treating all near-misses equally causes fatal precursors to be buried. Today, we present **SENTINEL-X**, an autonomous safety precursor intelligence platform built for **Oil India Limited**."* |
+| **1:00 - 2:00** | **Report Intelligence (`/analyze`)** | *"Let's input a raw field log: 'Worker unbolting valve without LOTO'. In under 800ms, our Groq AI decomposes the Safety DNA (96% SIF risk), links the 4-step causal chain, tags IOGP Rule #4, and runs LIME token attribution."* |
+| **2:00 - 3:00** | **Safety Time Machine (`/timeline`)** | *"Disasters don't happen randomly — they compound. Watch our **Safety Time Machine**: 30 days ago, risk was 14%. As LOTO bypasses clustered at Duliajan, momentum accelerated by +31.4% (94.6% risk). Sentinel-X catches this before energy is released."* |
+| **3:00 - 4:00** | **Intervention Simulator (`/simulator`)** | *"Leadership cannot fix everything at once. In our **Simulator**, Dr. Gogoi drags the LOTO compliance lever to 95%. Our mathematical multi-barrier reliability model projects a **47.3% fatal risk reduction**."* |
+| **4:00 - 5:00** | **Intervention Queue (`/queue`)** | *"Finally, in the **Intervention Queue**, we convert that insight into action, clicking `[DISPATCH AUDIT]` to assign the work order directly to Site Lead Rajesh Barua at Duliajan. That is how Sentinel-X saves lives."* |
+
+---
+
+## 📜 License
+This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details. Built for **Smart India Hackathon (SIH26165)** for **Oil India Limited (OIL)** by **THE NEURAL VANGUARD**.
