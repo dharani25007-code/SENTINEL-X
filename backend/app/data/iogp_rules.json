@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "name": "Bypassing Safety Controls",
+    "icon": "shield-off",
+    "description": "Do not defeat, bypass, or disable any safety-critical device, interlock, guard, or barrier unless authorised and properly managed. Safety controls exist to prevent catastrophic outcomes; removing them reintroduces the fatal hazard they were designed to control.",
+    "keywords": "bypass interlock guard barrier override defeat disable safety device safety system safety control alarm inhibit override protection"
+  },
+  {
+    "id": 2,
+    "name": "Confined Space",
+    "icon": "box",
+    "description": "Obtain authorisation before entering a confined space. Verify atmosphere testing is complete, continuous monitoring is in place, a trained standby person is present, and rescue arrangements are ready. Confined spaces include tanks, vessels, pits, silos, and any enclosed area with limited access or potential for hazardous atmosphere.",
+    "keywords": "confined space entry tank vessel pit silo enclosed atmosphere gas test oxygen standby attendant rescue entry permit manhole"
+  },
+  {
+    "id": 3,
+    "name": "Driving",
+    "icon": "car",
+    "description": "Follow safe driving rules at all times: wear a seatbelt, do not exceed speed limits, do not use a mobile phone while driving, do not drive under the influence of alcohol or drugs, and ensure the vehicle is fit for purpose. Vehicle incidents are a leading cause of workplace fatalities in oil and gas operations.",
+    "keywords": "driving vehicle car truck tanker mobile phone speed seatbelt road transport journey management fatigue alcohol impaired"
+  },
+  {
+    "id": 4,
+    "name": "Energy Isolation",
+    "icon": "zap-off",
+    "description": "Verify isolation before you start work. Confirm all hazardous energy sources (electrical, mechanical, hydraulic, pneumatic, chemical, thermal, gravitational, stored) have been identified, isolated, locked out, tagged, and tested to ensure zero energy before any maintenance or intervention work begins.",
+    "keywords": "lockout tagout LOTO isolation energy electrical mechanical hydraulic pneumatic zero energy de-energise maintenance live powered pump motor valve pressure"
+  },
+  {
+    "id": 5,
+    "name": "Hot Work",
+    "icon": "flame",
+    "description": "Control flammables and ignition sources during hot work operations. Obtain a hot work permit, ensure gas testing has confirmed the area is safe, maintain continuous fire watch, remove or protect combustible materials, and verify that fire suppression equipment is immediately available.",
+    "keywords": "hot work welding grinding cutting sparks flame flammable combustible fire ignition gas test fire watch permit solvent vapour"
+  },
+  {
+    "id": 6,
+    "name": "Line of Fire",
+    "icon": "alert-triangle",
+    "description": "Keep yourself and others out of the line of fire. Position yourself to avoid being struck by moving objects, pressurised releases, swinging loads, vehicle traffic, rotating equipment, or falling objects. Establish and respect exclusion zones around high-energy activities.",
+    "keywords": "line of fire struck by caught in between moving equipment rotating swing radius exclusion zone pedestrian vehicle traffic forklift crane load pressure release"
+  },
+  {
+    "id": 7,
+    "name": "Safe Mechanical Lifting",
+    "icon": "arrow-up-circle",
+    "description": "Plan and control every lift. Verify the load weight, select appropriate lifting equipment and rigging rated for the load, ensure the crane or lifting device is certified, establish exclusion zones beneath and around the lift path, and never stand or walk under a suspended load.",
+    "keywords": "lifting crane load suspended rigging sling hoist derrick winch dropped object exclusion zone mechanical lift heavy equipment weight"
+  },
+  {
+    "id": 8,
+    "name": "Work Authorisation",
+    "icon": "clipboard-check",
+    "description": "Obtain proper authorisation before starting any non-routine or hazardous work. Ensure that a valid permit-to-work is in place covering the specific task, location, time period, and required controls. Verify that all specified precautions and isolations are implemented before work begins.",
+    "keywords": "permit to work PTW work authorisation permission approval JSA job safety analysis risk assessment method statement simultaneous operations SIMOPS"
+  },
+  {
+    "id": 9,
+    "name": "Working at Height",
+    "icon": "mountain",
+    "description": "Protect yourself against falls when working at height. Use guardrails, safety nets, or personal fall arrest systems. Inspect all equipment before use. Secure tools and materials to prevent dropped objects. Any work above 1.8 metres (6 feet) requires fall protection.",
+    "keywords": "height fall harness scaffold ladder platform guardrail arrest lanyard anchor dropped object elevation climbing roof edge protection"
+  }
+]
