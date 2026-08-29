@@ -1,0 +1,242 @@
+[
+  {
+    "report_text": "Contractor was seen welding near an open valve with a strong gas smell in the area. No fire watch present.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "Hot work (welding) performed near an open valve leaking gas creates a high risk of fire or explosion, a classic fatality\u2011potential scenario.",
+    "correct": true
+  },
+  {
+    "report_text": "Worker entered a storage tank to clean residue without first confirming atmosphere testing had been completed. Buddy system was not in place.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "Entering a confined space without atmospheric testing and without a buddy creates a high risk of asphyxiation or toxic exposure, a classic fatality scenario.",
+    "correct": true
+  },
+  {
+    "report_text": "Two workers walked directly underneath a suspended load while a crane was actively lifting drill pipe.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "Walking under a suspended load creates a high risk of being struck or crushed if the load drops, a classic fatal\u2011potential scenario involving moving equipment and load release.",
+    "correct": true
+  },
+  {
+    "report_text": "Technician began maintenance on a pump without locking out the electrical isolation switch first. Pump was still receiving power.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.97,
+    "reasoning": "Working on energized equipment without lockout/tagout creates a direct electrocution hazard, a known high\u2011energy activity that can cause serious injury or death.",
+    "correct": true
+  },
+  {
+    "report_text": "Employee climbed to a platform 8 meters high to inspect piping without a harness or fall arrest system attached.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.97,
+    "reasoning": "Climbing 8\u202fm without a harness or fall arrest creates a fall\u2011from\u2011height hazard, a known cause of serious injury or fatality.",
+    "correct": true
+  },
+  {
+    "report_text": "Driver was observed using a mobile phone while operating a heavy tanker truck on-site access road.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.92,
+    "reasoning": "Distracted operation of a heavy tanker truck creates a high\u2011energy vehicle/traffic hazard that could lead to a serious crash or release of hazardous material, fitting a known SIF scenario.",
+    "correct": true
+  },
+  {
+    "report_text": "Scaffolding erected near an active excavation without an approved permit, and no barrier to prevent trench-side collapse onto workers below.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "The lack of a permit and missing barrier creates a risk of trench collapse onto workers, a known high\u2011energy hazard that can cause serious injury or fatality.",
+    "correct": true
+  },
+  {
+    "report_text": "Work began on live electrical panel without confirming permit-to-work had been signed off by area authority.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "Working on a live electrical panel without proper permit introduces risk of arc flash or electrocution, a high\u2011energy hazard that can cause serious injury or death.",
+    "correct": true
+  },
+  {
+    "report_text": "Grinding operation created sparks within 3 meters of an open flammable solvent container during a hot work task.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "Sparks from grinding (hot work) near an open flammable solvent container create a realistic fire/explosion hazard, a known cause of serious injury or fatality.",
+    "correct": true
+  },
+  {
+    "report_text": "Forklift operator reversed without a spotter in an area with pedestrian foot traffic near the loading dock.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.92,
+    "reasoning": "Reversing a forklift near pedestrians creates a moving\u2011equipment strike hazard, a known cause of serious injury or fatality if a collision occurs.",
+    "correct": true
+  },
+  {
+    "report_text": "A worker bypassed an interlock guard on a rotating equipment shaft to clear a jam while the machine was still running.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "Bypassing an interlock on a running rotating shaft creates a caught\u2011in/entanglement hazard, a known high\u2011energy activity that can cause serious injury or death.",
+    "correct": true
+  },
+  {
+    "report_text": "Near-miss: a wrench was dropped from an elevated platform and landed approximately 1 meter from a worker below. No exclusion zone had been marked.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.92,
+    "reasoning": "A dropped tool from height creates a falling-object hazard that can cause serious injury or death; the lack of an exclusion zone heightens the potential for a fatal impact.",
+    "correct": true
+  },
+  {
+    "report_text": "Housekeeping observation: cardboard boxes and packaging left in a walkway near the site office, creating a minor trip hazard.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.96,
+    "reasoning": "The issue is a housekeeping trip hazard with cardboard boxes, which does not involve high\u2011energy hazards like falls from height, moving equipment, or energy release, so it lacks realistic fatal potential.",
+    "correct": true
+  },
+  {
+    "report_text": "Printed safety signage at the entrance to Building 4 was faded and difficult to read; requested replacement.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.92,
+    "reasoning": "Faded entrance signage is a housekeeping/compliance issue without a direct pathway to a high\u2011energy hazard such as falls, moving equipment, or energy release.",
+    "correct": true
+  },
+  {
+    "report_text": "Employee noted the break room refrigerator door does not close fully on its own; minor inconvenience, no safety impact identified.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.96,
+    "reasoning": "The issue is a non\u2011functional refrigerator door, a minor housekeeping/maintenance problem with no pathway to serious injury or fatality.",
+    "correct": true
+  },
+  {
+    "report_text": "Observed a worker not wearing safety glasses while filling out paperwork at a desk in a designated non-hazard office area.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.96,
+    "reasoning": "The activity involves paperwork in a non\u2011hazardous office area with no exposure to energy, moving equipment, heights, or flammable materials, so there is no realistic pathway to a serious injury or fatality.",
+    "correct": true
+  },
+  {
+    "report_text": "A minor spill of approximately 200ml of water from a leaking tap was noted near the wash station; cleaned up immediately, no slip occurred.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.97,
+    "reasoning": "A small water spill poses only a slip hazard and was promptly cleaned; it lacks the high\u2011energy or fatal\u2011risk elements (falls, moving equipment, energy release, etc.) that define SIF\u2011potential.",
+    "correct": true
+  },
+  {
+    "report_text": "Fire extinguisher inspection tag was one week overdue for renewal; extinguisher itself appeared in good condition.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.78,
+    "reasoning": "The overdue inspection is a compliance/housekeeping issue; while it could affect fire response, there is no immediate high\u2011energy hazard or direct pathway to a serious injury or fatality in this observation.",
+    "correct": true
+  },
+  {
+    "report_text": "Worker mentioned mild discomfort from sitting at an unadjusted desk chair for extended periods during shift.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.97,
+    "reasoning": "The issue is ergonomic discomfort from an unadjusted chair, which lacks any direct pathway to serious injury or fatality such as energy release, fall, or equipment contact.",
+    "correct": true
+  },
+  {
+    "report_text": "A site vehicle was parked slightly outside the marked parking bay lines in the staff car park, causing minor inconvenience to neighbouring vehicles.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.96,
+    "reasoning": "The issue is a minor parking misalignment causing inconvenience, lacking any high\u2011energy hazard such as vehicle collision, struck\u2011by, or blocked emergency access.",
+    "correct": true
+  },
+  {
+    "report_text": "Noted that the noticeboard near the canteen has outdated shift schedule information still posted from last month.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.96,
+    "reasoning": "The issue is outdated posting on a noticeboard, a housekeeping/communication problem with no direct pathway to serious injury or fatality.",
+    "correct": true
+  },
+  {
+    "report_text": "A worker was seen without a hi-vis vest while walking through a low-traffic administrative corridor, no vehicle or moving equipment present in the area.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.92,
+    "reasoning": "The issue is a PPE compliance/visibility lapse in a low\u2011traffic area with no moving equipment, which does not present a realistic pathway to a serious injury or fatality.",
+    "correct": true
+  },
+  {
+    "report_text": "Small amount of rust noted on an external handrail in a low-traffic storage yard; handrail remains structurally stable.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.96,
+    "reasoning": "The issue is minor corrosion on a handrail that remains structurally sound, posing no immediate high\u2011energy hazard such as fall from height or equipment entanglement.",
+    "correct": true
+  },
+  {
+    "report_text": "Worker reported the site Wi-Fi connection in the break area has been intermittent for the past two days.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.99,
+    "reasoning": "The issue is a non\u2011safety, administrative problem (Wi\u2011Fi connectivity) with no pathway to serious injury or fatality.",
+    "correct": true
+  },
+  {
+    "report_text": "During a routine walk-around, a supervisor noticed a coworker manually overriding the pressure relief interlock on a separator vessel to speed up a process restart.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "Bypassing a pressure relief interlock on a separator creates a credible over\u2011pressure risk that could lead to vessel rupture or release of high\u2011energy fluids, a classic fatal\u2011potential scenario.",
+    "correct": true
+  },
+  {
+    "report_text": "A tanker was being loaded while the engine remained running and no bonding/grounding cable had been connected between the tanker and the loading arm.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "Loading flammable liquids without grounding/bonding while the engine runs creates a static discharge hazard that can ignite vapors, a known fatal\u2011risk scenario.",
+    "correct": true
+  },
+  {
+    "report_text": "Employee suggested that the cafeteria menu could include more variety in vegetarian options.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.99,
+    "reasoning": "The observation concerns food menu options and contains no safety hazard or potential for serious injury or fatality.",
+    "correct": true
+  },
+  {
+    "report_text": "A worker was observed standing inside the swing radius of an excavator's boom while it was actively digging, without making eye contact with the operator.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "The worker was in the swing radius of an operating excavator, creating a caught\u2011in/struck\u2011by hazard that could easily cause serious injury or death if the boom moved.",
+    "correct": true
+  },
+  {
+    "report_text": "Two contractors were seen entering a marked confined space (nitrogen-purged vessel) without confirming an active gas test or having a standby attendant.",
+    "true_label": "SIF-potential",
+    "predicted": "SIF-potential",
+    "confidence": 0.96,
+    "reasoning": "Entering a nitrogen\u2011purged confined space without gas testing or an attendant creates a high risk of asphyxiation, a classic fatal\u2011potential hazard.",
+    "correct": true
+  },
+  {
+    "report_text": "A minor discrepancy was found in the visitor sign-in log at the main gate; two entries were missing a signature.",
+    "true_label": "routine",
+    "predicted": "routine",
+    "confidence": 0.96,
+    "reasoning": "The issue is a documentation lapse (missing signatures) with no direct link to high\u2011energy hazards or injury pathways, so it lacks realistic fatal potential.",
+    "correct": true
+  }
+]
