@@ -139,47 +139,105 @@ For decades, safety programs operated on the assumption that reducing minor inci
 
 ---
 
-## 🔄 The 4-Screen Core Intelligence & Action Loop
+## 🌟 Advanced Novelty & Differentiators (Beyond Generic NLP)
 
-SENTINEL-X is built on a seamless 4-stage pipeline that takes raw text from the field and turns it into life-saving operational work orders:
+To overcome the common limitations of academic NLP, SENTINEL-X introduces 4 cutting-edge industrial safety capabilities:
+
+### 1. 🇮🇳 Code-Mixed "Hinglish" & Regional Oilfield Dialect Parser
+Field technicians across Assam (*Duliajan, Moran, Digboi*) rarely write in polished English. They log observations in mixed **Hinglish, Assamese shorthand, and rig jargon**:
+* *Sample Input*: `"Rig floor pe drill pipe stand lift karte waqt catline wire rope achanak tut gaya. Floorman helper narrowly escaped pinch zone."`
+* *Engine Response*: Native semantic token parsing maps Hindi verbs and technical slang directly to **Safe Mechanical Lifting (IOGP Rule)** and flags the high-energy kinetic release as **SIF-potential**.
+
+### 2. 🕳️ "Silent Barrier" Filter (Negative Space / Implicit Failure Detection)
+Standard NLP only evaluates what workers explicitly write. True SIF intelligence detects **what they forgot to mention**:
+* *Sample Input*: `"Welder successfully completed pipeline tie-in welding at Segment B manifold."`
+* *Engine Response*: Detects a high-energy thermal task on hydrocarbon infrastructure that **omits mentioning explosive LEL gas tests or countersigned PTWs**. The engine flags this as an **Implicit Barrier Breakdown** and triggers a mandatory gas clearance verification alert.
+
+### 3. 🕸️ Graph-Based Causal Risk Propagation
+Connects **Asset $\to$ Activity $\to$ Contractor $\to$ Equipment Model $\to$ Barrier**. If an asset logs 3 minor near-misses regarding a specific contractor's lifting tackle or valve packing, graph traversal models the escalating failure chain before a catastrophic 4th event occurs.
+
+---
+
+## 🖥️ The 4-Screen Industrial Mission Control Architecture
+
+To meet the rigorous standards of **Oil India Limited (OIL)** control room operators, SENTINEL-X is designed as a **High-Density Industrial Mission Control Center** rather than a generic web dashboard.
 
 ```
-  STEP 1: DETECT EARLY              STEP 2: TEST SOLUTIONS           STEP 3: DISPATCH ACTION
-  ┌─────────────────────────┐       ┌─────────────────────────┐      ┌─────────────────────────┐
-  │ ⏳ Safety Time Machine  │ ────► │ 🧪 Intervention         │ ───► │ 🚨 Intervention Queue   │
-  │                         │       │    Simulator            │      │                         │
-  │ "Look, fatal risk is    │       │ "If we enforce LOTO     │      │ "Dispatch audit work    │
-  │ compounding over time!" │       │ locks, risk drops 47%!" │      │ order to Site Lead!"    │
-  └─────────────────────────┘       └─────────────────────────┘      └─────────────────────────┘
-               ▲
+═══════════════════════════════════════════════════════════════════════════════════════════════
+                      SENTINEL-X 4-SCREEN EXECUTIVE ACTION LOOP
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+  SCREEN 1: DETECT & SURVEIL        SCREEN 2: MAP THREAT TOPOLOGY     SCREEN 3: FIELD INGESTION
+  ┌─────────────────────────┐       ┌─────────────────────────┐       ┌─────────────────────────┐
+  │ 📊 SIF Command Center   │       │ 🌌 Safety Risk Universe │       │ ⚡ Field Ingestion Desk │
+  │ • Dual-stream live feed │ ────► │ • 3-Hop Causal Graph    │ ────► │ • Hinglish / PTW Check  │
+  │ • 12Y Macro Trajectory  │       │ • Asset ➔ Barrier Node  │       │ • Negative Space Check  │
+  │ • Facility Risk Matrix  │       │ • Regional Danger Map   │       │ • LIME Explainable AI   │
+  └────────────┬────────────┘       └─────────────────────────┘       └─────────────────────────┘
                │
-  ┌─────────────────────────┐
-  │ 🌌 Risk Universe (Graph)│ "WHERE is the danger across Assam?"
-  └─────────────────────────┘
+               ▼
+  SCREEN 4: SIMULATE & DISPATCH
+  ┌─────────────────────────┐       ┌─────────────────────────┐
+  │ 🧪 Intervention         │ ────► │ 🚨 Action Dispatch      │
+  │    Simulator            │       │    Queue                │
+  │ • Barrier levers (LOTO) │       │ • 1-Click Work Orders   │
+  │ • Projected Risk -64%   │       │ • Assigned to Site Lead │
+  └─────────────────────────┘       └─────────────────────────┘
 ```
 
-### 1. 🌌 Risk Universe (`/universe`) — *The Threat Map (WHERE)*
-* **What it is**: An interactive 2D orbital network diagram mapping the multi-variable topology of hazards orbiting the **OIL Safety Core**.
-* **Visual Elements**:
-  * 🔴 **Red Nodes**: Critical escalating hazards (*⚡ Energy Isolation at Duliajan*, *🔥 Hot Work at Digboi*).
-  * 🟡 **Amber Nodes**: Warning precursors (*🏗️ Suspended Drill Pipe at Moran Rig #4*).
-  * 🟢 **Green Nodes**: Controlled operations (*🚗 Vehicle Transport at Pipeline Station 7*).
-* **Core Question Answered**: **`WHERE is the danger in Assam?`**
+### 🎨 The Industrial SCADA Design System
 
-### 2. ⏳ Safety Time Machine (`/timeline`) — *The Video Replay (HOW FAST)*
-* **What it is**: A temporal slider that lets leadership drag time from **`30 Days Ago` $\longrightarrow$ `Today (Live Telemetry)`**.
-* **What it does**: Models **Precursor Acceleration $\frac{d(\text{Risk})}{dt}$**. It proves that disasters don't happen randomly — they compound over 30 days of escalating barrier degradations (14% risk $\to$ 94.6% risk).
-* **Core Question Answered**: **`Is the danger getting worse?`**
+1. **🌑 24/7 Control Room Dark Mode (`#071318` / `#0B171C`)**:
+   * Engineered to reduce cognitive fatigue for 24/7 safety control room engineers across Assam installations.
+2. **🔢 Dual-Engine Typography System**:
+   * **Monospaced Numbers (`JetBrains Mono` / `Fira Code`)**: Used for all confidence scores, percentages, and incident counts to emphasize mathematical precision.
+   * **Clean Sans-Serif (`Inter`)**: High-contrast body typography for rapid multi-column scanning.
+3. **🚦 High-Energy Traffic Light Hierarchy**:
+   * 🔴 **`#FF4655` Critical Alpha SIF**: Fatal energy pathway identified (Arc flash, line-of-fire, $H_2S$ toxicity). Flashes red and demands instant supervisor review.
+   * 🟡 **`#FFB020` Active Precursor Warning**: Sub-critical barrier degradation (Uncertified scaffolding, missing toe boards).
+   * 🟢 **`#00E676` Verified Safe Baseline**: Fully isolated equipment and verified PTW compliance.
 
-### 3. 🧪 Intervention Simulator (`/simulator`) — *The Strategy Lab (HOW TO FIX)*
-* **What it is**: A counterfactual mathematical sandbox with 3 interactive barrier levers (*LOTO Enforcement*, *Continuous Gas Testing*, *Crane Red Exclusion Zones*).
-* **What it does**: Allows HSE Directors to test safety interventions virtually and calculates the exact projected fatal risk reduction (e.g. **`-64.0% Fatal Risk Reduction`**) before spending CAPEX/OPEX.
-* **Core Question Answered**: **`What is the best way to fix it?`**
+---
 
-### 4. 🚨 Intervention Queue (`/queue`) — *The Action Dispatch Board (WHO GOES)*
-* **What it is**: An operational task board that converts high-risk clusters into actionable field work orders with a single click (**`[ ✅ DISPATCH AUDIT ]`**).
-* **What it does**: Assigns mandatory inspections directly to Site Safety Engineers (*Rajesh Barua at Duliajan*), tracking resolution from `PENDING` $\to$ `IN PROGRESS` $\to$ `RESOLVED`.
-* **Core Question Answered**: **`Who goes to do the job on the ground?`**
+### 🖥️ Screen-by-Screen Operational Breakdown
+
+#### 1. 📊 Screen 1: SIF Interception Command Center (`/`) — *THE SURVEILLANCE DESK*
+* **Target User**: Executive HSE Director & Operational Asset Leads.
+* **Core Capabilities**:
+  * **Dual-Stream Telemetry Feed**: Fades low-severity housekeeping logs into the background while pinning critical SIF precursors to the top.
+  * **12-Year Macro & 14-Month Operational Trajectory**: Toggle between annual multi-year trends (**2015 $\to$ 2026**) and recent monthly operational horizons.
+  * **OIL Operational Facility Risk Matrix**: Ranks all 6 Assam assets dynamically by **SIF Precursor Density**.
+
+#### 2. 🌌 Screen 2: Safety Risk Universe (`/universe` & `/intel`) — *THE THREAT TOPOLOGY*
+* **Target User**: Senior Safety Auditors & Root Cause Investigators.
+* **Core Capabilities**:
+  * **3-Hop Relational Knowledge Graph**: Interactive network connecting **Asset Node $\longrightarrow$ IOGP Rule $\longrightarrow$ Activity $\longrightarrow$ Failed Barrier Text**.
+  * Clicking an asset node (*e.g., Moran Drilling Rig #4*) opens its orbital sub-cluster showing repeated equipment breakdowns and contractor failure chains.
+
+#### 3. ⚡ Screen 3: Field Ingestion Desk (`/classify`) — *THE FIELD PORTAL*
+* **Target User**: Field Safety Officers, Roughnecks, and Turnaround Technicians.
+* **Core Capabilities**:
+  * **Autonomous 9-Rule IOGP Classification**: Uses 384-dimensional Sentence Transformers to auto-infer the high-energy hazard and mapped IOGP Life-Saving Rule without manual dropdown guesswork.
+  * **Code-Mixed "Hinglish" Parsing**: Natively understands mixed Hindi, Assamese, and technical rig jargon (*"Rig floor pe catline wire tut gaya"*).
+  * **Silent Barrier / Negative Space Detection**: Automatically flags high-risk tasks that omit mandatory gas clearance tests or PTW documentation.
+  * **Explainable AI (LIME)**: Highlights token attribution weights explaining *why* an observation was classified as SIF vs Routine.
+
+##### 🚀 1-Click Live Pitch Demo Scenarios:
+
+| Scenario Button | Field Incident Narrative Tested | 🧠 What It Proves to the Judges |
+|:---|:---|:---|
+| **1. ⚡ LOTO Failure** | Technician overhauled a crude pump with live 415V power & un-isolated hydraulics. | **High-Energy Isolation**: Proves the AI flags electrical/hydraulic energy even if nobody was hurt this time. *(Mapped to: Energy Isolation)* |
+| **2. 🇮🇳 Rig Floor Catline Snap** | Spoken in Indian oilfield slang: *"Rig floor pe catline wire rope tut gaya... helper narrowly escaped"*. | **Hinglish / Regional Dialect Intelligence**: Proves the model parses mixed Hindi/Assamese rig shorthand without requiring textbook English. *(Mapped to: Safe Mechanical Lifting)* |
+| **3. 🚰 Pipeline Welding / Missing PTW** | Contractor completed welding on a manifold but omitted gas clearance and permit numbers. | **Silent Barrier / Negative Space Detection**: Proves the AI catches what was *forgotten*, flagging high-risk work that lacks documented gas tests. *(Mapped to: Hot Work / PTW)* |
+| **4. 🔥 Hot Work / Gas Leak** | Torch cutting 2.5m from open hydrocarbon condensate valve with no fire watch. | **Thermal Vapor Ignition**: Proves the AI detects flammable explosive hazard pathways near process vessels. *(Mapped to: Hot Work)* |
+| **5. 📦 Nitrogen Confined Space** | Two workers entered a nitrogen-purged distillation separator without SCBA gear or a standby attendant. | **Toxic / Asphyxiation Pathway**: Proves the AI identifies rapid nitrogen-induced oxygen deficiency ($O_2 < 19.5\%$). *(Mapped to: Confined Space)* |
+| **6. 🟢 Routine Housekeeping** | Empty plastic boxes left near the site corridor, cleared to the trash bin. | **The Heinrich Triangle Solution**: Proves the AI is **not a naive keyword search** that flags everything — it accurately filters routine non-fatal clutter as `routine`. |
+
+#### 4. 🧪 Screen 4: Counterfactual Simulator & Action Queue (`/simulator` & `/queue`) — *THE MITIGATION LAB*
+* **Target User**: Safety Engineering Leads & Maintenance Turnaround Planners.
+* **Core Capabilities**:
+  * **Barrier Compliance Levers**: Adjust sliders for **LOTO Enforcement**, **Continuous Gas Testing**, and **Crane Red Zones** to mathematically simulate fatal risk drops (*e.g., `-64.0% Risk Reduction`*).
+  * **One-Click Work Order Dispatch**: Convert simulated interventions into real-world field inspection tickets assigned to engineers (*Rajesh Barua at Duliajan*).
 
 ---
 
