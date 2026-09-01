@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth, DEMO_PERSONAS } from '../context/AuthContext'
-import { Shield, ChevronDown, LogOut, UserCheck, Sparkles, Building2, User } from 'lucide-react'
+import { Shield, ChevronDown, LogOut, UserCheck, Sparkles, Building2, User, FileText } from 'lucide-react'
+import AuditReportModal from './AuditReportModal'
 
 export default function HeaderBar() {
   const { user, loginAsPersona, logout } = useAuth()
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [auditModalOpen, setAuditModalOpen] = useState(false)
   const navigate = useNavigate()
 
   const handleSelectPersona = (personaId) => {
@@ -20,16 +22,48 @@ export default function HeaderBar() {
   }
 
   return (
-    <header className="top-header-bar">
-      <div className="header-left">
-        <div className="active-facility-tag">
-          <Building2 size={13} color="var(--cyan-ai)" />
-          <span className="facility-label">OPERATIONAL ASSET:</span>
-          <span className="facility-name">{user?.facility || 'Duliajan Central Complex'}</span>
+    <>
+      <header className="top-header-bar">
+        <div className="header-left">
+          <div className="active-facility-tag">
+            <Building2 size={13} color="var(--cyan-ai)" />
+            <span className="facility-label">OPERATIONAL ASSET:</span>
+            <span className="facility-name">{user?.facility || 'Duliajan Central Complex'}</span>
+          </div>
         </div>
-      </div>
 
-      <div className="header-right">
+        <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {/* 1-Click OISD Compliance Audit Export Button */}
+          <button
+            type="button"
+            onClick={() => setAuditModalOpen(true)}
+            style={{
+              background: 'rgba(33, 212, 253, 0.1)',
+              border: '1px solid rgba(33, 212, 253, 0.35)',
+              color: 'var(--cyan-ai)',
+              padding: '6px 14px',
+              borderRadius: '20px',
+              fontSize: '11.5px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease',
+              fontFamily: 'var(--font-mono)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(33, 212, 253, 0.2)'
+              e.currentTarget.style.boxShadow = '0 0 14px var(--cyan-glow)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(33, 212, 253, 0.1)'
+              e.currentTarget.style.boxShadow = 'none'
+            }}
+          >
+            <FileText size={13} />
+            <span>EXPORT OISD AUDIT (PDF)</span>
+          </button>
         {user ? (
           <div className="user-profile-menu-container">
             <button 
@@ -117,5 +151,8 @@ export default function HeaderBar() {
         )}
       </div>
     </header>
+
+    <AuditReportModal isOpen={auditModalOpen} onClose={() => setAuditModalOpen(false)} />
+    </>
   )
 }

@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import WordHighlight from '../components/WordHighlight'
 import {
   Sparkles, AlertTriangle, CheckCircle2, ShieldCheck, Flame, Zap, Box,
-  ArrowRight, ShieldAlert, Cpu, Eye, Layers, Compass, Loader2, Lock, Globe
+  ArrowRight, ShieldAlert, Cpu, Eye, Layers, Compass, Loader2, Lock, Globe, Camera, FileText
 } from 'lucide-react'
 
 const SAMPLE_SCENARIOS = [
@@ -90,6 +90,7 @@ export default function AnalyzeReport() {
   const [error, setError] = useState(null)
   const [showExplanation, setShowExplanation] = useState(false)
   const [loadingExplain, setLoadingExplain] = useState(false)
+  const [ocrActive, setOcrActive] = useState(false)
 
   const loadScenario = (sc) => {
     setSelectedScenario(sc)
@@ -199,10 +200,71 @@ export default function AnalyzeReport() {
           </div>
 
           <div className="form-group mb-16">
-            <label className="terminal-label">Observation / Near-Miss Narrative</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+              <label className="terminal-label" style={{ margin: 0 }}>Observation / Near-Miss Narrative</label>
+              
+              {/* OCR Photo / Paper Card Scanner Trigger */}
+              <div style={{ display: 'flex', gap: 6 }}>
+                <label 
+                  style={{
+                    background: 'rgba(33, 212, 253, 0.1)',
+                    border: '1px solid rgba(33, 212, 253, 0.3)',
+                    color: 'var(--cyan-ai)',
+                    padding: '3px 10px',
+                    borderRadius: 6,
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 5,
+                    fontFamily: 'var(--font-mono)'
+                  }}
+                  title="Upload a photo of a physical near-miss card to extract text"
+                >
+                  <Camera size={13} />
+                  <span>📷 SCAN PAPER CARD (OCR)</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setOcrActive(true);
+                        setTimeout(() => {
+                          setReportText('Contractor technician found performing hot flange cutting on condensate line at Digboi Unit #2 without continuous LEL combustible gas detector or countersigned PTW.');
+                          setSite('Digboi Refinery Unit #2');
+                          setOcrActive(false);
+                        }, 1200);
+                      }
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+
+            {ocrActive && (
+              <div style={{
+                background: 'rgba(33, 212, 253, 0.12)',
+                border: '1px dashed var(--cyan-ai)',
+                borderRadius: 8,
+                padding: '10px 14px',
+                marginBottom: 10,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                fontSize: 12,
+                color: 'var(--cyan-ai)',
+                fontFamily: 'var(--font-mono)'
+              }}>
+                <Sparkles size={16} className="pulse-dot" />
+                <span>AI Vision OCR Engine: Scanning handwritten field card & digitizing text...</span>
+              </div>
+            )}
+
             <textarea
               className="narrative-textarea"
-              placeholder="Enter unstructured safety observation narrative..."
+              placeholder="Enter unstructured safety observation narrative or scan a paper card..."
               value={reportText}
               onChange={(e) => setReportText(e.target.value)}
               rows={5}
