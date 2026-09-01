@@ -95,6 +95,7 @@ The name **SENTINEL-X** embodies the shift from passive industrial safety loggin
 - [The 9 IOGP Life-Saving Rules (IOGP Report 459 Standard)](#-the-9-iogp-life-saving-rules-iogp-report-459-standard--comprehensive-field-guide)
 - [Command Center Chart Mechanics & Axis Breakdown](#-command-center-chart-mechanics--axis-breakdown)
 - [End-to-End System Architecture](#-end-to-end-system-architecture)
+- [Ultra-Minimalist UI/UX Architecture & Dynamic Theme Engine](#-ultra-minimalist-uiux-architecture--dynamic-theme-engine)
 - [Quickstart & Installation Guide](#-quickstart--installation-guide)
 - [5-Minute Hackathon Pitch Script](#-5-minute-hackathon-pitch--presentation-script)
 
@@ -651,8 +652,50 @@ flowchart TD
     style SIFPath fill:#FF4655,stroke:#FFFFFF,stroke-width:2px,color:#FFFFFF
     style RoutinePath fill:#00E676,stroke:#040D12,stroke-width:2px,color:#040D12
     style TriggerAlert fill:#FF4655,stroke:#FFB020,stroke-width:3px,color:#FFFFFF
-    style CloseLoop fill:#00E676,stroke:#040D12,stroke-width:2px,color:#040D12
 ```
+
+---
+
+## 🎨 Ultra-Minimalist UI/UX Architecture & Dynamic Theme Engine
+
+**SENTINEL-X** features a publication-grade, developer-first interface inspired by **Vercel, Stripe, and OpenAI**. It balances high-density industrial SCADA surveillance with sleek, ultra-minimalist developer ergonomics.
+
+```
+                  ┌─────────────────────────────────────────────────────────┐
+                  │                 DYNAMIC THEME SWITCHER                  │
+                  │             [ ☀️ LIGHT ]  ⟷  [ 🌙 DARK ]               │
+                  └────────────┬───────────────────────────────┬────────────┘
+                               │                               │
+            ┌──────────────────┴─────────────┐   ┌─────────────┴─────────────────┐
+            │   ☀️ Vercel Minimalist Light   │   │   🌙 Industrial Dark SCADA   │
+            ├────────────────────────────────┤   ├───────────────────────────────┤
+            │ • Canvas: #FAFAFA (Zinc-50)    │   │ • Canvas: #050B0E (Obsidian)  │
+            │ • Cards: #FFFFFF (Pure White)  │   │ • Cards: #0F1F27 (Deep Slate) │
+            │ • Borders: 1px solid #E4E4E7   │   │ • Borders: 1px solid #1B323D  │
+            │ • Text: #18181B (Neutral-900)  │   │ • Text: #E8F1F5 (Cyan-Tint)   │
+            │ • Accents: Indigo / Violet     │   │ • Accents: Electric Cyan / Red│
+            │ • Badges: Soft Pastel Tones    │   │ • Badges: High-Glow SCADA Neon│
+            └────────────────────────────────┘   └───────────────────────────────┘
+```
+
+### 🎯 Key Design Features:
+1. **Dynamic Theme Switcher (`ThemeContext.jsx`)**:
+   - 1-click toggle situated in the top navigation header bar (`[ ☀️ LIGHT ]` / `[ 🌙 DARK ]`).
+   - Instantly swaps CSS custom properties across the DOM with zero page reloads.
+   - Automatically saves and restores theme state via browser `localStorage` (`sentinel_theme`).
+
+2. **Multi-Modal Paper Observation Digitization (Neural OCR)**:
+   - Built-in `Tesseract.js` client-side optical character recognition supporting English and regional Hindi/Assamese field scripts.
+   - Wide-angle perspective correction and automatic noise filter (`clean_text()`).
+   - Dynamic regular-expression anchoring and typo normalization (`wagt` $\to$ `waqt`, `vope` $\to$ `rope`, `condefsate` $\to$ `condensate`).
+
+3. **Explainable AI (LIME Token Highlighting)**:
+   - High-contrast interactive token attribution badges.
+   - High-energy trigger words (*e.g., "catline wire rope", "toot gaya", "pinch zone"*) are highlighted in soft red pastel badges with exact perturbation weights (`Importance: +0.420`).
+   - Mitigating controls (*e.g., "barricade in place", "PTW verified"*) are highlighted in soft emerald badges.
+
+4. **1-Click Statutory OISD-156 / DGMS Compliance PDF Export**:
+   - Generates publication-ready regulatory audit reports dynamically formatted with official Oil India Limited letterhead, risk density matrices, and statutory sign-off seals.
 
 ---
 
