@@ -543,59 +543,56 @@ SENTINEL-X is engineered as a high-throughput, modular, cloud-edge safety intell
 ### 📊 Interactive Mermaid Architecture Diagram
 
 ```mermaid
-graph TB
-    subgraph Layer1["1. Ingestion Layer"]
+flowchart TD
+    subgraph L1["1. Field Ingestion Layer"]
         A1["📱 Field Tablets (PWA)"]
         A2["📄 QR Near-Miss Forms"]
         A3["📟 SCADA / DCS Event Stream"]
         A4["🏛️ OISD / DGMS Incident Logs"]
     end
 
-    subgraph Layer2["2. API Gateway (FastAPI)"]
+    subgraph L2["2. API Gateway & Security (FastAPI)"]
         B1["POST /classify"]
         B2["POST /reports/bulk"]
-        B3["GET /dashboard/stats"]
-        B4["JWT Clearance & RBAC Filter"]
+        B3["JWT Clearance & Facility RBAC Filter"]
     end
 
-    subgraph Layer3["3. AI/ML Inference & XAI Engine"]
-        C1["⚡ Groq LLM Inference (Llama-3.3-70B)"]
+    subgraph L3["3. AI/ML & XAI Cognitive Engine"]
+        C1["⚡ Groq LLM (Llama-3.3-70B)"]
         C2["🔍 Sentence Transformers (all-MiniLM-L6-v2)"]
-        C3["📋 IOGP Report 459 Taxonomy Matcher"]
-        C4["🔬 LIME Token Attribution & SIF Weights"]
-        C5["🧬 Safety DNA Causal Chain Extractor"]
+        C3["📋 IOGP Report 459 9-Rule Matcher"]
+        C4["🔬 LIME Token XAI Feature Weights"]
     end
 
-    subgraph Layer4["4. Data & Persistence Store"]
-        D1[("🗄️ SQLite Database (WAL Mode)")]
+    subgraph L4["4. Persistence & Analytics Store"]
+        D1[("🗄️ SQLite WAL Database")]
         D2["📊 Time-Series Telemetry Aggregator"]
         D3["🚨 Active Intervention Queue Store"]
     end
 
-    subgraph Layer5["5. Executive Command & Interception Surface"]
-        E1["📈 SIF Precursor Trajectory (Year/Month)"]
-        E2["🏭 Facility Risk Matrix (6 Assam Sites)"]
-        E3["🌌 3D Risk Universe Network Graph"]
+    subgraph L5["5. Executive Command & Action Surface"]
+        E1["📈 SIF Trajectory (12Y/14M)"]
+        E2["🏭 Facility Risk Matrix"]
+        E3["🌌 3D Risk Universe Graph"]
         E4["⏳ 30-Day Safety Time Machine"]
-        E5["🧪 Counterfactual Intervention Simulator"]
-        E6["🚨 One-Click Action Dispatch Queue"]
+        E5["🧪 Counterfactual Simulator"]
+        E6["🚨 One-Click Action Dispatch"]
     end
 
     A1 & A2 & A3 & A4 --> B1 & B2
-    B1 & B2 --> B4
-    B4 --> C1 & C2
-    C2 --> C3
-    C1 & C3 --> C4 & C5
-    C4 & C5 --> D1
+    B1 & B2 --> B3
+    B3 --> C1 & C2
+    C1 & C2 --> C3
+    C3 --> C4
+    C4 --> D1
     D1 --> D2 & D3
-    D2 & D3 --> B3
-    B3 --> E1 & E2 & E3 & E4 & E5 & E6
+    D2 & D3 --> E1 & E2 & E3 & E4 & E5 & E6
 
-    style Layer1 fill:#071318,stroke:#162932,stroke-width:2px,color:#E8F1F5
-    style Layer2 fill:#0B1C24,stroke:#21D4FD,stroke-width:2px,color:#E8F1F5
-    style Layer3 fill:#102833,stroke:#FF6B4A,stroke-width:2px,color:#E8F1F5
-    style Layer4 fill:#0B1C24,stroke:#FFB020,stroke-width:2px,color:#E8F1F5
-    style Layer5 fill:#071318,stroke:#00E676,stroke-width:2px,color:#E8F1F5
+    style L1 fill:#081318,stroke:#1A3644,stroke-width:2px,color:#E8F1F5
+    style L2 fill:#0B1C24,stroke:#21D4FD,stroke-width:2px,color:#E8F1F5
+    style L3 fill:#102833,stroke:#FF6B4A,stroke-width:2px,color:#E8F1F5
+    style L4 fill:#0B1C24,stroke:#FFB020,stroke-width:2px,color:#E8F1F5
+    style L5 fill:#081318,stroke:#00E676,stroke-width:2px,color:#E8F1F5
 ```
 
 ---
