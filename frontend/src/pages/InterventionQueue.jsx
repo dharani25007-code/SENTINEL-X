@@ -78,7 +78,7 @@ export default function InterventionQueue() {
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 800, color: 'var(--cyan-ai)' }}>
                     #{item.id}
                   </span>
-                  <h3 style={{ fontSize: 16, fontWeight: 800, color: '#E8F1F5', margin: 0 }}>
+                  <h3 style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
                     {item.title}
                   </h3>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: item.severity === 'critical' ? 'var(--red-critical)' : 'var(--amber-warn)' }}>
@@ -89,10 +89,10 @@ export default function InterventionQueue() {
                 <div style={{ display: 'flex', gap: 18, fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--text-muted)', margin: '8px 0' }}>
                   <span>FACILITY: <strong style={{ color: 'var(--cyan-ai)' }}>{item.site}</strong></span>
                   <span>PRECURSORS: <strong style={{ color: 'var(--red-critical)' }}>{item.reportsCount} LOGS</strong></span>
-                  <span>HAZARD: <strong style={{ color: '#E8F1F5' }}>{item.hazard}</strong></span>
+                  <span>HAZARD: <strong style={{ color: 'var(--text-primary)' }}>{item.hazard}</strong></span>
                 </div>
 
-                <div style={{ fontSize: 13, color: '#E8F1F5', background: 'var(--bg-deep)', padding: '10px 14px', borderRadius: 6, border: '1px solid var(--border-color)', marginTop: 8 }}>
+                <div style={{ fontSize: 13, color: 'var(--text-primary)', background: 'var(--bg-deep)', padding: '10px 14px', borderRadius: 6, border: '1px solid var(--border-color)', marginTop: 8 }}>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, color: 'var(--amber-warn)', textTransform: 'uppercase', fontWeight: 700 }}>Recommended Intervention: </span>
                   {item.suggestedAction}
                 </div>

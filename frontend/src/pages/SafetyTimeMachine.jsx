@@ -311,19 +311,19 @@ export default function SafetyTimeMachine() {
           </div>
           <ResponsiveContainer width="100%" height={250}>
             <AreaChart data={current.chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1B323D" />
-              <XAxis dataKey="epoch" tick={{ fill: '#8EA3AD', fontSize: 11, fontFamily: 'var(--font-mono)' }} />
-              <YAxis tick={{ fill: '#8EA3AD', fontSize: 11, fontFamily: 'var(--font-mono)' }} />
-              <Tooltip contentStyle={{ background: '#0F1F27', border: '1px solid #1B323D', color: '#E8F1F5', fontFamily: 'var(--font-mono)' }} />
-              <Area type="monotone" dataKey="total" name="Total Reports" stroke="#21D4FD" fill="#21D4FD" fillOpacity={0.15} strokeWidth={2} />
-              <Area type="monotone" dataKey="sif" name="SIF Precursors" stroke="#FF4655" fill="#FF4655" fillOpacity={0.25} strokeWidth={2.5} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
+              <XAxis dataKey="epoch" tick={{ fill: 'var(--text-muted)', fontSize: 11, fontFamily: 'var(--font-mono)' }} />
+              <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11, fontFamily: 'var(--font-mono)' }} />
+              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }} />
+              <Area type="monotone" dataKey="total" name="Total Reports" stroke="var(--cyan-ai)" fill="var(--cyan-ai)" fillOpacity={0.15} strokeWidth={2} />
+              <Area type="monotone" dataKey="sif" name="SIF Precursors" stroke="var(--red-critical)" fill="var(--red-critical)" fillOpacity={0.25} strokeWidth={2.5} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
 
         <div className="card-elevated">
           <div className="input-label" style={{ color: 'var(--cyan-ai)' }}>Fleet Temporal Assessment</div>
-          <h3 style={{ fontSize: 17, fontWeight: 800, color: '#E8F1F5', margin: '6px 0 14px' }}>
+          <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text-primary)', margin: '6px 0 14px' }}>
             {viewMode === '12Y' ? '12-Year Historical Milestone' : '30-Day Precursor Accrual Chain'}
           </h3>
 
@@ -340,7 +340,7 @@ export default function SafetyTimeMachine() {
             </div>
           </div>
 
-          <p style={{ fontSize: 13, color: '#E8F1F5', lineHeight: 1.6, background: 'var(--bg-deep)', padding: 14, borderRadius: 8, border: '1px solid var(--border-color)' }}>
+          <p style={{ fontSize: 13, color: 'var(--text-primary)', lineHeight: 1.6, background: 'var(--bg-deep)', padding: 14, borderRadius: 8, border: '1px solid var(--border-color)' }}>
             "{current.narrative}"
           </p>
         </div>

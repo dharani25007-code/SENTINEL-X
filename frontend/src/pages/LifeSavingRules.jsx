@@ -117,7 +117,7 @@ export default function LifeSavingRules() {
               <SelectedIcon size={28} />
             </div>
             <div>
-              <h3 style={{ fontSize: 20, fontWeight: 800, color: '#E8F1F5' }}>{selectedRule.name}</h3>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)' }}>{selectedRule.name}</h3>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, color: 'var(--text-secondary)', marginTop: 4 }}>
                 {getRuleCount(selectedRule.name)} Active SIF Precursor Observations Logged Across OIL Facilities
               </p>
@@ -128,7 +128,7 @@ export default function LifeSavingRules() {
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 1, color: 'var(--cyan-ai)', fontWeight: 700, marginBottom: 6 }}>
               IOGP Mandatory Control Requirements
             </div>
-            <p style={{ fontSize: 14, lineHeight: 1.6, color: '#E8F1F5' }}>
+            <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--text-primary)' }}>
               {selectedRule.description}
             </p>
           </div>
@@ -152,7 +152,7 @@ export default function LifeSavingRules() {
                 <div key={report.id} className="alert-card">
                   <div className="alert-severity critical" />
                   <div className="alert-content">
-                    <div style={{ fontSize: 13.5, color: '#E8F1F5', lineHeight: 1.6, fontWeight: 500 }}>
+                    <div style={{ fontSize: 13.5, color: 'var(--text-primary)', lineHeight: 1.6, fontWeight: 500 }}>
                       {report.report_text}
                     </div>
                     <div className="alert-meta">

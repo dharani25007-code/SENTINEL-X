@@ -143,7 +143,7 @@ export default function RiskUniverse() {
               }}
               onClick={() => setSelectedNode(node)}
             >
-              <div style={{ fontSize: 12.5, fontWeight: 800, color: '#E8F1F5', whiteSpace: 'nowrap' }}>{node.label}</div>
+              <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>{node.label}</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: node.color, marginTop: 4, whiteSpace: 'nowrap' }}>
                 {node.sub}
               </div>
@@ -159,7 +159,7 @@ export default function RiskUniverse() {
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--cyan-ai)' }}>NODE #{selectedNode.id.toUpperCase()}</span>
             </div>
 
-            <h3 style={{ fontSize: 18, fontWeight: 800, color: '#E8F1F5', marginBottom: 6 }}>{selectedNode.label}</h3>
+            <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 6 }}>{selectedNode.label}</h3>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11.5, color: selectedNode.color, marginBottom: 18 }}>
               {selectedNode.sub}
             </p>
@@ -171,7 +171,7 @@ export default function RiskUniverse() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
                 <span style={{ color: 'var(--text-muted)' }}>High-Risk Task Vector:</span>
-                <strong style={{ color: '#E8F1F5' }}>{selectedNode.activity}</strong>
+                <strong style={{ color: 'var(--text-primary)' }}>{selectedNode.activity}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
                 <span style={{ color: 'var(--text-muted)' }}>Precursor Momentum:</span>
@@ -182,7 +182,7 @@ export default function RiskUniverse() {
             <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 11.5, textTransform: 'uppercase', letterSpacing: 0.8, color: 'var(--text-secondary)', marginBottom: 10 }}>
               Autonomous Safety Assessment
             </h4>
-            <p style={{ fontSize: 13, color: '#E8F1F5', lineHeight: 1.6, marginBottom: 20 }}>
+            <p style={{ fontSize: 13, color: 'var(--text-primary)', lineHeight: 1.6, marginBottom: 20 }}>
               "{selectedNode.insight}"
             </p>
 

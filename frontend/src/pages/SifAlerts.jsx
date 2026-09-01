@@ -158,12 +158,12 @@ export default function SifAlerts() {
 
                 {expandedId === alert.id && (
                   <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--border-color)' }}>
-                    <div style={{ fontSize: 13.5, color: '#E8F1F5', lineHeight: 1.6 }}>
+                    <div style={{ fontSize: 13.5, color: 'var(--text-primary)', lineHeight: 1.6 }}>
                       <strong style={{ color: 'var(--cyan-ai)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>FIELD REPORT: </strong>
                       {alert.report_text}
                     </div>
                     {alert.reasoning && (
-                      <div style={{ marginTop: 10, fontSize: 13, color: '#8EA3AD', background: 'var(--bg-deep-slate)', padding: 12, borderRadius: 6, border: '1px solid var(--border-color)' }}>
+                      <div style={{ marginTop: 10, fontSize: 13, color: 'var(--text-secondary)', background: 'var(--bg-deep)', padding: 12, borderRadius: 6, border: '1px solid var(--border-color)' }}>
                         <strong style={{ color: 'var(--amber-warn)', fontFamily: 'var(--font-mono)', fontSize: 11.5 }}>AI PRECURSOR DETERMINATION: </strong>
                         {alert.reasoning}
                       </div>

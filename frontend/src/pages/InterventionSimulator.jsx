@@ -111,7 +111,7 @@ export default function InterventionSimulator() {
         {/* Counterfactual Results Card */}
         <div className="sim-comparison-card">
           <div className="input-label" style={{ color: 'var(--violet-sim)' }}>SIMULATED HAZARD INTERCEPTION</div>
-          <h3 style={{ fontSize: 20, fontWeight: 800, color: '#E8F1F5', margin: '8px 0 16px' }}>
+          <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', margin: '8px 0 16px' }}>
             Counterfactual Risk Profile
           </h3>
 

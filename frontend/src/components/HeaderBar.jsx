@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth, DEMO_PERSONAS } from '../context/AuthContext'
-import { Shield, ChevronDown, LogOut, UserCheck, Sparkles, Building2, User, FileText } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
+import { Shield, ChevronDown, LogOut, UserCheck, Sparkles, Building2, User, FileText, Sun, Moon } from 'lucide-react'
 import AuditReportModal from './AuditReportModal'
 
 export default function HeaderBar() {
   const { user, loginAsPersona, logout } = useAuth()
+  const { theme, toggleTheme, isDark } = useTheme()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [auditModalOpen, setAuditModalOpen] = useState(false)
   const navigate = useNavigate()
@@ -32,14 +34,49 @@ export default function HeaderBar() {
           </div>
         </div>
 
-        <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Dynamic Theme Switcher (Vercel Light vs Industrial Dark) */}
+          <button
+            type="button"
+            className="theme-toggle-btn"
+            onClick={toggleTheme}
+            title={`Switch to ${isDark ? 'Ultra-Minimalist Light Mode' : 'Industrial Dark SCADA Mode'}`}
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--text-primary)',
+              padding: '6px 12px',
+              borderRadius: '20px',
+              fontSize: '11px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease',
+              boxShadow: 'var(--shadow-card)'
+            }}
+          >
+            {isDark ? (
+              <>
+                <Sun size={13} color="#F59E0B" />
+                <span>LIGHT</span>
+              </>
+            ) : (
+              <>
+                <Moon size={13} color="#6366F1" />
+                <span>DARK</span>
+              </>
+            )}
+          </button>
+
           {/* 1-Click OISD Compliance Audit Export Button */}
           <button
             type="button"
             onClick={() => setAuditModalOpen(true)}
             style={{
-              background: 'rgba(33, 212, 253, 0.1)',
-              border: '1px solid rgba(33, 212, 253, 0.35)',
+              background: 'var(--cyan-subtle)',
+              border: '1px solid var(--border-cyan)',
               color: 'var(--cyan-ai)',
               padding: '6px 14px',
               borderRadius: '20px',
@@ -51,14 +88,6 @@ export default function HeaderBar() {
               gap: '6px',
               transition: 'all 0.2s ease',
               fontFamily: 'var(--font-mono)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(33, 212, 253, 0.2)'
-              e.currentTarget.style.boxShadow = '0 0 14px var(--cyan-glow)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(33, 212, 253, 0.1)'
-              e.currentTarget.style.boxShadow = 'none'
             }}
           >
             <FileText size={13} />

@@ -52,11 +52,11 @@ export default function AuditReportModal({ isOpen, onClose }) {
           alignItems: 'center',
           padding: '16px 24px',
           borderBottom: '1px solid var(--border-color)',
-          background: 'rgba(16, 40, 51, 0.8)'
+          background: 'var(--bg-deep)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <FileText size={18} color="var(--cyan-ai)" />
-            <span style={{ fontWeight: 800, fontSize: 13, color: '#E8F1F5', letterSpacing: 0.5 }}>
+            <span style={{ fontWeight: 800, fontSize: 13, color: 'var(--text-primary)', letterSpacing: 0.5 }}>
               STATUTORY HSSE AUDIT SHEET (OISD-156 / DGMS COMPLIANCE)
             </span>
           </div>
@@ -96,7 +96,7 @@ export default function AuditReportModal({ isOpen, onClose }) {
         </div>
 
         {/* Printable Formal Document Sheet */}
-        <div id="printable-audit-area" style={{ padding: '32px 36px', color: '#E8F1F5', background: '#0B1C24' }}>
+        <div id="printable-audit-area" style={{ padding: '32px 36px', color: 'var(--text-primary)', background: 'var(--bg-card)' }}>
           
           {/* Official Letterhead */}
           <div style={{
@@ -181,42 +181,42 @@ export default function AuditReportModal({ isOpen, onClose }) {
               </thead>
               <tbody>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '8px 12px', color: '#E8F1F5', fontWeight: 600 }}>Duliajan Central Complex</td>
+                  <td style={{ padding: '8px 12px', color: 'var(--text-primary)', fontWeight: 600 }}>Duliajan Central Complex</td>
                   <td style={{ padding: '8px 12px' }}>54</td>
                   <td style={{ padding: '8px 12px', color: 'var(--red-critical)', fontWeight: 700 }}>47</td>
                   <td style={{ padding: '8px 12px', color: 'var(--red-critical)' }}>87.0%</td>
                   <td style={{ padding: '8px 12px', color: 'var(--text-secondary)' }}>High-Voltage LOTO Breakers</td>
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '8px 12px', color: '#E8F1F5', fontWeight: 600 }}>Digboi Refinery Unit #2</td>
+                  <td style={{ padding: '8px 12px', color: 'var(--text-primary)', fontWeight: 600 }}>Digboi Refinery Unit #2</td>
                   <td style={{ padding: '8px 12px' }}>46</td>
                   <td style={{ padding: '8px 12px', color: 'var(--red-critical)', fontWeight: 700 }}>38</td>
                   <td style={{ padding: '8px 12px', color: 'var(--red-critical)' }}>82.6%</td>
                   <td style={{ padding: '8px 12px', color: 'var(--text-secondary)' }}>Hot Torch Cutting Near Condensate</td>
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '8px 12px', color: '#E8F1F5', fontWeight: 600 }}>Moran Drilling Rig #4</td>
+                  <td style={{ padding: '8px 12px', color: 'var(--text-primary)', fontWeight: 600 }}>Moran Drilling Rig #4</td>
                   <td style={{ padding: '8px 12px' }}>38</td>
                   <td style={{ padding: '8px 12px', color: 'var(--amber-warn)', fontWeight: 700 }}>29</td>
                   <td style={{ padding: '8px 12px', color: 'var(--amber-warn)' }}>76.3%</td>
                   <td style={{ padding: '8px 12px', color: 'var(--text-secondary)' }}>Suspended 3.5T Drill Tubulars</td>
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '8px 12px', color: '#E8F1F5', fontWeight: 600 }}>Naharkatiya Gas Plant</td>
+                  <td style={{ padding: '8px 12px', color: 'var(--text-primary)', fontWeight: 600 }}>Naharkatiya Gas Plant</td>
                   <td style={{ padding: '8px 12px' }}>31</td>
                   <td style={{ padding: '8px 12px', color: 'var(--amber-warn)', fontWeight: 700 }}>22</td>
                   <td style={{ padding: '8px 12px', color: 'var(--amber-warn)' }}>71.0%</td>
                   <td style={{ padding: '8px 12px', color: 'var(--text-secondary)' }}>Nitrogen Purged Separator Entry</td>
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '8px 12px', color: '#E8F1F5', fontWeight: 600 }}>Pipeline Pump Station 7</td>
+                  <td style={{ padding: '8px 12px', color: 'var(--text-primary)', fontWeight: 600 }}>Pipeline Pump Station 7</td>
                   <td style={{ padding: '8px 12px' }}>28</td>
                   <td style={{ padding: '8px 12px', color: 'var(--emerald-safe)', fontWeight: 700 }}>12</td>
                   <td style={{ padding: '8px 12px', color: 'var(--emerald-safe)' }}>42.8%</td>
                   <td style={{ padding: '8px 12px', color: 'var(--text-secondary)' }}>1200 PSI Hydrotest Flange Barriers</td>
                 </tr>
                 <tr>
-                  <td style={{ padding: '8px 12px', color: '#E8F1F5', fontWeight: 600 }}>Numaligarh Terminal</td>
+                  <td style={{ padding: '8px 12px', color: 'var(--text-primary)', fontWeight: 600 }}>Numaligarh Terminal</td>
                   <td style={{ padding: '8px 12px' }}>16</td>
                   <td style={{ padding: '8px 12px', color: 'var(--emerald-safe)', fontWeight: 700 }}>9</td>
                   <td style={{ padding: '8px 12px', color: 'var(--emerald-safe)' }}>56.2%</td>

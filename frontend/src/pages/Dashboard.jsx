@@ -15,29 +15,29 @@ function CustomTrajectoryTooltip({ active, payload, label }) {
     const data = payload[0]?.payload || {}
     return (
       <div style={{
-        background: '#0B171C',
-        border: '1px solid #1B323D',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border-color)',
         borderRadius: 8,
         padding: '10px 14px',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.6)',
+        boxShadow: 'var(--shadow-card)',
         fontFamily: 'var(--font-mono)',
         fontSize: 12,
         minWidth: 190
       }}>
-        <div style={{ fontWeight: 700, color: '#E8F1F5', marginBottom: 6, fontSize: 13, borderBottom: '1px solid #162932', paddingBottom: 4 }}>
+        <div style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: 6, fontSize: 13, borderBottom: '1px solid var(--border-color)', paddingBottom: 4 }}>
           {label}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, color: '#21D4FD', marginBottom: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, color: 'var(--cyan-ai)', marginBottom: 4 }}>
           <span>Total Reports:</span>
           <span style={{ fontWeight: 700 }}>{data.total}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, color: '#FF4655', marginBottom: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, color: 'var(--red-critical)', marginBottom: 4 }}>
           <span>SIF Precursors:</span>
           <span style={{ fontWeight: 700 }}>{data.sif}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, color: '#7E95A0', borderTop: '1px solid #162932', paddingTop: 4, marginTop: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, color: 'var(--text-muted)', borderTop: '1px solid var(--border-color)', paddingTop: 4, marginTop: 4 }}>
           <span>Precursor Rate:</span>
-          <span style={{ fontWeight: 700, color: Number(data.density) > 25 ? '#FF4655' : '#00E5FF' }}>
+          <span style={{ fontWeight: 700, color: Number(data.density) > 25 ? 'var(--red-critical)' : 'var(--cyan-ai)' }}>
             {data.density}%
           </span>
         </div>
@@ -261,7 +261,7 @@ export default function Dashboard() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'nowrap' }}>
               {/* Sleek Segmented Pill Toggle */}
-              <div style={{ display: 'inline-flex', background: '#071318', padding: 2, borderRadius: 6, border: '1px solid #162932' }}>
+              <div style={{ display: 'inline-flex', background: 'var(--bg-card-elevated)', padding: 2, borderRadius: 6, border: '1px solid var(--border-color)' }}>
                 <button
                   type="button"
                   onClick={() => setTimelineMode('yearly')}
@@ -275,7 +275,7 @@ export default function Dashboard() {
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
                     background: timelineMode === 'yearly' ? 'var(--cyan-ai)' : 'transparent',
-                    color: timelineMode === 'yearly' ? '#040D12' : '#7E95A0',
+                    color: timelineMode === 'yearly' ? '#FFFFFF' : 'var(--text-muted)',
                     transition: 'all 0.15s ease'
                   }}
                 >
@@ -294,7 +294,7 @@ export default function Dashboard() {
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
                     background: timelineMode === 'monthly' ? 'var(--cyan-ai)' : 'transparent',
-                    color: timelineMode === 'monthly' ? '#040D12' : '#7E95A0',
+                    color: timelineMode === 'monthly' ? '#FFFFFF' : 'var(--text-muted)',
                     transition: 'all 0.15s ease'
                   }}
                 >
@@ -303,10 +303,10 @@ export default function Dashboard() {
               </div>
 
               <div className="chart-legend" style={{ display: 'flex', alignItems: 'center', gap: 12, margin: 0 }}>
-                <span className="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#A0B4BE', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
+                <span className="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
                   <span className="dot cyan" /> Total
                 </span>
-                <span className="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#A0B4BE', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
+                <span className="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
                   <span className="dot red" /> SIF Precursor
                 </span>
               </div>
@@ -317,28 +317,28 @@ export default function Dashboard() {
               <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#21D4FD" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#21D4FD" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="var(--cyan-ai)" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="var(--cyan-ai)" stopOpacity={0.0} />
                   </linearGradient>
                   <linearGradient id="colorSif" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#FF4655" stopOpacity={0.35} />
-                    <stop offset="95%" stopColor="#FF4655" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="var(--red-critical)" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="var(--red-critical)" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#162932" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
                 <XAxis 
                   dataKey="month" 
-                  tick={{ fill: '#7E95A0', fontSize: 10.5, fontFamily: 'var(--font-mono)' }} 
-                  axisLine={{ stroke: '#1B323D' }} 
+                  tick={{ fill: 'var(--text-muted)', fontSize: 10.5, fontFamily: 'var(--font-mono)' }} 
+                  axisLine={{ stroke: 'var(--border-color)' }} 
                   tickLine={false} 
                   interval="preserveStartEnd"
                   minTickGap={20}
                   dy={6}
                 />
-                <YAxis tick={{ fill: '#7E95A0', fontSize: 11, fontFamily: 'var(--font-mono)' }} axisLine={false} tickLine={false} allowDecimals={false} />
+                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11, fontFamily: 'var(--font-mono)' }} axisLine={false} tickLine={false} allowDecimals={false} />
                 <Tooltip content={<CustomTrajectoryTooltip />} />
-                <Area type="monotone" dataKey="total" stroke="#21D4FD" strokeWidth={2.5} fillOpacity={1} fill="url(#colorTotal)" name="Total Reports" />
-                <Area type="monotone" dataKey="sif" stroke="#FF4655" strokeWidth={2.5} fillOpacity={1} fill="url(#colorSif)" name="SIF Precursors" />
+                <Area type="monotone" dataKey="total" stroke="var(--cyan-ai)" strokeWidth={2.5} fillOpacity={1} fill="url(#colorTotal)" name="Total Reports" />
+                <Area type="monotone" dataKey="sif" stroke="var(--red-critical)" strokeWidth={2.5} fillOpacity={1} fill="url(#colorSif)" name="SIF Precursors" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -371,21 +371,21 @@ export default function Dashboard() {
                   tickLine={false} 
                 />
                 <Tooltip
-                  contentStyle={{ background: '#0B171C', border: '1px solid #1B323D', borderRadius: 8, color: '#E8F1F5', fontFamily: 'var(--font-mono)' }}
+                  contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 8, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}
                   formatter={(value, name, props) => [`${value} Precursors`, props.payload.fullName]}
                 />
                 <Bar dataKey="count" radius={[0, 5, 5, 0]} barSize={15}>
                   <LabelList 
                     dataKey="count" 
                     position="right" 
-                    fill="#E8F1F5" 
+                    fill="var(--text-primary)" 
                     fontSize={11} 
                     fontFamily="var(--font-mono)" 
                     fontWeight={700} 
                     offset={8} 
                   />
                   {ruleData.map((entry, i) => {
-                    const color = i === 0 ? '#FF4655' : i === 1 ? '#FF6B4A' : i === 2 ? '#FFB020' : '#21D4FD'
+                    const color = i === 0 ? '#FF4655' : i === 1 ? '#FF6B4A' : i === 2 ? '#FFB020' : 'var(--cyan-ai)'
                     return <Cell key={i} fill={color} />
                   })}
                 </Bar>
@@ -422,7 +422,7 @@ export default function Dashboard() {
             <tbody>
               {stats.by_site.map((s, i) => (
                 <tr key={i}>
-                  <td style={{ fontWeight: 700, color: '#E8F1F5', fontSize: 13.5 }}>{s.site}</td>
+                  <td style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: 13.5 }}>{s.site}</td>
                   <td style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>{s.total} logs</td>
                   <td style={{ fontFamily: 'var(--font-mono)', color: 'var(--red-critical)', fontWeight: 700 }}>
                     {s.sif_count}

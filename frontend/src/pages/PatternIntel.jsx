@@ -62,7 +62,7 @@ export default function PatternIntel() {
           <strong style={{ color: 'var(--amber-warn)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontSize: 11 }}>
             EMERGING SYSTEMIC RISK IDENTIFIED:
           </strong>
-          <p style={{ fontSize: 13.5, color: '#E8F1F5', marginTop: 2 }}>
+          <p style={{ fontSize: 13.5, color: 'var(--text-primary)', marginTop: 2 }}>
             <strong>Energy Isolation & LOTO failures</strong> increased by <strong>23.4%</strong> in <strong>Duliajan Central Complex</strong> over the last 30 days during active maintenance schedules.
           </p>
         </div>
@@ -88,7 +88,7 @@ export default function PatternIntel() {
               onClick={() => setSelectedSiteNode(node)}
             >
               <div className={`site-node-status ${node.risk}`} />
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#E8F1F5', marginBottom: 6 }}>{node.name}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 6 }}>{node.name}</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: node.risk === 'red' ? 'var(--red-critical)' : 'var(--amber-warn)' }}>
                 SIF Density: {node.density}
               </div>
@@ -182,12 +182,12 @@ export default function PatternIntel() {
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={stackedData}>
-              <XAxis dataKey="site" tick={{ fill: '#8EA3AD', fontSize: 11, fontFamily: 'var(--font-mono)' }} axisLine={false} />
-              <YAxis tick={{ fill: '#8EA3AD', fontSize: 12, fontFamily: 'var(--font-mono)' }} axisLine={false} />
+              <XAxis dataKey="site" tick={{ fill: 'var(--text-muted)', fontSize: 11, fontFamily: 'var(--font-mono)' }} axisLine={false} />
+              <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 12, fontFamily: 'var(--font-mono)' }} axisLine={false} />
               <Tooltip
-                contentStyle={{ background: '#111F25', border: '1px solid #24363E', borderRadius: 8, color: '#E8F1F5', fontFamily: 'var(--font-mono)' }}
+                contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 8, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}
               />
-              <Legend wrapperStyle={{ fontSize: 11, color: '#8EA3AD' }} />
+              <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-secondary)' }} />
               {allRules.map((rule, i) => (
                 <Bar key={rule} dataKey={rule} stackId="a" fill={COLORS[i % COLORS.length]} radius={i === allRules.length - 1 ? [4, 4, 0, 0] : [0, 0, 0, 0]} />
               ))}
