@@ -17,6 +17,22 @@ const SAMPLE_SCENARIOS = [
     barrier: 'LOTO Isolation & Zero-Energy Verification Breached'
   },
   {
+    label: '🇮🇳 Rig Floor Catline Snap',
+    text: 'Rig floor pe drill pipe stand lift karte waqt catline wire rope achanak tut gaya. Floorman helper narrowly escaped high-energy pinch zone near rotary table.',
+    site: 'Moran Drilling Rig #4',
+    activity: 'Safe Mechanical Lifting',
+    hazard: 'Catline Cable Failure & Heavy Suspended Load',
+    barrier: 'Lifting Rigging Integrity & Red Zone Protocol Breached'
+  },
+  {
+    label: '🚰 Pipeline Welding / Missing PTW',
+    text: 'Contractor successfully completed pipeline tie-in welding at Segment B manifold without conducting hot work atmospheric gas check or issuing countersigned PTW.',
+    site: 'Pipeline Pump Station 7',
+    activity: 'Hot Work',
+    hazard: 'Potential Flammable Vapor Ignition Without Gas Test',
+    barrier: 'Missing Gas Clearance & Countersigned PTW'
+  },
+  {
     label: '🔥 Hot Work / Gas Leak',
     text: 'Contractor was observed performing torch cutting and welding within 2.5 meters of an open condensate drainage valve with strong hydrocarbon smell. No continuous gas monitoring or fire watch present.',
     site: 'Digboi Refinery Unit #2',
@@ -33,17 +49,9 @@ const SAMPLE_SCENARIOS = [
     barrier: 'Confined Space Entry Permit & Continuous Atmospheric Monitoring Bypassed'
   },
   {
-    label: '🏗️ Suspended Drill Pipe',
-    text: 'During tripping operations on drilling floor, 4.5-inch drill pipe stand was hoisted while roughneck walked directly underneath the suspended 3.5-ton tubular load.',
-    site: 'Moran Drilling Rig #4',
-    activity: 'Lifting Operations',
-    hazard: '3.5-Ton Suspended Kinetic Overhead Load',
-    barrier: 'Red Exclusion Zone Protocol Not Enforced'
-  },
-  {
     label: '🟢 Routine Housekeeping',
     text: 'Empty plastic packaging boxes and wrapping plastic left near the site office corridor, causing minor clutter. Cleared and disposed into waste bin immediately.',
-    site: 'Pipeline Pump Station 7',
+    site: 'Numaligarh Terminal',
     activity: 'Housekeeping',
     hazard: 'Low-Energy Slip/Trip Surface',
     barrier: 'Managed'
@@ -204,32 +212,21 @@ export default function AnalyzeReport() {
             </div>
           </div>
 
-          <div className="terminal-form-row">
+          <div className="terminal-form-row" style={{ marginBottom: 22 }}>
             <div className="form-group">
-              <label className="terminal-label">Observation Type</label>
-              <select
-                className="terminal-select"
-                value={reportType}
-                onChange={(e) => setReportType(e.target.value)}
-              >
-                <option value="Unsafe Act">Unsafe Act (UA)</option>
-                <option value="Unsafe Condition">Unsafe Condition (UC)</option>
-                <option value="Near-Miss">Near-Miss Observation (NM)</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                <label className="terminal-label" style={{ margin: 0 }}>OIL Operational Facility</label>
-                {isFleetDirector ? (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--cyan-ai)' }}>
-                    <Globe size={10} style={{ display: 'inline', marginRight: 3 }} /> Fleet-Wide
-                  </span>
-                ) : (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--amber-warn)' }}>
-                    <Lock size={10} style={{ display: 'inline', marginRight: 3 }} /> Scoped
-                  </span>
-                )}
+              <div style={{ display: 'flex', alignItems: 'center', height: 22, marginBottom: 6 }}>
+                <label className="terminal-label" style={{ margin: 0, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span>OIL Facility</span>
+                  {isFleetDirector ? (
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--cyan-ai)', fontWeight: 600 }}>
+                      [Fleet-Wide]
+                    </span>
+                  ) : (
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--amber-warn)', fontWeight: 600 }}>
+                      [Scoped]
+                    </span>
+                  )}
+                </label>
               </div>
 
               {isFleetDirector ? (
@@ -249,13 +246,9 @@ export default function AnalyzeReport() {
                 <div 
                   className="terminal-select" 
                   style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
                     gap: 8, 
                     color: 'var(--cyan-ai)', 
                     fontWeight: 700,
-                    background: 'var(--bg-card-elevated)',
-                    border: '1px solid rgba(255, 176, 32, 0.4)',
                     cursor: 'not-allowed'
                   }}
                   title="Permissions scoped to your assigned operational asset"
@@ -265,24 +258,29 @@ export default function AnalyzeReport() {
                 </div>
               )}
             </div>
-          </div>
 
-          <div className="form-group mb-20">
-            <label className="terminal-label">High-Energy Task Classification</label>
-            <select
-              className="terminal-select"
-              value={activity}
-              onChange={(e) => setActivity(e.target.value)}
-            >
-              <option value="Energy Isolation">Energy Isolation (LOTO)</option>
-              <option value="Hot Work">Hot Work (Welding / Torch Cutting)</option>
-              <option value="Confined Space Entry">Confined Space Entry</option>
-              <option value="Lifting Operations">Mechanical Lifting Operations</option>
-              <option value="Working at Height">Working at Height / Scaffolding</option>
-              <option value="Driving">Field Driving & Transport</option>
-              <option value="Excavation">Trenching & Excavation</option>
-              <option value="Housekeeping">General Housekeeping</option>
-            </select>
+            <div className="form-group">
+              <div style={{ display: 'flex', alignItems: 'center', height: 22, marginBottom: 6 }}>
+                <label className="terminal-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>IOGP Rule Classification</label>
+              </div>
+              <div
+                className="terminal-select"
+                style={{
+                  gap: 8,
+                  color: 'var(--cyan-ai)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 11.5,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  cursor: 'default'
+                }}
+                title="The AI model automatically maps your narrative against the 9 IOGP Life-Saving Rules"
+              >
+                <Sparkles size={13} className="pulse-dot" color="var(--cyan-ai)" style={{ flexShrink: 0 }} />
+                <span style={{ fontWeight: 600 }}>🤖 AUTO-INFERRED (IOGP 9 RULES)</span>
+              </div>
+            </div>
           </div>
 
           <button

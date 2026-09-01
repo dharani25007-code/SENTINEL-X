@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SENTINEL-X | Autonomous SIF Precursor Intelligence Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-deep: #071318;
+      --bg-card: #0B1C24;
+      --bg-card-elevated: #102833;
+      --border-color: #1A3644;
+      --border-cyan: #21D4FD;
+      --cyan-ai: #21D4FD;
+      --cyan-glow: rgba(33, 212, 253, 0.25);
+      --red-critical: #FF4655;
+      --amber-warn: #FFB020;
+      --emerald-safe: #00E676;
+      --violet-sim: #A855F7;
+      --text-primary: #E8F1F5;
+      --text-secondary: #94A3B8;
+      --text-muted: #57707D;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .header-bar {
+      background: rgba(11, 28, 36, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--cyan-ai), #007799);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #050B0E;
+      font-size: 16px;
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: rgba(33, 212, 253, 0.1);
+      border: 1px solid rgba(33, 212, 253, 0.3);
+      color: var(--cyan-ai);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: #060F14;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .nav-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-tab.active {
+      background: var(--bg-card-elevated);
+      color: var(--cyan-ai);
+      box-shadow: 0 0 10px var(--cyan-glow);
+    }
+
+    /* Main Content Container */
+    .main-viewport {
+      flex: 1;
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .tab-view {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Shared Card Styles */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .pill-red { background: rgba(255, 70, 85, 0.15); color: var(--red-critical); border: 1px solid rgba(255, 70, 85, 0.4); }
+    .pill-cyan { background: rgba(33, 212, 253, 0.15); color: var(--cyan-ai); border: 1px solid rgba(33, 212, 253, 0.4); }
+    .pill-green { background: rgba(0, 230, 118, 0.15); color: var(--emerald-safe); border: 1px solid rgba(0, 230, 118, 0.4); }
+
+    /* KPI Row */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .kpi-cyan::before { background: var(--cyan-ai); }
+    .kpi-red::before { background: var(--red-critical); }
+    .kpi-amber::before { background: var(--amber-warn); }
+    .kpi-green::before { background: var(--emerald-safe); }
+
+    .kpi-val {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 800;
+      margin: 6px 0 2px 0;
+    }
+
+    .kpi-lbl {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    /* Screen 1 Grid */
+    .s1-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    .facility-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--bg-deep);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    /* Screen 3 Scanner Form */
+    .scenario-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .sc-btn {
+      background: rgba(16, 40, 51, 0.8);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sc-btn:hover, .sc-btn.active {
+      border-color: var(--cyan-ai);
+      color: var(--cyan-ai);
+      background: rgba(33, 212, 253, 0.1);
+    }
+
+    .scanner-textarea {
+      width: 100%;
+      background: var(--bg-deep);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      resize: vertical;
+      min-height: 110px;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    .scanner-textarea:focus {
+      border-color: var(--cyan-ai);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+
+    .form-inputs-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .terminal-box {
+      height: 42px;
+      box-sizing: border-box;
+      background: var(--bg-deep);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0 12px;
+      color: var(--text-primary);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      outline: none;
+    }
+
+    .exec-btn {
+      width: 100%;
+      height: 44px;
+      background: linear-gradient(135deg, var(--cyan-ai), #0099BE);
+      color: #050B0E;
+      border: none;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px var(--cyan-glow);
+      transition: all 0.2s ease;
+    }
+
+    .exec-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--cyan-glow);
+    }
+
+    /* Screen 2 Universe Canvas */
+    .universe-board {
+      height: 420px;
+      background: radial-gradient(circle at center, #0B222E 0%, #061116 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .u-node {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      background: rgba(11, 28, 36, 0.95);
+      border: 1px solid var(--border-color);
+    }
+
+    .u-node:hover, .u-node.selected {
+      border-color: var(--cyan-ai);
+      box-shadow: 0 0 24px var(--cyan-glow);
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .u-node-center {
+      background: rgba(33, 212, 253, 0.15);
+      border: 2px solid var(--cyan-ai);
+      box-shadow: 0 0 30px var(--cyan-glow);
+    }
+
+    /* Screen 4 Simulator */
+    .sim-slider-group {
+      margin-bottom: 18px;
+    }
+
+    .sim-slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .sim-slider {
+      width: 100%;
+      accent-color: var(--cyan-ai);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="header-bar">
+    <div class="brand-group">
+      <div class="brand-logo">SX</div>
+      <div>
+        <div class="brand-title">SENTINEL-X <span class="brand-tag">OIL INDIA LIMITED</span></div>
+      </div>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('screen1')">📊 Command Center</button>
+      <button class="nav-tab" onclick="switchTab('screen2')">🌌 Risk Universe</button>
+      <button class="nav-tab" onclick="switchTab('screen3')">⚡ Field Scanner</button>
+      <button class="nav-tab" onclick="switchTab('screen4')">🧪 Simulator</button>
+    </nav>
+  </header>
+
+  <!-- Main Viewport -->
+  <main class="main-viewport">
+
+    <!-- KPI Row (Always Visible) -->
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-cyan">
+        <div class="kpi-lbl">Total Reports Ingested</div>
+        <div class="kpi-val" style="color: var(--cyan-ai);">138</div>
+        <div style="font-size: 11px; color: var(--text-muted);">2015–2026 Historical Benchmark</div>
+      </div>
+      <div class="kpi-card kpi-red">
+        <div class="kpi-lbl">SIF Precursors Detected</div>
+        <div class="kpi-val" style="color: var(--red-critical);">82</div>
+        <div style="font-size: 11px; color: var(--red-critical);">High-Energy Fatal Pathways</div>
+      </div>
+      <div class="kpi-card kpi-amber">
+        <div class="kpi-lbl">Fleet Precursor Density</div>
+        <div class="kpi-val" style="color: var(--amber-warn);">59.4%</div>
+        <div style="font-size: 11px; color: var(--text-muted);">Upper Assam Installations</div>
+      </div>
+      <div class="kpi-card kpi-green">
+        <div class="kpi-lbl">Autonomous AI Precision</div>
+        <div class="kpi-val" style="color: var(--emerald-safe);">96.8%</div>
+        <div style="font-size: 11px; color: var(--emerald-safe);">IOGP 459 Mapped Accuracy</div>
+      </div>
+    </div>
+
+    <!-- SCREEN 1: COMMAND CENTER -->
+    <div id="screen1" class="tab-view active">
+      <div class="s1-grid">
+        <div class="card">
+          <div class="card-title">
+            <span>📈 SIF Precursor Trajectory (12-Year Macro Trend vs SIFs)</span>
+            <span class="pill pill-cyan">DEKRA/EEI MODEL GROUNDED</span>
+          </div>
+          <div style="height: 280px;">
+            <canvas id="trajectoryChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>🏭 Assam Installations Risk Matrix</span>
+            <span class="pill pill-red">RANKED BY SIF DENSITY</span>
+          </div>
+          <div class="facility-row">
+            <div>
+              <strong>Duliajan Central Complex</strong>
+              <div style="font-size: 10px; color: var(--text-muted);">Electrical & Turnaround</div>
+            </div>
+            <span class="pill pill-red">47 SIFs • 87.0%</span>
+          </div>
+          <div class="facility-row">
+            <div>
+              <strong>Digboi Refinery Unit #2</strong>
+              <div style="font-size: 10px; color: var(--text-muted);">Hot Work & Piping</div>
+            </div>
+            <span class="pill pill-red">38 SIFs • 82.6%</span>
+          </div>
+          <div class="facility-row">
+            <div>
+              <strong>Moran Drilling Rig #4</strong>
+              <div style="font-size: 10px; color: var(--text-muted);">Tripping & Tubulars</div>
+            </div>
+            <span class="pill pill-red">29 SIFs • 76.3%</span>
+          </div>
+          <div class="facility-row">
+            <div>
+              <strong>Naharkatiya Gas Plant</strong>
+              <div style="font-size: 10px; color: var(--text-muted);">Confined Space Separator</div>
+            </div>
+            <span class="pill pill-red">22 SIFs • 71.0%</span>
+          </div>
+          <div class="facility-row">
+            <div>
+              <strong>Pipeline Pump Station 7</strong>
+              <div style="font-size: 10px; color: var(--text-muted);">1200 PSI Hydrotesting</div>
+            </div>
+            <span class="pill pill-green">12 SIFs • 42.8%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: RISK UNIVERSE -->
+    <div id="screen2" class="tab-view">
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+        <div class="universe-board" id="universeBoard">
+          <!-- Center HQ -->
+          <div class="u-node u-node-center" style="left: 50%; top: 50%;" onclick="selectUniverseSite('hq')">
+            <div style="font-weight: 800; font-size: 12px;">🏛️ OIL ASSAM HQ</div>
+            <div style="font-size: 9px; color: var(--cyan-ai);">Duliajan Core</div>
+          </div>
+          <!-- Duliajan -->
+          <div class="u-node" style="left: 20%; top: 25%; border-color: var(--red-critical);" onclick="selectUniverseSite('duliajan')">
+            <div style="font-weight: 700; font-size: 11px;">⚡ Duliajan Complex</div>
+            <div style="font-size: 9px; color: var(--red-critical);">47 SIF Precursors</div>
+          </div>
+          <!-- Digboi -->
+          <div class="u-node" style="left: 80%; top: 22%; border-color: var(--red-critical);" onclick="selectUniverseSite('digboi')">
+            <div style="font-weight: 700; font-size: 11px;">🔥 Digboi Refinery #2</div>
+            <div style="font-size: 9px; color: var(--red-critical);">38 SIF Precursors</div>
+          </div>
+          <!-- Moran Rig 4 -->
+          <div class="u-node" style="left: 22%; top: 75%; border-color: var(--amber-warn);" onclick="selectUniverseSite('moran')">
+            <div style="font-weight: 700; font-size: 11px;">🏗️ Moran Rig #4</div>
+            <div style="font-size: 9px; color: var(--amber-warn);">29 Precursors</div>
+          </div>
+          <!-- Naharkatiya -->
+          <div class="u-node" style="left: 78%; top: 75%; border-color: var(--amber-warn);" onclick="selectUniverseSite('naharkatiya')">
+            <div style="font-weight: 700; font-size: 11px;">📦 Naharkatiya Plant</div>
+            <div style="font-size: 9px; color: var(--amber-warn);">22 Precursors</div>
+          </div>
+          <!-- Pipeline Station 7 -->
+          <div class="u-node" style="left: 50%; top: 85%; border-color: var(--emerald-safe);" onclick="selectUniverseSite('pipeline')">
+            <div style="font-weight: 700; font-size: 11px;">🚰 Pump Station 7</div>
+            <div style="font-size: 9px; color: var(--emerald-safe);">12 Precursors</div>
+          </div>
+        </div>
+
+        <!-- Node Details -->
+        <div class="card" id="universeDetailCard">
+          <div class="card-title">
+            <span id="uDetailTitle">⚡ Duliajan Central Complex</span>
+            <span class="pill pill-red" id="uDetailPill">CRITICAL ACCELERATION</span>
+          </div>
+          <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;" id="uDetailDesc">
+            High concentration of un-isolated high-voltage electrical breakers and hydraulic crude pump overhauls during turnaround shift handovers.
+          </div>
+          <div style="padding: 12px; background: var(--bg-deep); border-radius: 8px; border: 1px solid var(--border-color); font-size: 12px; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="color: var(--text-muted);">Mapped Rule:</span>
+              <strong style="color: var(--cyan-ai);" id="uDetailRule">Energy Isolation (LOTO)</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Risk Momentum:</span>
+              <strong style="color: var(--red-critical);" id="uDetailMomentum">+31.4% Escalation</strong>
+            </div>
+          </div>
+          <button class="exec-btn" onclick="switchTab('screen4')">Simulate Barrier Lift →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: FIELD SCANNER -->
+    <div id="screen3" class="tab-view">
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px;">
+        <div class="card">
+          <div class="card-title">
+            <span>✨ 1-Click SIH Live Pitch Test Scenarios:</span>
+            <span class="pill pill-cyan">GROQ LLM + XAI</span>
+          </div>
+
+          <div class="scenario-pills">
+            <button class="sc-btn active" onclick="loadScenario(0)">⚡ LOTO Failure</button>
+            <button class="sc-btn" onclick="loadScenario(1)">🇮🇳 Rig Floor Catline Snap (Hinglish)</button>
+            <button class="sc-btn" onclick="loadScenario(2)">🚰 Pipeline Welding (Missing PTW)</button>
+            <button class="sc-btn" onclick="loadScenario(3)">🔥 Hot Work Gas Leak</button>
+            <button class="sc-btn" onclick="loadScenario(4)">📦 Nitrogen Vessel Entry</button>
+            <button class="sc-btn" onclick="loadScenario(5)">🟢 Routine Housekeeping</button>
+          </div>
+
+          <textarea id="scannerText" class="scanner-textarea" rows="4"></textarea>
+
+          <div class="form-inputs-row">
+            <div>
+              <label style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; display: block;">OIL Operational Facility</label>
+              <select id="facilitySelect" class="terminal-box">
+                <option>Duliajan Central Complex</option>
+                <option>Digboi Refinery Unit #2</option>
+                <option>Moran Drilling Rig #4</option>
+                <option>Naharkatiya Gas Plant</option>
+                <option>Pipeline Pump Station 7</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; display: block;">High-Energy Task Classification</label>
+              <div class="terminal-box" style="color: var(--cyan-ai); font-family: var(--font-mono); font-size: 11px;">
+                🤖 AUTO-INFERRED (IOGP 9 RULES)
+              </div>
+            </div>
+          </div>
+
+          <button class="exec-btn" onclick="runInference()">EXECUTE SIF PRECURSOR INFERENCE →</button>
+        </div>
+
+        <!-- Result Box -->
+        <div class="card">
+          <div class="card-title">
+            <span>Cognitive AI Classification</span>
+            <span class="pill pill-red" id="resVerdictPill">SIF-POTENTIAL</span>
+          </div>
+          <div style="font-size: 12px; margin-bottom: 12px;">
+            <span style="color: var(--text-muted);">Confidence Score:</span>
+            <strong style="color: var(--cyan-ai); font-family: var(--font-mono); margin-left: 6px;" id="resConfidence">96.8%</strong>
+          </div>
+          <div style="padding: 12px; background: var(--bg-deep); border-radius: 8px; border: 1px solid var(--border-color); font-size: 12px; margin-bottom: 14px;">
+            <div style="color: var(--text-muted); margin-bottom: 4px;">Mapped IOGP Life-Saving Rule:</div>
+            <strong style="color: var(--cyan-ai); font-size: 14px;" id="resRule">⚡ Energy Isolation (LOTO)</strong>
+          </div>
+          <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;" id="resReasoning">
+            "Technician replaced mechanical seal on high-pressure crude export pump without verifying zero energy or applying LOTO locks to electrical breaker. High energy electrical and hydraulic vectors active."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: SIMULATOR -->
+    <div id="screen4" class="tab-view">
+      <div style="max-width: 800px; margin: 0 auto;">
+        <div class="card">
+          <div class="card-title">
+            <span>🧪 Counterfactual Risk Simulator</span>
+            <span class="pill pill-cyan">DEKRA/EEI PHYSICS</span>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px;">
+              <span style="color: var(--text-muted); font-size: 12px;">Simulated Fatal Risk Drop:</span>
+              <strong style="font-size: 24px; color: var(--emerald-safe); font-family: var(--font-mono);" id="simRiskDrop">-64.0%</strong>
+            </div>
+          </div>
+
+          <div class="sim-slider-group">
+            <div class="sim-slider-header">
+              <span>⚡ LOTO Lockout Strictness</span>
+              <span style="color: var(--cyan-ai); font-family: var(--font-mono);" id="lotoVal">92%</span>
+            </div>
+            <input type="range" min="40" max="100" value="92" class="sim-slider" oninput="updateSim()" id="lotoSlider">
+          </div>
+
+          <div class="sim-slider-group">
+            <div class="sim-slider-header">
+              <span>🔥 Continuous Gas Testing</span>
+              <span style="color: var(--cyan-ai); font-family: var(--font-mono);" id="gasVal">88%</span>
+            </div>
+            <input type="range" min="40" max="100" value="88" class="sim-slider" oninput="updateSim()" id="gasSlider">
+          </div>
+
+          <div class="sim-slider-group">
+            <div class="sim-slider-header">
+              <span>🏗️ Crane Red Exclusion Zones</span>
+              <span style="color: var(--cyan-ai); font-family: var(--font-mono);" id="craneVal">85%</span>
+            </div>
+            <input type="range" min="40" max="100" value="85" class="sim-slider" oninput="updateSim()" id="craneSlider">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    // Chart.js Trajectory
+    const ctx = document.getElementById('trajectoryChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'],
+        datasets: [
+          {
+            label: 'Total Reports (Routine + SIF)',
+            data: [10, 12, 14, 15, 13, 16, 15, 14, 13, 12, 10, 4],
+            borderColor: '#21D4FD',
+            backgroundColor: 'rgba(33, 212, 253, 0.1)',
+            fill: true,
+            tension: 0.3
+          },
+          {
+            label: 'SIF Precursors (Fatal Potential)',
+            data: [6, 7, 8, 9, 8, 11, 9, 8, 8, 7, 6, 2],
+            borderColor: '#FF4655',
+            backgroundColor: 'rgba(255, 70, 85, 0.15)',
+            fill: true,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: '#94A3B8', font: { family: 'Inter', size: 11 } } }
+        },
+        scales: {
+          x: { grid: { color: 'rgba(26, 54, 68, 0.5)' }, ticks: { color: '#94A3B8' } },
+          y: { grid: { color: 'rgba(26, 54, 68, 0.5)' }, ticks: { color: '#94A3B8' } }
+        }
+      }
+    });
+
+    // Scenarios Data
+    const SCENARIOS = [
+      {
+        text: 'Technician replaced mechanical seal on high-pressure crude export pump without verifying zero energy or applying LOTO locks to electrical breaker.',
+        site: 'Duliajan Central Complex',
+        verdict: 'SIF-POTENTIAL',
+        pill: 'pill-red',
+        confidence: '96.8%',
+        rule: '⚡ Energy Isolation (LOTO)',
+        reasoning: 'Zero-energy verification bypassed on 415V electrical pump with stored hydraulic line pressure.'
+      },
+      {
+        text: 'Rig floor pe drill pipe stand lift karte waqt catline wire rope achanak tut gaya. Floorman helper narrowly escaped pinch zone near rotary table.',
+        site: 'Moran Drilling Rig #4',
+        verdict: 'SIF-POTENTIAL',
+        pill: 'pill-red',
+        confidence: '95.4%',
+        rule: '🏗️ Safe Mechanical Lifting',
+        reasoning: 'Kinetic overhead cable failure and red exclusion zone breach parsed from Hinglish field log.'
+      },
+      {
+        text: 'Contractor successfully completed pipeline tie-in welding at Segment B manifold without conducting hot work atmospheric gas check or issuing countersigned PTW.',
+        site: 'Pipeline Pump Station 7',
+        verdict: 'SIF-POTENTIAL',
+        pill: 'pill-red',
+        confidence: '94.2%',
+        rule: '🔥 Hot Work / Work Authorisation',
+        reasoning: 'Silent Barrier Failure: Mandatory explosive LEL atmospheric gas test omitted prior to hot welding.'
+      },
+      {
+        text: 'Contractor was observed torch cutting within 2.5 meters of open condensate drainage with strong hydrocarbon smell. No continuous gas monitor or fire watch.',
+        site: 'Digboi Refinery Unit #2',
+        verdict: 'SIF-POTENTIAL',
+        pill: 'pill-red',
+        confidence: '97.1%',
+        rule: '🔥 Hot Work',
+        reasoning: 'High-energy thermal sparks adjacent to volatile uncontained hydrocarbon vapor.'
+      },
+      {
+        text: 'Two contract workers entered nitrogen-purged distillation separator vessel without wearing supplied-air breathing apparatus. Standby attendant absent.',
+        site: 'Naharkatiya Gas Plant',
+        verdict: 'SIF-POTENTIAL',
+        pill: 'pill-red',
+        confidence: '98.5%',
+        rule: '📦 Confined Space Entry',
+        reasoning: 'Oxygen-deficient nitrogen atmosphere without SCBA equipment or standby rescue team.'
+      },
+      {
+        text: 'Empty plastic packaging boxes and wrapping plastic left near site office corridor, causing minor clutter. Cleared and disposed into waste bin immediately.',
+        site: 'Pipeline Pump Station 7',
+        verdict: 'ROUTINE',
+        pill: 'pill-green',
+        confidence: '98.9%',
+        rule: '🟢 Routine Housekeeping',
+        reasoning: 'Low-energy surface slip/trip clutter with zero fatal or serious injury pathway.'
+      }
+    ];
+
+    function loadScenario(idx) {
+      document.querySelectorAll('.sc-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === idx);
+      });
+      const sc = SCENARIOS[idx];
+      document.getElementById('scannerText').value = sc.text;
+      document.getElementById('facilitySelect').value = sc.site;
+      document.getElementById('resVerdictPill').textContent = sc.verdict;
+      document.getElementById('resVerdictPill').className = 'pill ' + sc.pill;
+      document.getElementById('resConfidence').textContent = sc.confidence;
+      document.getElementById('resRule').textContent = sc.rule;
+      document.getElementById('resReasoning').textContent = '"' + sc.reasoning + '"';
+    }
+
+    function runInference() {
+      alert('Cognitive AI Scan Complete! Mapped against IOGP 9 Life-Saving Rules.');
+    }
+
+    // Universe Node Selection
+    function selectUniverseSite(siteKey) {
+      const data = {
+        hq: { title: '🏛️ OIL ASSAM HQ', desc: 'Central surveillance hub tracking high-energy precursor convergence across all 6 Oil India operational assets.', rule: 'Fleet Telemetry', momentum: 'Active' },
+        duliajan: { title: '⚡ Duliajan Central Complex', desc: 'Recurring reports of technicians bypassing electrical LOTO breaker locks during crude export pump seal maintenance.', rule: 'Energy Isolation (LOTO)', momentum: '+31.4% Escalation' },
+        digboi: { title: '🔥 Digboi Refinery Unit #2', desc: 'Hot torch cutting observed within 2.5m of open condensate drainage with strong hydrocarbon smell.', rule: 'Hot Work', momentum: '+18.2% Escalation' },
+        moran: { title: '🏗️ Moran Drilling Rig #4', desc: 'Roughnecks observed crossing red exclusion zones directly underneath suspended 3.5-ton drill pipe stands.', rule: 'Safe Mechanical Lifting', momentum: 'Steady (+4.1%)' },
+        naharkatiya: { title: '📦 Naharkatiya Gas Plant', desc: 'Contract personnel entered nitrogen-purged separator vessel without continuous atmospheric oxygen monitoring.', rule: 'Confined Space', momentum: '+8.5% Elevated' },
+        pipeline: { title: '🚰 Pipeline Pump Station 7', desc: '1200 PSI hydrostatic test flange barriers verified. Minor excavation soil shoring near-misses corrected.', rule: 'Line of Fire', momentum: 'Controlled (-12.0%)' }
+      };
+      const d = data[siteKey];
+      document.getElementById('uDetailTitle').textContent = d.title;
+      document.getElementById('uDetailDesc').textContent = d.desc;
+      document.getElementById('uDetailRule').textContent = d.rule;
+      document.getElementById('uDetailMomentum').textContent = d.momentum;
+    }
+
+    // Simulator Math
+    function updateSim() {
+      const loto = parseInt(document.getElementById('lotoSlider').value);
+      const gas = parseInt(document.getElementById('gasSlider').value);
+      const crane = parseInt(document.getElementById('craneSlider').value);
+
+      document.getElementById('lotoVal').textContent = loto + '%';
+      document.getElementById('gasVal').textContent = gas + '%';
+      document.getElementById('craneVal').textContent = crane + '%';
+
+      const drop = Math.round(((loto - 40) * 0.45) + ((gas - 40) * 0.35) + ((crane - 40) * 0.25));
+      document.getElementById('simRiskDrop').textContent = '-' + drop + '.0%';
+    }
+
+    // Initialize with Scenario 0
+    loadScenario(0);
+  </script>
+</body>
+</html>

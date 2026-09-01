@@ -36,9 +36,6 @@ export default function Sidebar() {
         <NavLink to="/simulator" className={({isActive}) => `nav-link ${isActive ? 'active violet' : ''}`}>
           <FlaskConical /> Intervention Simulator
         </NavLink>
-        <NavLink to="/queue" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>
-          <ShieldAlert /> Intervention Queue
-        </NavLink>
         <NavLink to="/rules" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>
           <BookOpen /> IOGP Safety Rules
         </NavLink>

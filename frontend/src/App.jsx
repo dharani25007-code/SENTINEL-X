@@ -36,7 +36,6 @@ function AppContent() {
             <Route path="/universe" element={<RiskUniverse />} />
             <Route path="/timeline" element={<SafetyTimeMachine />} />
             <Route path="/simulator" element={<InterventionSimulator />} />
-            <Route path="/queue" element={<InterventionQueue />} />
             <Route path="/rules" element={<LifeSavingRules />} />
             <Route path="/auth" element={<Auth />} />
           </Routes>
