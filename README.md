@@ -419,52 +419,176 @@ The **International Association of Oil & Gas Producers (IOGP Report 459)** stand
 
 ---
 
+---
+
 ## 🏗️ End-to-End System Architecture
 
+SENTINEL-X is engineered as a high-throughput, modular, cloud-edge safety intelligence pipeline designed specifically for upstream oil & gas operations.
+
 ```
-                                  SENTINEL-X SYSTEM TOPOLOGY
-                                  
-  [ Mobile / Web App ]       [ Field Tablets ]        [ SCADA / Incident Feeds ]
-           │                         │                             │
-           └─────────────────────────┼─────────────────────────────┘
-                                     ▼
-                      ┌──────────────────────────────┐
-                      │  FastAPI INGESTION ENDPOINT  │
-                      │       POST /classify         │
-                      └──────────────┬───────────────┘
-                                     │
-           ┌─────────────────────────┴─────────────────────────┐
-           ▼                                                   ▼
-┌──────────────────────────────┐                    ┌──────────────────────────────┐
-│    GROQ LLM INFERENCE        │                    │    IOGP RULE MATCHING        │
-│  - Zero-Shot SIF Potential   │                    │  - Cosine Semantic Search    │
-│  - Causal Chain Extraction   │                    │  - All-MiniLM-L6-v2 Embed    │
-│  - Precursor DNA Score       │                    │  - Report 459 Taxonomy       │
-└──────────┬───────────────────┘                    └──────────┬───────────────────┘
-           │                                                   │
-           └─────────────────────────┬─────────────────────────┘
-                                     ▼
-                      ┌──────────────────────────────┐
-                      │    EXPLAINABLE AI (XAI)      │
-                      │  - LIME Token Perturbation   │
-                      │  - SIF/Routine Feature Mass  │
-                      └──────────────┬───────────────┘
-                                     │
-                                     ▼
-                      ┌──────────────────────────────┐
-                      │     PERSISTENCE LAYER        │
-                      │  - SQLite (WAL Mode)         │
-                      │  - Indexed Analytics Tables  │
-                      └──────────────┬───────────────┘
-                                     │
-           ┌─────────────────────────┴─────────────────────────┐
-           ▼                                                   ▼
-┌──────────────────────────────┐                    ┌──────────────────────────────┐
-│    EXECUTIVE COMMAND         │                    │    PRECURSOR INTERCEPTION    │
-│  - Macro Telemetry Cards     │                    │  - Risk Universe Graph       │
-│  - Multi-Year Trajectory     │                    │  - Safety Time Machine       │
-│  - Facility Risk Matrix      │                    │  - Intervention Simulator    │
-└──────────────────────────────┘                    └──────────────────────────────┘
+═══════════════════════════════════════════════════════════════════════════════════════════════
+                              SENTINEL-X 5-LAYER SYSTEM TOPOLOGY
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  LAYER 1: FIELD INGESTION & DATA SOURCES                                                │
+  │  [ Field Tablets / PWA ]   [ QR Near-Miss Cards ]   [ SCADA / DCS Alerts ]   [ OISD/DGMS Logs ] │
+  └────────────────────────────────────────────┬────────────────────────────────────────────┘
+                                               │ HTTPS / JSON Payloads
+                                               ▼
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  LAYER 2: API GATEWAY & ACCESS CONTROL (FastAPI + Pydantic)                             │
+  │  • Input Sanitization & Schema Validation     • JWT Role-Based Access Control (RBAC)    │
+  │  • Facility Clearance Filtering (OIL Assam)    • Rate-Limiting & Asynchronous Dispatch   │
+  └────────────────────────────────────────────┬────────────────────────────────────────────┘
+                                               │
+                                               ▼
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  LAYER 3: AI/ML COGNITIVE INFERENCE ENGINE                                              │
+  │  ┌───────────────────────────────┐           ┌────────────────────────────────────────┐ │
+  │  │  GROQ LLM INFERENCE (Llama-3) │           │  VECTOR SEMANTIC EMBEDDINGS            │ │
+  │  │  • SIF vs Routine Classifier  │           │  • all-MiniLM-L6-v2 (384-Dim)          │ │
+  │  │  • Safety DNA Extractor       │           │  • Cosine Similarity vs IOGP Taxonomy  │ │
+  │  │  • High-Energy Causal Chains  │           │  • 9 Life-Saving Rules Report 459      │ │
+  │  └───────────────┬───────────────┘           └───────────────────┬────────────────────┘ │
+  │                  │                                               │                      │
+  │                  └───────────────────────┬───────────────────────┘                      │
+  │                                          ▼                                              │
+  │  ┌───────────────────────────────────────────────────────────────────────────────────┐  │
+  │  │  EXPLAINABLE AI (XAI) & LIME ATTRIBUTION ENGINE                                   │  │
+  │  │  • Token Perturbation & Masking         • SIF / Routine Feature Weighting         │  │
+  │  │  • Transparent Audit Evidence           • Barrier Degradation Score Calculation   │  │
+  │  └───────────────────────────────────────────────────────────────────────────────────┘  │
+  └────────────────────────────────────────────┬────────────────────────────────────────────┘
+                                               │ Structured Records & Vectors
+                                               ▼
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  LAYER 4: PERSISTENCE & ANALYTICS DATA STORE                                            │
+  │  • SQLite with WAL (Write-Ahead Logging) Mode for High-Concurrency Locking              │
+  │  • Indexed Telemetry & Time-Series Bins (2015–2026 Historical Horizons)                 │
+  │  • Facility Precursor Density & Active Intervention Work Order State Store              │
+  └────────────────────────────────────────────┬────────────────────────────────────────────┘
+                                               │ Reactive State & Query Streams
+                                               ▼
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  LAYER 5: PRESENTATION & EXECUTIVE COMMAND SURFACE (React 18 + Vite)                    │
+  │  ┌───────────────────────────────┐           ┌────────────────────────────────────────┐ │
+  │  │  EXECUTIVE TELEMETRY CENTER   │           │  PRECURSOR INTERCEPTION SUITE          │ │
+  │  │  • Macro Fleet KPI Badges     │           │  • 3D Risk Universe Graph (3-Hop)      │ │
+  │  │  • SIF Trajectory (12Y / 14M) │           │  • 30-Day Safety Time Machine          │ │
+  │  │  • Facility Risk Matrix       │           │  • Counterfactual Intervention Sim     │ │
+  │  │  • IOGP Rule Breakdown (9)    │           │  • Instant Action Queue / Dispatch     │ │
+  │  └───────────────────────────────┘           └────────────────────────────────────────┘ │
+  └─────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 📊 Interactive Mermaid Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph Layer1["1. Ingestion Layer"]
+        A1["📱 Field Tablets (PWA)"]
+        A2["📄 QR Near-Miss Forms"]
+        A3["📟 SCADA / DCS Event Stream"]
+        A4["🏛️ OISD / DGMS Incident Logs"]
+    end
+
+    subgraph Layer2["2. API Gateway (FastAPI)"]
+        B1["POST /classify"]
+        B2["POST /reports/bulk"]
+        B3["GET /dashboard/stats"]
+        B4["JWT Clearance & RBAC Filter"]
+    end
+
+    subgraph Layer3["3. AI/ML Inference & XAI Engine"]
+        C1["⚡ Groq LLM Inference (Llama-3.3-70B)"]
+        C2["🔍 Sentence Transformers (all-MiniLM-L6-v2)"]
+        C3["📋 IOGP Report 459 Taxonomy Matcher"]
+        C4["🔬 LIME Token Attribution & SIF Weights"]
+        C5["🧬 Safety DNA Causal Chain Extractor"]
+    end
+
+    subgraph Layer4["4. Data & Persistence Store"]
+        D1[("🗄️ SQLite Database (WAL Mode)")]
+        D2["📊 Time-Series Telemetry Aggregator"]
+        D3["🚨 Active Intervention Queue Store"]
+    end
+
+    subgraph Layer5["5. Executive Command & Interception Surface"]
+        E1["📈 SIF Precursor Trajectory (Year/Month)"]
+        E2["🏭 Facility Risk Matrix (6 Assam Sites)"]
+        E3["🌌 3D Risk Universe Network Graph"]
+        E4["⏳ 30-Day Safety Time Machine"]
+        E5["🧪 Counterfactual Intervention Simulator"]
+        E6["🚨 One-Click Action Dispatch Queue"]
+    end
+
+    A1 & A2 & A3 & A4 --> B1 & B2
+    B1 & B2 --> B4
+    B4 --> C1 & C2
+    C2 --> C3
+    C1 & C3 --> C4 & C5
+    C4 & C5 --> D1
+    D1 --> D2 & D3
+    D2 & D3 --> B3
+    B3 --> E1 & E2 & E3 & E4 & E5 & E6
+
+    style Layer1 fill:#071318,stroke:#162932,stroke-width:2px,color:#E8F1F5
+    style Layer2 fill:#0B1C24,stroke:#21D4FD,stroke-width:2px,color:#E8F1F5
+    style Layer3 fill:#102833,stroke:#FF6B4A,stroke-width:2px,color:#E8F1F5
+    style Layer4 fill:#0B1C24,stroke:#FFB020,stroke-width:2px,color:#E8F1F5
+    style Layer5 fill:#071318,stroke:#00E676,stroke-width:2px,color:#E8F1F5
+```
+
+---
+
+## 🔄 End-to-End Operational Decision Flowchart
+
+This flowchart outlines the exact step-by-step logic executed when a free-text field safety report is submitted from an Oil India facility into Sentinel-X:
+
+```mermaid
+flowchart TD
+    Start(["📥 Raw Incident / Near-Miss Text Ingested"]) --> Tokenize["🧹 Text Sanitization & Preprocessing"]
+    
+    Tokenize --> VectorEmbed["📐 Compute 384-Dim Vector Embeddings<br/>(all-MiniLM-L6-v2)"]
+    VectorEmbed --> CosineMatch["🎯 Cosine Similarity Search vs.<br/>9 IOGP Life-Saving Rules"]
+    
+    Tokenize --> GroqInference["⚡ Groq LLM Zero-Shot Cognitive Classifier<br/>(High-Energy Barrier Analysis)"]
+    
+    CosineMatch & GroqInference --> EvaluateSIF{"⚖️ Verdict Check:<br/>Is SIF Potential Detected?"}
+    
+    %% ROUTINE PATH
+    EvaluateSIF -- "NO (Routine Housekeeping / PPE Slip)" --> RoutinePath["🟢 Classify as Routine Control<br/>Confidence: 90%+"]
+    RoutinePath --> DB_Routine[("💾 Write to Database as Routine")]
+    DB_Routine --> UpdateBaseline["📊 Update Baseline Telemetry & Normal Trends"]
+    
+    %% SIF PATH
+    EvaluateSIF -- "YES (Fatal / High-Energy Precursor)" --> SIFPath["🔴 Classify as SIF-Potential<br/>Flag Life-Threatening Energy Pathway"]
+    
+    SIFPath --> XAI["🔬 Run LIME Token Attribution<br/>(Compute SIF Word Importance Weights)"]
+    SIFPath --> DNAExtract["🧬 Extract Safety DNA Causal Chain<br/>(Energy + Exposure + Barrier Failure)"]
+    SIFPath --> TagRule["🏷️ Auto-Tag to Primary IOGP Life-Saving Rule"]
+    
+    XAI & DNAExtract & TagRule --> DB_SIF[("💾 Write SIF Record & Vectors to SQLite (WAL)")]
+    
+    DB_SIF --> RecalcDensity["📈 Recalculate Site SIF Precursor Density<br/>(Sort Facility Risk Matrix)"]
+    RecalcDensity --> CheckMomentum{"⚠️ 30-Day Momentum Check:<br/>Precursor Rate Acceleration > 25%?"}
+    
+    CheckMomentum -- "YES (Clustering Detected)" --> TriggerAlert["🚨 Trigger Critical Incident Horizon Alert<br/>(e.g., LOTO Failures at Duliajan)"]
+    CheckMomentum -- "NO" --> StandardDashboard["🖥️ Update SIF Precursor Trajectory & Rules Breakdown"]
+    
+    TriggerAlert --> SimulateIntervention["🧪 Launch Counterfactual Barrier Simulator<br/>(Model LOTO / Gas / Zone Compliance Lift)"]
+    SimulateIntervention --> DispatchWorkOrder["📋 Dispatch Urgent Audit Work Order<br/>(Assigned to Site Lead Rajesh Barua)"]
+    
+    DispatchWorkOrder --> CloseLoop(["✅ Field Inspection Executed & Barrier Restored"])
+    StandardDashboard --> EndState(["📊 Continuous 24/7 Surveillance Monitoring"])
+
+    style Start fill:#21D4FD,stroke:#040D12,stroke-width:2px,color:#040D12
+    style EvaluateSIF fill:#FFB020,stroke:#040D12,stroke-width:2px,color:#040D12
+    style SIFPath fill:#FF4655,stroke:#FFFFFF,stroke-width:2px,color:#FFFFFF
+    style RoutinePath fill:#00E676,stroke:#040D12,stroke-width:2px,color:#040D12
+    style TriggerAlert fill:#FF4655,stroke:#FFB020,stroke-width:3px,color:#FFFFFF
+    style CloseLoop fill:#00E676,stroke:#040D12,stroke-width:2px,color:#040D12
 ```
 
 ---
