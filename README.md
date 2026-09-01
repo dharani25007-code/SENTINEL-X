@@ -544,55 +544,63 @@ SENTINEL-X is engineered as a high-throughput, modular, cloud-edge safety intell
 
 ```mermaid
 flowchart TD
-    subgraph L1["1. Field Ingestion Layer"]
-        A1["📱 Field Tablets (PWA)"]
-        A2["📄 QR Near-Miss Forms"]
-        A3["📟 SCADA / DCS Event Stream"]
-        A4["🏛️ OISD / DGMS Incident Logs"]
+    subgraph L1["1. Field Ingestion Sources"]
+        direction TB
+        A1["📱 Field Tablets (PWA)"] --- A2["📄 QR Near-Miss Forms"]
+        A3["📟 SCADA / DCS Event Stream"] --- A4["🏛️ OISD / DGMS Incident Logs"]
     end
 
     subgraph L2["2. API Gateway & Security (FastAPI)"]
-        B1["POST /classify"]
-        B2["POST /reports/bulk"]
-        B3["JWT Clearance & Facility RBAC Filter"]
+        direction TB
+        B1["POST /classify  •  POST /reports/bulk"]
+        B2["🔐 JWT Clearance & Facility RBAC Filter"]
+        B1 --> B2
     end
 
     subgraph L3["3. AI/ML & XAI Cognitive Engine"]
-        C1["⚡ Groq LLM (Llama-3.3-70B)"]
+        direction TB
+        C1["⚡ Groq Llama-3.3-70B Cognitive Engine"]
         C2["🔍 Sentence Transformers (all-MiniLM-L6-v2)"]
-        C3["📋 IOGP Report 459 9-Rule Matcher"]
-        C4["🔬 LIME Token XAI Feature Weights"]
+        C3["📋 IOGP Report 459 9-Rule Taxonomy Matcher"]
+        C4["🔬 LIME Token Perturbation & SIF Feature XAI"]
+        C1 & C2 --> C3 --> C4
     end
 
-    subgraph L4["4. Persistence & Analytics Store"]
-        D1[("🗄️ SQLite WAL Database")]
-        D2["📊 Time-Series Telemetry Aggregator"]
+    subgraph L4["4. Persistence & Telemetry Store"]
+        direction TB
+        D1[("🗄️ SQLite Database (WAL Mode)")]
+        D2["📊 12Y/14M Time-Series Telemetry"]
         D3["🚨 Active Intervention Queue Store"]
+        D1 --> D2 & D3
     end
 
-    subgraph L5["5. Executive Command & Action Surface"]
-        E1["📈 SIF Trajectory (12Y/14M)"]
-        E2["🏭 Facility Risk Matrix"]
-        E3["🌌 3D Risk Universe Graph"]
-        E4["⏳ 30-Day Safety Time Machine"]
-        E5["🧪 Counterfactual Simulator"]
-        E6["🚨 One-Click Action Dispatch"]
+    subgraph L5["5. Executive Command & Action Surface (React 18)"]
+        direction TB
+        subgraph L5A["Surveillance & Threat Topology"]
+            E1["📈 SIF Trajectory"]
+            E2["🏭 Facility Risk Matrix"]
+            E3["🌌 3D Risk Universe"]
+        end
+        subgraph L5B["Simulation & Dispatch"]
+            E4["⏳ 30-Day Time Machine"]
+            E5["🧪 Counterfactual Sim"]
+            E6["🚨 Action Dispatch Queue"]
+        end
+        L5A --- L5B
     end
 
-    A1 & A2 & A3 & A4 --> B1 & B2
-    B1 & B2 --> B3
-    B3 --> C1 & C2
-    C1 & C2 --> C3
-    C3 --> C4
-    C4 --> D1
-    D1 --> D2 & D3
-    D2 & D3 --> E1 & E2 & E3 & E4 & E5 & E6
+    L1 ==> B1
+    B2 ==> C1 & C2
+    C4 ==> D1
+    D2 & D3 ==> L5A
 
     style L1 fill:#081318,stroke:#1A3644,stroke-width:2px,color:#E8F1F5
     style L2 fill:#0B1C24,stroke:#21D4FD,stroke-width:2px,color:#E8F1F5
     style L3 fill:#102833,stroke:#FF6B4A,stroke-width:2px,color:#E8F1F5
     style L4 fill:#0B1C24,stroke:#FFB020,stroke-width:2px,color:#E8F1F5
     style L5 fill:#081318,stroke:#00E676,stroke-width:2px,color:#E8F1F5
+    style L5A fill:#0B1C24,stroke:#00E676,stroke-dasharray: 5 5,color:#E8F1F5
+    style L5B fill:#0B1C24,stroke:#00E676,stroke-dasharray: 5 5,color:#E8F1F5
 ```
 
 ---
