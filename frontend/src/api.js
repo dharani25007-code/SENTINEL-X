@@ -51,4 +51,29 @@ export async function resetDatabase() {
   return res.json();
 }
 
+export async function scanImageOcr(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await fetch(`${API_BASE}/ocr`, {
+    method: 'POST',
+    body: formData,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'OCR failed' }));
+    throw new Error(err.detail || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
 
+export async function refineOcrText(rawText) {
+  const res = await fetch(`${API_BASE}/ocr/refine`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ raw_text: rawText }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Refine failed' }));
+    throw new Error(err.detail || `HTTP ${res.status}`);
+  }
+  return res.json();
+}

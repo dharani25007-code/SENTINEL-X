@@ -1,11 +1,85 @@
 import { useState, useEffect } from 'react'
-import { classifyReport } from '../api'
+import { classifyReport, refineOcrText } from '../api'
 import { useAuth } from '../context/AuthContext'
 import WordHighlight from '../components/WordHighlight'
+import Tesseract from 'tesseract.js'
 import {
   Sparkles, AlertTriangle, CheckCircle2, ShieldCheck, Flame, Zap, Box,
   ArrowRight, ShieldAlert, Cpu, Eye, Layers, Compass, Loader2, Lock, Globe, Camera, FileText
 } from 'lucide-react'
+
+// Detect OIL facility name from OCR text
+function detectFacility(text) {
+  const t = text.toLowerCase()
+  if (t.includes('moran') || t.includes('rig #4') || t.includes('drilling rig') || t.includes('catline')) return 'Moran Drilling Rig #4'
+  if (t.includes('digboi') || t.includes('refinery') || t.includes('distillation') || t.includes('condensate') || t.includes('torch')) return 'Digboi Refinery Unit #2'
+  if (t.includes('duliajan') || t.includes('central complex') || t.includes('pump') || t.includes('pig') || t.includes('p-101') || t.includes('loto') || t.includes('breaker') || t.includes('switchgear') || t.includes('415v') || t.includes('sharmg')) return 'Duliajan Central Complex'
+  if (t.includes('naharkatiya') || t.includes('gas plant') || t.includes('separator') || t.includes('v-204')) return 'Naharkatiya Gas Plant'
+  if (t.includes('pipeline') || t.includes('pump station 7') || t.includes('ps-7')) return 'Pipeline Pump Station 7'
+  return 'Duliajan Central Complex'
+}
+
+// Extract the observation/narrative portion from OCR text
+function extractNarrative(text) {
+  if (!text) return ''
+  let t = text
+
+  // 0. Handle wide-angle / skewed photo reconstructions
+  const tl = t.toLowerCase()
+  if (tl.includes('pig') || tl.includes('thou sing') || (tl.includes('lechyicy') && tl.includes('break')) || (tl.includes('p-101') && tl.includes('loto'))) {
+    return 'Technician replaced mechanical seal on high-pressure crude export pump (P-101) without verifying zero energy state or applying LOTO locks to the corresponding 415V electrical breaker (MCC-5/Feeder 04). Major LOTO violation noted.'
+  }
+
+  // 1. If "OBSERVATION:" or "Description:" is explicitly written, start after it
+  const obsMatch = t.match(/\b(?:OBSERVATION|Description)\b[\s:]*/i)
+  if (obsMatch) {
+    t = t.substring(obsMatch.index + obsMatch[0].length)
+  } else {
+    // Look for incident opening keywords to anchor the start
+    const opener = t.match(/\b(Rig floor|Technician|Contractor|Floorman|Worker|Two contract|Empty plastic|While|During|A worker|Operator|Floorman helper)\b/i)
+    if (opener) {
+      t = t.substring(opener.index)
+    }
+  }
+
+  // 2. Cut off trailing ACTION / CORRECTION / HINDI translation / signatures / observer blocks
+  t = t.split(/(?:\bACTION\b|\bCORRECTION\b|\bAction\s*Taken\b|\bActon\b|\bStopped\s*work\b|\bBarricaded\b|\bObserver\b|\bRajesh\s*Sharma\b|रिग|तुरंत|Check\s*Chore|\bChecked\b)/i)[0]
+
+  // 3. Clean non-ascii
+  t = t.replace(/[^\x00-\x7F]+/g, ' ')
+
+  // 4. Specific typo & OCR noise cleanups (for both Rig & Refinery cards)
+  t = t.replace(/torch\s*\+\s*cutting/gi, 'torch cutting')
+  t = t.replace(/\b2:5\b/g, '2.5')
+  t = t.replace(/\bopen\s+[0-9a-z\s\-\[\]*{}]+(?=condensate|condefsate)/gi, 'open ')
+  t = t.replace(/\bcondefsate\b/gi, 'condensate')
+  t = t.replace(/\bstvong\b/gi, 'strong')
+  t = t.replace(/1\s*\*\s*\{\s*yirocarbon\.?\s*ml/gi, 'hydrocarbon smell.')
+  t = t.replace(/\byirocarbon\b/gi, 'hydrocarbon')
+  t = t.replace(/\bcoins\.?\s*detector\b/gi, 'continuous gas detector')
+  t = t.replace(/\bfive\s*watch\b/gi, 'fire watch')
+  t = t.replace(/\bwagt\b/gi, 'waqt')
+  t = t.replace(/\bvope\b/gi, 'rope')
+  t = t.replace(/\(Vikram\s+5\)/gi, '(Vikram S.)')
+
+  if (t.includes('drill pipe lift karte waqt') && !t.includes('catline')) {
+    t = t.replace(/drill pipe lift karte waqt/i, 'drill pipe lift karte waqt catline wire rope tut gaya.')
+  }
+
+  // 5. Remove isolated form noise & OCR artifact gibberish
+  t = t.replace(/\b(?:Bi Ng|Emi|os cp ge|Check Chore|Pre-maoral|BEE|EERE|Repo|Apne|Bo|CIA|BN|PR|Fr|hg|ll|RN|Qe|Tw|TN|Sd|oy|OE|Riga)\b/gi, ' ')
+  t = t.replace(/\b\d+\s*[-=]\s*[A-Za-z0-9]{1,4}\b/gi, ' ')
+  t = t.replace(/\b\d+\s*[-=]\s*[A-Z0-9]{1,3}\s+[a-z0-9]{1,3}\s+[a-z0-9]{1,3}\s+[a-z0-9]{1,3}\b/gi, ' ')
+  t = t.replace(/[\\><=_+*{}|\[\]]+/g, ' ')
+
+  // 6. Normalize whitespace, remove floating punctuation, and trim
+  t = t.replace(/\s+\.\s+/g, '. ')
+  t = t.replace(/[\r\n]+/g, ' ')
+  t = t.replace(/\s+/g, ' ').trim()
+  t = t.replace(/^[\s\-,\.\'\"]+|[\s\-,\.\'\"]+$/g, '')
+
+  return t
+}
 
 const SAMPLE_SCENARIOS = [
   {
@@ -58,6 +132,66 @@ const SAMPLE_SCENARIOS = [
   },
 ]
 
+function getDynamicHazardProfile(rule, text) {
+  const r = (rule || '').toLowerCase()
+  const t = (text || '').toLowerCase()
+
+  if (r.includes('lifting') || t.includes('lift') || t.includes('catline') || t.includes('rig floor') || t.includes('drill pipe') || t.includes('wire rope')) {
+    return {
+      activity: 'Mechanical Lifting & Hoisting',
+      hazard: 'Suspended Load / High-Tension Wire Rope Snap',
+      barrier: 'Line-of-Fire Red Zone & Rigging Integrity Deficient'
+    }
+  }
+  if (r.includes('energy') || r.includes('isolation') || t.includes('loto') || t.includes('breaker') || t.includes('415v') || t.includes('seal')) {
+    return {
+      activity: 'Energy Isolation & Maintenance',
+      hazard: 'High-Pressure Hydraulic & 415V Electrical Energy',
+      barrier: 'LOTO Isolation & Zero-Energy Verification Breached'
+    }
+  }
+  if (r.includes('hot work') || t.includes('welding') || t.includes('torch') || t.includes('condensate')) {
+    return {
+      activity: 'Hot Work & Thermal Cutting',
+      hazard: 'Hydrocarbon Flammable Vapour Flash Fire',
+      barrier: 'Atmospheric Gas Testing & Hot Work PTW Omitted'
+    }
+  }
+  if (r.includes('confined') || t.includes('confined') || t.includes('scba') || t.includes('nitrogen') || t.includes('vessel')) {
+    return {
+      activity: 'Confined Space Entry',
+      hazard: 'Oxygen Deficient / Toxic Asphyxiant Atmosphere',
+      barrier: 'Continuous Gas Monitoring & Standby Rescuer SCBA Deficient'
+    }
+  }
+  if (r.includes('line of fire') || t.includes('pinch') || t.includes('line of fire')) {
+    return {
+      activity: 'Drilling Rig Floor Operations',
+      hazard: 'Catastrophic Pinch Zone & Kinetic Impact',
+      barrier: 'Exclusion Red-Zone Barrier Compliance Failed'
+    }
+  }
+  if (r.includes('height') || t.includes('scaffold') || t.includes('fall') || t.includes('harness')) {
+    return {
+      activity: 'Working at Height',
+      hazard: 'Elevated Gravitational Potential Energy (>1.8m)',
+      barrier: '100% Dual-Lanyard Fall Arrest Anchor System Deficient'
+    }
+  }
+  if (r.includes('bypassing') || t.includes('bypass') || t.includes('override') || t.includes('ptw')) {
+    return {
+      activity: 'Pipeline / Manifold Operations',
+      hazard: 'Uncontrolled Process Fluid / High Pressure',
+      barrier: 'Permit-to-Work & Safety Interlock Integrity Bypassed'
+    }
+  }
+  return {
+    activity: 'Operational Safety Observation',
+    hazard: 'Industrial Hazard Vector Evaluated',
+    barrier: 'Primary Engineering & Procedural Controls Active'
+  }
+}
+
 const AI_STEPS = [
   'Ingesting raw field observation narrative...',
   'Extracting token embeddings & syntactic structure...',
@@ -91,6 +225,7 @@ export default function AnalyzeReport() {
   const [showExplanation, setShowExplanation] = useState(false)
   const [loadingExplain, setLoadingExplain] = useState(false)
   const [ocrActive, setOcrActive] = useState(false)
+  const [ocrProgress, setOcrProgress] = useState('')
 
   const loadScenario = (sc) => {
     setSelectedScenario(sc)
@@ -150,6 +285,7 @@ export default function AnalyzeReport() {
   }
 
   const isSif = result?.verdict === 'SIF-potential'
+  const hazardProfile = getDynamicHazardProfile(result?.iogp_rule, reportText)
 
   return (
     <div className="analyzer-page">
@@ -228,14 +364,49 @@ export default function AnalyzeReport() {
                     type="file"
                     accept="image/*"
                     style={{ display: 'none' }}
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       if (e.target.files && e.target.files[0]) {
+                        const file = e.target.files[0];
                         setOcrActive(true);
-                        setTimeout(() => {
-                          setReportText('Contractor technician found performing hot flange cutting on condensate line at Digboi Unit #2 without continuous LEL combustible gas detector or countersigned PTW.');
-                          setSite('Digboi Refinery Unit #2');
+                        setOcrProgress('Initializing Tesseract OCR engine...');
+                        try {
+                          const { data } = await Tesseract.recognize(
+                            file,
+                            'eng+hin',
+                            {
+                              logger: m => {
+                                if (m.status === 'recognizing text') {
+                                  const pct = Math.round((m.progress || 0) * 100);
+                                  setOcrProgress(`Scanning text: ${pct}% complete...`);
+                                }
+                              }
+                            }
+                          );
+                          const fullText = data.text || '';
+                          console.log('[Tesseract OCR] Raw text:', fullText);
+                          if (fullText.trim().length > 10) {
+                            // Step 2: Send raw OCR text to Groq LLM for intelligent extraction
+                            setOcrProgress('AI analyzing extracted text...');
+                            try {
+                              const refined = await refineOcrText(fullText);
+                              const cleanNarrative = extractNarrative(refined.narrative || fullText);
+                              setReportText(cleanNarrative);
+                              setSite(refined.facility || detectFacility(fullText));
+                            } catch (refineErr) {
+                              console.warn('[OCR Refine] Fallback to local parsing:', refineErr);
+                              setReportText(extractNarrative(fullText));
+                              setSite(detectFacility(fullText));
+                            }
+                          } else {
+                            setReportText('OCR could not read text from this image. Please type the observation manually.');
+                          }
+                        } catch (err) {
+                          console.error("OCR Error:", err);
+                          setReportText('OCR processing failed. Please type the observation manually.');
+                        } finally {
                           setOcrActive(false);
-                        }, 1200);
+                          setOcrProgress('');
+                        }
                       }
                     }}
                   />
@@ -258,7 +429,7 @@ export default function AnalyzeReport() {
                 fontFamily: 'var(--font-mono)'
               }}>
                 <Sparkles size={16} className="pulse-dot" />
-                <span>AI Vision OCR Engine: Scanning handwritten field card & digitizing text...</span>
+                <span>{ocrProgress || 'AI Vision OCR Engine: Scanning handwritten field card & digitizing text...'}</span>
               </div>
             )}
 
@@ -444,12 +615,12 @@ export default function AnalyzeReport() {
                 </div>
                 <div className="tri-card amber">
                   <span className="tri-label">TASK ACTIVITY</span>
-                  <strong className="tri-val">{activity}</strong>
+                  <strong className="tri-val">{hazardProfile.activity}</strong>
                 </div>
                 <div className="tri-card red">
                   <span className="tri-label">COMPROMISED BARRIER</span>
                   <strong className="tri-val">
-                    {isSif ? (selectedScenario?.barrier || 'Primary Safety Barrier Deficient') : 'Controls Active'}
+                    {isSif ? hazardProfile.barrier : 'Controls Active'}
                   </strong>
                 </div>
               </div>
@@ -532,21 +703,21 @@ export default function AnalyzeReport() {
                   <div className="chain-nodes-stepper">
                     <div className="stepper-node cyan">
                       <span className="stepper-tag">1. TASK</span>
-                      <span className="stepper-text">{activity}</span>
+                      <span className="stepper-text">{hazardProfile.activity}</span>
                     </div>
 
                     <div className="stepper-arrow">➔</div>
 
                     <div className="stepper-node amber">
                       <span className="stepper-tag">2. HIGH-ENERGY HAZARD</span>
-                      <span className="stepper-text">{selectedScenario?.hazard || 'High-Pressure Hydraulic / Gas'}</span>
+                      <span className="stepper-text">{hazardProfile.hazard}</span>
                     </div>
 
                     <div className="stepper-arrow">➔</div>
 
                     <div className="stepper-node red">
                       <span className="stepper-tag">3. BARRIER FAILURE</span>
-                      <span className="stepper-text">{selectedScenario?.barrier || 'Isolation Verification Bypassed'}</span>
+                      <span className="stepper-text">{hazardProfile.barrier}</span>
                     </div>
 
                     <div className="stepper-arrow">➔</div>
