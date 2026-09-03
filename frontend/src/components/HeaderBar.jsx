@@ -46,15 +46,14 @@ export default function HeaderBar() {
               border: '1px solid var(--border-color)',
               color: 'var(--text-primary)',
               padding: '6px 12px',
-              borderRadius: '20px',
+              borderRadius: '0px',
               fontSize: '11px',
               fontWeight: 600,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              transition: 'all 0.2s ease',
-              boxShadow: 'var(--shadow-card)'
+              transition: 'all 0.2s ease'
             }}
           >
             {isDark ? (
@@ -79,7 +78,7 @@ export default function HeaderBar() {
               border: '1px solid var(--border-cyan)',
               color: 'var(--cyan-ai)',
               padding: '6px 14px',
-              borderRadius: '20px',
+              borderRadius: '0px',
               fontSize: '11.5px',
               fontWeight: 700,
               cursor: 'pointer',

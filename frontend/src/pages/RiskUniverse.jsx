@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { Orbit, Sparkles, AlertTriangle, Shield, ArrowRight, Zap, Flame, Mountain, Box, Car, Building2, MapPin } from 'lucide-react'
+import { Orbit } from 'lucide-react'
 
 const UNIVERSE_NODES = [
   { 
     id: 'center', 
     type: 'center', 
-    label: '🏛️ OIL ASSAM HQ', 
+    label: 'OIL ASSAM HQ', 
     sub: 'Duliajan Surveillance Core', 
     x: 50, 
     y: 50, 
@@ -19,7 +19,7 @@ const UNIVERSE_NODES = [
   { 
     id: 'duliajan', 
     type: 'critical', 
-    label: '⚡ Duliajan Central Complex', 
+    label: 'Duliajan Central Complex', 
     sub: 'Energy Isolation • 47 SIF Precursors', 
     x: 25, 
     y: 18, 
@@ -33,7 +33,7 @@ const UNIVERSE_NODES = [
   { 
     id: 'digboi', 
     type: 'critical', 
-    label: '🔥 Digboi Refinery Unit #2', 
+    label: 'Digboi Refinery Unit #2', 
     sub: 'Hot Work & Leaks • 38 SIF Precursors', 
     x: 75, 
     y: 18, 
@@ -47,7 +47,7 @@ const UNIVERSE_NODES = [
   { 
     id: 'moran', 
     type: 'warning', 
-    label: '🏗️ Moran Drilling Rig #4', 
+    label: 'Moran Drilling Rig #4', 
     sub: 'Suspended Tubulars • 29 Precursors', 
     x: 18, 
     y: 52, 
@@ -61,7 +61,7 @@ const UNIVERSE_NODES = [
   { 
     id: 'naharkatiya', 
     type: 'warning', 
-    label: '📦 Naharkatiya Gas Plant', 
+    label: 'Naharkatiya Gas Plant', 
     sub: 'Confined Space • 22 Precursors', 
     x: 82, 
     y: 52, 
@@ -75,7 +75,7 @@ const UNIVERSE_NODES = [
   { 
     id: 'pipeline', 
     type: 'simulated', 
-    label: '🚰 Pipeline Pump Station 7', 
+    label: 'Pipeline Pump Station 7', 
     sub: 'Hydrotesting • 12 Precursors', 
     x: 28, 
     y: 84, 
@@ -89,7 +89,7 @@ const UNIVERSE_NODES = [
   { 
     id: 'numaligarh', 
     type: 'simulated', 
-    label: '🚛 Numaligarh Terminal', 
+    label: 'Numaligarh Terminal', 
     sub: 'Logistics • 9 Precursors', 
     x: 72, 
     y: 84, 
@@ -121,14 +121,14 @@ export default function RiskUniverse() {
         <div className="universe-container">
           <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
             {/* Draw Convergence Lines to Center */}
-            <line x1="50%" y1="50%" x2="25%" y2="18%" stroke="rgba(255, 70, 85, 0.4)" strokeWidth="2" strokeDasharray="4" />
-            <line x1="50%" y1="50%" x2="75%" y2="18%" stroke="rgba(255, 70, 85, 0.4)" strokeWidth="2" strokeDasharray="4" />
-            <line x1="50%" y1="50%" x2="18%" y2="52%" stroke="rgba(255, 176, 32, 0.4)" strokeWidth="1.5" />
-            <line x1="50%" y1="50%" x2="82%" y2="52%" stroke="rgba(255, 176, 32, 0.4)" strokeWidth="1.5" />
-            <line x1="50%" y1="50%" x2="28%" y2="84%" stroke="rgba(39, 209, 127, 0.4)" strokeWidth="1" />
-            <line x1="50%" y1="50%" x2="72%" y2="84%" stroke="rgba(39, 209, 127, 0.4)" strokeWidth="1" />
+            <line x1="50%" y1="50%" x2="25%" y2="18%" stroke="rgba(239, 68, 68, 0.5)" strokeWidth="2" strokeDasharray="4" />
+            <line x1="50%" y1="50%" x2="75%" y2="18%" stroke="rgba(239, 68, 68, 0.5)" strokeWidth="2" strokeDasharray="4" />
+            <line x1="50%" y1="50%" x2="18%" y2="52%" stroke="rgba(245, 158, 11, 0.5)" strokeWidth="1.5" />
+            <line x1="50%" y1="50%" x2="82%" y2="52%" stroke="rgba(245, 158, 11, 0.5)" strokeWidth="1.5" />
+            <line x1="50%" y1="50%" x2="28%" y2="84%" stroke="rgba(34, 197, 94, 0.5)" strokeWidth="1" />
+            <line x1="50%" y1="50%" x2="72%" y2="84%" stroke="rgba(34, 197, 94, 0.5)" strokeWidth="1" />
             {/* Cross Connection between High Risks */}
-            <line x1="25%" y1="18%" x2="75%" y2="18%" stroke="rgba(168, 85, 247, 0.3)" strokeWidth="1.5" strokeDasharray="2" />
+            <line x1="25%" y1="18%" x2="75%" y2="18%" stroke="rgba(2, 22, 79, 0.3)" strokeWidth="1.5" strokeDasharray="2" />
           </svg>
 
           {UNIVERSE_NODES.map((node) => (
@@ -139,7 +139,6 @@ export default function RiskUniverse() {
                 left: `${node.x}%`,
                 top: `${node.y}%`,
                 borderColor: selectedNode.id === node.id ? 'var(--cyan-ai)' : undefined,
-                boxShadow: selectedNode.id === node.id ? '0 0 28px var(--cyan-glow)' : undefined,
               }}
               onClick={() => setSelectedNode(node)}
             >
@@ -164,7 +163,7 @@ export default function RiskUniverse() {
               {selectedNode.sub}
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: 16, background: 'var(--bg-deep)', borderRadius: 10, border: '1px solid var(--border-color)', marginBottom: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: 16, background: 'var(--bg-deep)', borderRadius: 0, border: '1px solid var(--border-color)', marginBottom: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
                 <span style={{ color: 'var(--text-muted)' }}>Assam Operational Facility:</span>
                 <strong style={{ color: 'var(--cyan-ai)' }}>{selectedNode.site}</strong>
@@ -187,7 +186,7 @@ export default function RiskUniverse() {
             </p>
 
             <div style={{ display: 'flex', gap: 10 }}>
-              <a href="/simulator" className="analyze-btn" style={{ textDecoration: 'none', textAlign: 'center', background: 'linear-gradient(135deg, var(--violet-sim), #7C3AED)', color: '#fff' }}>
+              <a href="/simulator" className="analyze-btn" style={{ textDecoration: 'none', textAlign: 'center', background: 'var(--cyan-ai)', color: 'var(--btn-primary-text)', fontWeight: 700 }}>
                 Simulate Safety Intervention →
               </a>
             </div>

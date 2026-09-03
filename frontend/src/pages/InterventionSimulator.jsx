@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getDashboardStats } from '../api'
-import { FlaskConical, Sliders, CheckCircle2, ArrowRight, ShieldCheck, Zap, Flame, Mountain } from 'lucide-react'
+import { FlaskConical } from 'lucide-react'
 
 export default function InterventionSimulator() {
   const [lotoCompliance, setLotoCompliance] = useState(52)
@@ -29,7 +29,7 @@ export default function InterventionSimulator() {
   return (
     <div>
       <div className="page-header">
-        <div className="topic-pill violet">
+        <div className="topic-pill">
           <FlaskConical size={12} />
           <span>OIL INDIA LIMITED • COUNTERFACTUAL SAFETY SIMULATOR</span>
         </div>
@@ -42,14 +42,14 @@ export default function InterventionSimulator() {
         <div className="sim-lever-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
             <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>Safety Barrier Intervention Levers</h3>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--violet-sim)' }}>SCENARIO: MODEL ESTIMATE</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--cyan-ai)' }}>SCENARIO: MODEL ESTIMATE</span>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {/* Lever 1 */}
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                <label className="input-label" style={{ margin: 0 }}>⚡ Enforce 100% LOTO Zero-Energy Test</label>
+                <label className="input-label" style={{ margin: 0 }}>Enforce 100% LOTO Zero-Energy Test</label>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--cyan-ai)', fontWeight: 700 }}>
                   {lotoCompliance}% Compliance
                 </span>
@@ -69,7 +69,7 @@ export default function InterventionSimulator() {
             {/* Lever 2 */}
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                <label className="input-label" style={{ margin: 0 }}>🔥 Mandatory Continuous Hydrocarbon Gas Testing</label>
+                <label className="input-label" style={{ margin: 0 }}>Mandatory Continuous Hydrocarbon Gas Testing</label>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--amber-warn)', fontWeight: 700 }}>
                   {gasTestingRigor}% Compliance
                 </span>
@@ -89,7 +89,7 @@ export default function InterventionSimulator() {
             {/* Lever 3 */}
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                <label className="input-label" style={{ margin: 0 }}>🏗️ Automated Crane Red Exclusion Zone Enforcement</label>
+                <label className="input-label" style={{ margin: 0 }}>Automated Crane Red Exclusion Zone Enforcement</label>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--emerald-safe)', fontWeight: 700 }}>
                   {exclusionZoneRigor}% Compliance
                 </span>
@@ -110,7 +110,7 @@ export default function InterventionSimulator() {
 
         {/* Counterfactual Results Card */}
         <div className="sim-comparison-card">
-          <div className="input-label" style={{ color: 'var(--violet-sim)' }}>SIMULATED HAZARD INTERCEPTION</div>
+          <div className="input-label" style={{ color: 'var(--cyan-ai)' }}>SIMULATED HAZARD INTERCEPTION</div>
           <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', margin: '8px 0 16px' }}>
             Counterfactual Risk Profile
           </h3>
@@ -121,7 +121,7 @@ export default function InterventionSimulator() {
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 32, fontWeight: 800, color: 'var(--red-critical)' }}>
                 {baseRisk}%
               </div>
-              <div style={{ fontSize: 11, color: 'var(--red-critical)', marginTop: 4 }}>🔴 CRITICAL PRECURSOR</div>
+              <div style={{ fontSize: 11, color: 'var(--red-critical)', marginTop: 4, fontWeight: 700 }}>CRITICAL PRECURSOR</div>
             </div>
 
             <div className="sim-metric-box after">
@@ -129,11 +129,11 @@ export default function InterventionSimulator() {
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 32, fontWeight: 800, color: 'var(--emerald-safe)' }}>
                 {simulatedRisk}%
               </div>
-              <div style={{ fontSize: 11, color: 'var(--emerald-safe)', marginTop: 4 }}>🟢 MANAGED STATE</div>
+              <div style={{ fontSize: 11, color: 'var(--emerald-safe)', marginTop: 4, fontWeight: 700 }}>MANAGED STATE</div>
             </div>
           </div>
 
-          <div style={{ padding: 14, background: 'var(--bg-deep)', borderRadius: 8, border: '1px solid var(--border-color)', marginBottom: 16 }}>
+          <div style={{ padding: 14, background: 'var(--bg-deep)', borderRadius: 0, border: '1px solid var(--border-color)', marginBottom: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Estimated Risk Interception:</span>
               <strong style={{ fontFamily: 'var(--font-mono)', fontSize: 18, color: 'var(--cyan-ai)' }}>-{riskReduction}%</strong>

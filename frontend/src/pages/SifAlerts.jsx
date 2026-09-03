@@ -118,7 +118,7 @@ export default function SifAlerts() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
                     <div className="alert-rule">
-                      {alert.iogp_rule ? `⚡ ${alert.iogp_rule}` : '⚠️ High-Energy SIF Precursor'}
+                      {alert.iogp_rule ? alert.iogp_rule : 'High-Energy SIF Precursor'}
                     </div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11.5, color: sev === 'critical' ? 'var(--red-critical)' : 'var(--amber-warn)', marginTop: 2 }}>
                       {getSeverityLabel(alert.confidence)}

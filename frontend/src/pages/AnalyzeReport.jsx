@@ -83,7 +83,7 @@ function extractNarrative(text) {
 
 const SAMPLE_SCENARIOS = [
   {
-    label: '⚡ LOTO Failure (High Energy)',
+    label: 'LOTO Failure (High Energy)',
     text: 'Technician replaced mechanical seal on high-pressure crude export pump without verifying zero hydraulic energy or applying LOTO locks to the electrical breaker. Live power was still present.',
     site: 'Duliajan Central Complex',
     activity: 'Energy Isolation',
@@ -784,9 +784,9 @@ export default function AnalyzeReport() {
               <h4>Awaiting Field Observation Ingestion</h4>
               <p>Select any 1-click test scenario above or type custom free-text to trigger real-time AI precursor analysis.</p>
               <div className="empty-features-hint">
-                <span>⚡ Real-Time LLM Inference</span>
-                <span>🧬 5-Pillar Safety DNA</span>
-                <span>🔬 LIME Token Explainability</span>
+                <span>Real-Time LLM Inference</span>
+                <span>5-Pillar Safety DNA</span>
+                <span>LIME Token Explainability</span>
               </div>
             </div>
           )}

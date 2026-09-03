@@ -219,16 +219,16 @@ export default function SafetyTimeMachine() {
         <div style={{ display: 'flex', background: 'var(--bg-deep)', padding: 4, borderRadius: 8, border: '1px solid var(--border-color)', gap: 4 }}>
           <button
             onClick={() => handleModeChange('12Y')}
-            className="tab-btn"
+            className={`tab-btn ${viewMode === '12Y' ? 'active' : ''}`}
             style={{
               padding: '7px 14px',
               fontSize: 12,
               fontWeight: 700,
-              borderRadius: 6,
+              borderRadius: 0,
               border: 'none',
               cursor: 'pointer',
               background: viewMode === '12Y' ? 'var(--cyan-ai)' : 'transparent',
-              color: viewMode === '12Y' ? '#050B0E' : 'var(--text-secondary)'
+              color: viewMode === '12Y' ? 'var(--btn-primary-text)' : 'var(--text-secondary)'
             }}
           >
             <Calendar size={13} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
@@ -236,16 +236,16 @@ export default function SafetyTimeMachine() {
           </button>
           <button
             onClick={() => handleModeChange('30D')}
-            className="tab-btn"
+            className={`tab-btn ${viewMode === '30D' ? 'active' : ''}`}
             style={{
               padding: '7px 14px',
               fontSize: 12,
               fontWeight: 700,
-              borderRadius: 6,
+              borderRadius: 0,
               border: 'none',
               cursor: 'pointer',
               background: viewMode === '30D' ? 'var(--cyan-ai)' : 'transparent',
-              color: viewMode === '30D' ? '#050B0E' : 'var(--text-secondary)'
+              color: viewMode === '30D' ? 'var(--btn-primary-text)' : 'var(--text-secondary)'
             }}
           >
             <FastForward size={13} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />

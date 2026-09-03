@@ -115,7 +115,7 @@ export default function InterventionQueue() {
                 <a
                   href="/simulator"
                   className="btn-action-outline"
-                  style={{ textAlign: 'center', textDecoration: 'none', padding: '6px 14px', borderColor: 'var(--violet-sim)', color: 'var(--violet-sim)' }}
+                  style={{ textAlign: 'center', textDecoration: 'none', padding: '6px 14px', borderColor: 'var(--cyan-ai)', color: 'var(--cyan-ai)' }}
                 >
                   <Sliders size={11} style={{ display: 'inline', marginRight: 4 }} />
                   Simulate

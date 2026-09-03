@@ -12,7 +12,7 @@ export default function Sidebar() {
           <span className="oil-tag">OIL INDIA LIMITED</span>
           <span className="sih-tag">SIH26165</span>
         </div>
-        <h1>🛡 SENTINEL-<span>X</span></h1>
+        <h1>SENTINEL-<span>X</span></h1>
         <p>Precursor Intelligence Engine</p>
         <div className="sidebar-status">
           <span className="status-dot"></span>
@@ -33,7 +33,7 @@ export default function Sidebar() {
         <NavLink to="/timeline" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>
           <History /> Safety Time Machine
         </NavLink>
-        <NavLink to="/simulator" className={({isActive}) => `nav-link ${isActive ? 'active violet' : ''}`}>
+        <NavLink to="/simulator" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>
           <FlaskConical /> Intervention Simulator
         </NavLink>
         <NavLink to="/rules" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>

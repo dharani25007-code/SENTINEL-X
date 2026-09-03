@@ -166,7 +166,7 @@ export default function PatternIntel() {
           <div className="flow-arrow">→</div>
           <div className="flow-node action">
             <div className="flow-node-label">Targeted Action</div>
-            <div className="flow-node-value" style={{ color: 'var(--cyan-ai)' }}>⚡ Field LOTO Audit</div>
+            <div className="flow-node-value" style={{ color: 'var(--cyan-ai)' }}>Field LOTO Audit</div>
           </div>
         </div>
       )}
