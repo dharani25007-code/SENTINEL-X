@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTheme } from '../context/ThemeContext'
 import { History, TrendingUp, AlertTriangle, FastForward, Play, ShieldAlert, Calendar, Building2, Layers } from 'lucide-react'
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid
@@ -14,7 +15,7 @@ const HISTORICAL_12Y_DATA = [
     sifCount: 8,
     momentum: 'Baseline Stable',
     status: 'CONTROLLED STEADY-STATE',
-    statusColor: 'var(--emerald-safe)',
+    statusColor: '#00A86B',
     narrative: 'Fleet-wide baseline across Duliajan and Digboi: Standard crude extraction and routine mechanical pump overhauls. 22 statutory logs recorded with isolated slip/trip housekeeping.',
     sifProbability: '18.4%',
     primaryAsset: 'Duliajan & Digboi Assets',
@@ -32,7 +33,7 @@ const HISTORICAL_12Y_DATA = [
     sifCount: 28,
     momentum: '+42.5% Precursor Growth',
     status: 'ELEVATED DRILLING HAZARDS',
-    statusColor: 'var(--amber-warn)',
+    statusColor: '#F37022',
     narrative: 'High-pressure drilling expansion across Moran Rig #4 and Naharkatiya Gas Plant: Catline cable snaps and tripping near-misses begin clustering due to high-pace drilling targets.',
     sifProbability: '54.2%',
     primaryAsset: 'Moran Rig #4 & Naharkatiya',
@@ -52,7 +53,7 @@ const HISTORICAL_12Y_DATA = [
     sifCount: 54,
     momentum: '+68.2% SPIKE',
     status: 'CRITICAL HIGH-ENERGY SIF SURGE',
-    statusColor: 'var(--red-critical)',
+    statusColor: '#C04500',
     narrative: 'Critical blowout precursor surge: Uncontrolled gas kicks and kill fluid hydrostatic column depletion logged in daily workover reports prior to the Baghjan wellhead blowout.',
     sifProbability: '96.8%',
     primaryAsset: 'Baghjan & Moran Workover Wells',
@@ -72,7 +73,7 @@ const HISTORICAL_12Y_DATA = [
     sifCount: 71,
     momentum: '+36.5% Drift',
     status: 'HOT WORK & LOTO DRIFT',
-    statusColor: 'var(--amber-warn)',
+    statusColor: '#F37022',
     narrative: 'Refinery turnaround and pipeline maintenance at Digboi and Pump Station 7: Multiple instances of torch cutting without continuous LEL gas monitors and unverified electrical breaker isolations.',
     sifProbability: '64.5%',
     primaryAsset: 'Digboi Refinery & PS-7 Pipeline',
@@ -94,7 +95,7 @@ const HISTORICAL_12Y_DATA = [
     sifCount: 82,
     momentum: 'Proactive AI Defense Active',
     status: 'AI PROACTIVE INTERCEPTION ACTIVE',
-    statusColor: 'var(--cyan-ai)',
+    statusColor: '#1D4ED8',
     narrative: 'SENTINEL-X Fleet Deployment: Full real-time ingestion across all 6 Assam facilities. 82 high-energy SIF precursors intercepted and dispatched into engineering work orders before catastrophic escalation.',
     sifProbability: '28.0% (CONTROLLED)',
     primaryAsset: 'All 6 Assam Operational Facilities',
@@ -119,7 +120,7 @@ const OPERATIONAL_30D_DATA = [
     sifCount: 1,
     momentum: '+4%',
     status: 'CONTROLLED',
-    statusColor: 'var(--emerald-safe)',
+    statusColor: '#00A86B',
     narrative: 'Fleet Baseline across Assam: Isolated minor valve seep logged during routine maintenance at Duliajan. Standard PTW active, zero high-energy exposure.',
     sifProbability: '14.2%',
     primaryAsset: 'Duliajan Central Complex',
@@ -136,7 +137,7 @@ const OPERATIONAL_30D_DATA = [
     sifCount: 6,
     momentum: '+18%',
     status: 'WATCHLIST',
-    statusColor: 'var(--amber-warn)',
+    statusColor: '#F37022',
     narrative: 'Initial Precursor Clustering: Turnaround contractors noted bypassing tagout verification to meet turnaround speed targets at Duliajan and Digboi.',
     sifProbability: '38.5%',
     primaryAsset: 'Duliajan & Digboi Refinery',
@@ -155,7 +156,7 @@ const OPERATIONAL_30D_DATA = [
     sifCount: 16,
     momentum: '+32%',
     status: 'HIGH ALERT (INTERCEPT NOW)',
-    statusColor: 'var(--amber-warn)',
+    statusColor: '#F37022',
     narrative: 'Multiple high-pressure crude pump overhauls conducted with bypassed physical lockouts and omitted explosive gas checks. Near-miss energy release reported.',
     sifProbability: '68.0%',
     primaryAsset: 'Duliajan, Digboi & Moran Rig 4',
@@ -173,7 +174,7 @@ const OPERATIONAL_30D_DATA = [
     sifCount: 31,
     momentum: '+48.4%',
     status: 'CRITICAL SIF PRECURSOR CONVERGENCE',
-    statusColor: 'var(--red-critical)',
+    statusColor: '#C04500',
     narrative: 'CRITICAL ESCALATION: 31 SIF precursor observations correlate Energy Isolation and Hot Work breaches. Imminent fatality risk if barrier chain is not broken.',
     sifProbability: '94.6%',
     primaryAsset: 'All 6 Assam Assets',
@@ -188,6 +189,7 @@ const OPERATIONAL_30D_DATA = [
 ]
 
 export default function SafetyTimeMachine() {
+  const { isDark } = useTheme()
   const [viewMode, setViewMode] = useState('12Y') // '12Y' or '30D'
   const [currentStep, setCurrentStep] = useState(viewMode === '12Y' ? 4 : 3)
   const [selectedFacility, setSelectedFacility] = useState('ALL')
@@ -196,6 +198,8 @@ export default function SafetyTimeMachine() {
   const maxStep = activeDataset.length - 1
   const safeStep = Math.min(currentStep, maxStep)
   const current = activeDataset[safeStep]
+
+  const totalLineColor = isDark ? '#FFFFFF' : '#0F172A'
 
   const handleModeChange = (mode) => {
     setViewMode(mode)
@@ -224,11 +228,11 @@ export default function SafetyTimeMachine() {
               padding: '7px 14px',
               fontSize: 12,
               fontWeight: 700,
-              borderRadius: 0,
+              borderRadius: 6,
               border: 'none',
               cursor: 'pointer',
-              background: viewMode === '12Y' ? 'var(--cyan-ai)' : 'transparent',
-              color: viewMode === '12Y' ? 'var(--btn-primary-text)' : 'var(--text-secondary)'
+              background: viewMode === '12Y' ? '#1D4ED8' : 'transparent',
+              color: viewMode === '12Y' ? '#FFFFFF' : 'var(--text-secondary)'
             }}
           >
             <Calendar size={13} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
@@ -241,11 +245,11 @@ export default function SafetyTimeMachine() {
               padding: '7px 14px',
               fontSize: 12,
               fontWeight: 700,
-              borderRadius: 0,
+              borderRadius: 6,
               border: 'none',
               cursor: 'pointer',
-              background: viewMode === '30D' ? 'var(--cyan-ai)' : 'transparent',
-              color: viewMode === '30D' ? 'var(--btn-primary-text)' : 'var(--text-secondary)'
+              background: viewMode === '30D' ? '#1D4ED8' : 'transparent',
+              color: viewMode === '30D' ? '#FFFFFF' : 'var(--text-secondary)'
             }}
           >
             <FastForward size={13} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
@@ -259,7 +263,7 @@ export default function SafetyTimeMachine() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <span className="stat-label">TEMPORAL REPLAY POSITION • {viewMode === '12Y' ? 'HISTORICAL ERA' : 'PRECURSOR DAY'}</span>
-            <div style={{ fontSize: 19, fontWeight: 800, color: 'var(--cyan-ai)' }}>{current.label}</div>
+            <div style={{ fontSize: 19, fontWeight: 800, color: 'var(--text-primary)' }}>{current.label}</div>
           </div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: current.statusColor, fontWeight: 700, background: 'var(--bg-deep)', padding: '6px 12px', borderRadius: 6, border: '1px solid var(--border-color)' }}>
             ● {current.status}
@@ -274,7 +278,7 @@ export default function SafetyTimeMachine() {
           value={safeStep}
           onChange={e => setCurrentStep(parseInt(e.target.value))}
           className="timeline-slider"
-          style={{ accentColor: 'var(--cyan-ai)', marginTop: 14 }}
+          style={{ accentColor: '#1D4ED8', marginTop: 14 }}
         />
 
         <div className="timeline-ticks" style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
@@ -287,7 +291,7 @@ export default function SafetyTimeMachine() {
                 cursor: 'pointer',
                 fontSize: 11,
                 fontFamily: 'var(--font-mono)',
-                color: i === safeStep ? 'var(--cyan-ai)' : 'var(--text-muted)',
+                color: i === safeStep ? (isDark ? '#FFFFFF' : '#1D4ED8') : 'var(--text-muted)',
                 fontWeight: i === safeStep ? 800 : 500
               }}
             >
@@ -302,7 +306,7 @@ export default function SafetyTimeMachine() {
         <div className="chart-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <div>
-              <h3 style={{ fontSize: 15, fontWeight: 700 }}>Fleet Precursor Volume vs SIF Precursors</h3>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)' }}>Fleet Precursor Volume vs SIF Precursors</h3>
               <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Assam Asset Focus: {current.primaryAsset}</span>
             </div>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: current.statusColor, fontWeight: 700 }}>
@@ -311,18 +315,28 @@ export default function SafetyTimeMachine() {
           </div>
           <ResponsiveContainer width="100%" height={250}>
             <AreaChart data={current.chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
+              <defs>
+                <linearGradient id="totalReportsGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={totalLineColor} stopOpacity={0.28}/>
+                  <stop offset="95%" stopColor={totalLineColor} stopOpacity={0.0}/>
+                </linearGradient>
+                <linearGradient id="sifPrecursorsGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#F37022" stopOpacity={0.40}/>
+                  <stop offset="95%" stopColor="#F37022" stopOpacity={0.0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" opacity={0.6} />
               <XAxis dataKey="epoch" tick={{ fill: 'var(--text-muted)', fontSize: 11, fontFamily: 'var(--font-mono)' }} />
               <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11, fontFamily: 'var(--font-mono)' }} />
-              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }} />
-              <Area type="monotone" dataKey="total" name="Total Reports" stroke="var(--cyan-ai)" fill="var(--cyan-ai)" fillOpacity={0.15} strokeWidth={2} />
-              <Area type="monotone" dataKey="sif" name="SIF Precursors" stroke="var(--red-critical)" fill="var(--red-critical)" fillOpacity={0.25} strokeWidth={2.5} />
+              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', borderRadius: '6px' }} />
+              <Area type="monotone" dataKey="total" name="Total Reports" stroke={totalLineColor} fill="url(#totalReportsGrad)" strokeWidth={2.2} />
+              <Area type="monotone" dataKey="sif" name="SIF Precursors" stroke="#F37022" fill="url(#sifPrecursorsGrad)" strokeWidth={2.5} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
 
         <div className="card-elevated">
-          <div className="input-label" style={{ color: 'var(--cyan-ai)' }}>Fleet Temporal Assessment</div>
+          <div className="input-label" style={{ color: 'var(--text-secondary)' }}>Fleet Temporal Assessment</div>
           <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text-primary)', margin: '6px 0 14px' }}>
             {viewMode === '12Y' ? '12-Year Historical Milestone' : '30-Day Precursor Accrual Chain'}
           </h3>
@@ -330,7 +344,7 @@ export default function SafetyTimeMachine() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
             <div style={{ padding: 10, background: 'var(--bg-deep)', borderRadius: 8, border: '1px solid var(--border-color)' }}>
               <div className="stat-label">Total Ingested</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 800, color: 'var(--cyan-ai)' }}>{current.count}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 800, color: 'var(--text-primary)' }}>{current.count}</div>
               <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{current.sifCount} SIF Precursors</div>
             </div>
             <div style={{ padding: 10, background: 'var(--bg-deep)', borderRadius: 8, border: '1px solid var(--border-color)' }}>
