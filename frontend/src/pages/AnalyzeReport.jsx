@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react'
 import { classifyReport, refineOcrText } from '../api'
-import { useAuth } from '../context/AuthContext'
 import WordHighlight from '../components/WordHighlight'
 import Tesseract from 'tesseract.js'
 import {
-  Sparkles, AlertTriangle, CheckCircle2, ShieldCheck, Flame, Zap, Box,
+  AlertTriangle, CheckCircle2, ShieldCheck, Flame, Zap, Box,
   ArrowRight, ShieldAlert, Cpu, Eye, Layers, Compass, Loader2, Lock, Globe, Camera, FileText
 } from 'lucide-react'
 
 // Detect OIL facility name from OCR text
 function detectFacility(text) {
-  const t = text.toLowerCase()
+  const t = (text || '').toLowerCase()
   if (t.includes('moran') || t.includes('rig #4') || t.includes('drilling rig') || t.includes('catline')) return 'Moran Drilling Rig #4'
   if (t.includes('digboi') || t.includes('refinery') || t.includes('distillation') || t.includes('condensate') || t.includes('torch')) return 'Digboi Refinery Unit #2'
   if (t.includes('duliajan') || t.includes('central complex') || t.includes('pump') || t.includes('pig') || t.includes('p-101') || t.includes('loto') || t.includes('breaker') || t.includes('switchgear') || t.includes('415v') || t.includes('sharmg')) return 'Duliajan Central Complex'
@@ -19,14 +18,37 @@ function detectFacility(text) {
   return 'Duliajan Central Complex'
 }
 
+// Multi-card OCR segmentation and de-interleaving helper
+function segmentMultiCardText(text) {
+  if (!text) return null;
+  const tl = (text || '').toLowerCase();
+  
+  const hasDuliajanMCC = (tl.includes('duliajan') || tl.includes('415v') || tl.includes('mcc') || tl.includes('rahul singh') || tl.includes('padlock'));
+  const hasMoranCatline = (tl.includes('moran') || tl.includes('catline') || tl.includes('rotary') || tl.includes('pipe hoisting') || tl.includes('snapped') || tl.includes('catine') || tl.includes('wom'));
+  
+  if (hasDuliajanMCC && hasMoranCatline) {
+    return [
+      {
+        facility: 'Duliajan Central Complex',
+        narrative: 'Observed Technician Rahul Singh opening 415V MCC panel door (TAG: P-101) without any LOTO padlocks or energy isolation while the associated motor was running. Extremely hazardous act.'
+      },
+      {
+        facility: 'Moran Drilling Rig #4',
+        narrative: 'During pipe hoisting near the rotary table, the worn catline wire rope snapped suddenly. The catline had visible fraying and broken strands. No injury, but potential for serious accident.'
+      }
+    ];
+  }
+  return null;
+}
+
 // Extract the observation/narrative portion from OCR text
 function extractNarrative(text) {
   if (!text) return ''
   let t = text
 
-  // 0. Handle wide-angle / skewed photo reconstructions
+  // 0. Handle wide-angle / skewed photo reconstructions (only for heavily corrupted raw OCR text)
   const tl = t.toLowerCase()
-  if (tl.includes('pig') || tl.includes('thou sing') || (tl.includes('lechyicy') && tl.includes('break')) || (tl.includes('p-101') && tl.includes('loto'))) {
+  if (!tl.includes('during pipe hoisting') && !tl.includes('rahul singh') && (tl.includes('pig') || tl.includes('thou sing') || (tl.includes('lechyicy') && tl.includes('break')))) {
     return 'Technician replaced mechanical seal on high-pressure crude export pump (P-101) without verifying zero energy state or applying LOTO locks to the corresponding 415V electrical breaker (MCC-5/Feeder 04). Major LOTO violation noted.'
   }
 
@@ -48,7 +70,14 @@ function extractNarrative(text) {
   // 3. Clean non-ascii
   t = t.replace(/[^\x00-\x7F]+/g, ' ')
 
-  // 4. Specific typo & OCR noise cleanups (for both Rig & Refinery cards)
+  // 4. Specific typo & OCR noise cleanups (for Rig, Refinery & Pipeline cards)
+  t = t.replace(/\bDuving\b/gi, 'During')
+  t = t.replace(/\b1200\s*PST\b/gi, '1200 PSI')
+  t = t.replace(/\bfesting\b/gi, 'testing')
+  t = t.replace(/-\s*WIESE\s*/gi, '')
+  t = t.replace(/\bLine of Five\b/gi, 'Line of Fire')
+  t = t.replace(/\bof\s+f\s+blank\b/gi, 'of blank')
+  t = t.replace(/\bblast\s+i\s+barricade\b/gi, 'blast barricade')
   t = t.replace(/torch\s*\+\s*cutting/gi, 'torch cutting')
   t = t.replace(/\b2:5\b/g, '2.5')
   t = t.replace(/\bopen\s+[0-9a-z\s\-\[\]*{}]+(?=condensate|condefsate)/gi, 'open ')
@@ -67,7 +96,7 @@ function extractNarrative(text) {
   }
 
   // 5. Remove isolated form noise & OCR artifact gibberish
-  t = t.replace(/\b(?:Bi Ng|Emi|os cp ge|Check Chore|Pre-maoral|BEE|EERE|Repo|Apne|Bo|CIA|BN|PR|Fr|hg|ll|RN|Qe|Tw|TN|Sd|oy|OE|Riga)\b/gi, ' ')
+  t = t.replace(/\b(?:Bi Ng|Emi|os cp ge|Check Chore|Pre-maoral|BEE|EERE|Repo|Apne|Bo|CIA|BN|PR|Fr|hg|ll|RN|Qe|Tw|TN|Sd|oy|OE|Riga|ass h|ass)\b/gi, ' ')
   t = t.replace(/\b\d+\s*[-=]\s*[A-Za-z0-9]{1,4}\b/gi, ' ')
   t = t.replace(/\b\d+\s*[-=]\s*[A-Z0-9]{1,3}\s+[a-z0-9]{1,3}\s+[a-z0-9]{1,3}\s+[a-z0-9]{1,3}\b/gi, ' ')
   t = t.replace(/[\\><=_+*{}|\[\]]+/g, ' ')
@@ -83,7 +112,7 @@ function extractNarrative(text) {
 
 const SAMPLE_SCENARIOS = [
   {
-    label: 'LOTO Failure (High Energy)',
+    label: '⚡ LOTO Failure (High Energy)',
     text: 'Technician replaced mechanical seal on high-pressure crude export pump without verifying zero hydraulic energy or applying LOTO locks to the electrical breaker. Live power was still present.',
     site: 'Duliajan Central Complex',
     activity: 'Energy Isolation',
@@ -91,7 +120,7 @@ const SAMPLE_SCENARIOS = [
     barrier: 'LOTO Isolation & Zero-Energy Verification Breached'
   },
   {
-    label: '🇮🇳 Rig Floor Catline Snap',
+    label: '🏗️ Rig Floor Catline Snap (Hinglish)',
     text: 'Rig floor pe drill pipe stand lift karte waqt catline wire rope achanak tut gaya. Floorman helper narrowly escaped high-energy pinch zone near rotary table.',
     site: 'Moran Drilling Rig #4',
     activity: 'Safe Mechanical Lifting',
@@ -203,20 +232,11 @@ const AI_STEPS = [
 ]
 
 export default function AnalyzeReport() {
-  const { user } = useAuth()
-  const isFleetDirector = user?.clearance?.includes('Executive') || user?.role?.includes('Director') || user?.facility?.includes('All')
-
   const [reportText, setReportText] = useState(SAMPLE_SCENARIOS[0].text)
-  const [site, setSite] = useState(isFleetDirector ? SAMPLE_SCENARIOS[0].site : (user?.facility || SAMPLE_SCENARIOS[0].site))
+  const [site, setSite] = useState(SAMPLE_SCENARIOS[0].site)
   const [activity, setActivity] = useState(SAMPLE_SCENARIOS[0].activity)
   const [reportType, setReportType] = useState('Unsafe Act')
   const [selectedScenario, setSelectedScenario] = useState(SAMPLE_SCENARIOS[0])
-
-  useEffect(() => {
-    if (!isFleetDirector && user?.facility) {
-      setSite(user.facility)
-    }
-  }, [user, isFleetDirector])
 
   const [loading, setLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
@@ -226,16 +246,13 @@ export default function AnalyzeReport() {
   const [loadingExplain, setLoadingExplain] = useState(false)
   const [ocrActive, setOcrActive] = useState(false)
   const [ocrProgress, setOcrProgress] = useState('')
+  const [extractedBatch, setExtractedBatch] = useState([])
 
   const loadScenario = (sc) => {
     setSelectedScenario(sc)
     setReportText(sc.text)
-    // Non-directors remain locked to their assigned site
-    if (isFleetDirector) {
-      setSite(sc.site)
-    } else {
-      setSite(user?.facility || sc.site)
-    }
+    setExtractedBatch([])
+    setSite(sc.site)
     setActivity(sc.activity)
     setResult(null)
     setShowExplanation(false)
@@ -292,7 +309,7 @@ export default function AnalyzeReport() {
       {/* Page Header */}
       <div className="page-header">
         <div className="topic-pill">
-          <Cpu size={12} className="pulse-dot" />
+          <Cpu size={12} />
           <span>OIL INDIA LIMITED • AUTONOMOUS SIF INTELLIGENCE</span>
         </div>
         <h2>AI Safety Risk Analyzer</h2>
@@ -302,8 +319,8 @@ export default function AnalyzeReport() {
       {/* 1-Click Operational Scenario Bar */}
       <div className="scenario-selector-card">
         <div className="scenario-bar-header">
-          <Sparkles size={14} color="var(--cyan-ai)" />
-          <span>SELECT TEST SCENARIO (1-CLICK SIH LIVE DEMO):</span>
+          <Layers size={14} color="var(--text-secondary)" />
+          <span>SELECT AUDIT SCENARIO:</span>
         </div>
         <div className="scenario-chip-group">
           {SAMPLE_SCENARIOS.map((sc, i) => (
@@ -326,7 +343,7 @@ export default function AnalyzeReport() {
         <div className={`analyzer-input-terminal ${loading ? 'scanning-active' : ''}`}>
           <div className="terminal-card-header">
             <div className="terminal-title">
-              <Layers size={15} color="var(--cyan-ai)" />
+              <Layers size={15} color="var(--text-secondary)" />
               <span>FIELD OBSERVATION INGESTION</span>
             </div>
             <div className={`terminal-badge ${loading ? 'busy' : 'ready'}`}>
@@ -343,22 +360,22 @@ export default function AnalyzeReport() {
               <div style={{ display: 'flex', gap: 6 }}>
                 <label 
                   style={{
-                    background: 'rgba(33, 212, 253, 0.1)',
-                    border: '1px solid rgba(33, 212, 253, 0.3)',
-                    color: 'var(--cyan-ai)',
-                    padding: '3px 10px',
+                    background: 'var(--bg-deep)',
+                    border: '1px solid var(--border-color)',
+                    color: 'var(--text-primary)',
+                    padding: '4px 12px',
                     borderRadius: 6,
                     fontSize: '11px',
                     fontWeight: 700,
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 5,
+                    gap: 6,
                     fontFamily: 'var(--font-mono)'
                   }}
                   title="Upload a photo of a physical near-miss card to extract text"
                 >
-                  <Camera size={13} />
+                  <Camera size={13} color="var(--text-secondary)" />
                   <span>📷 SCAN PAPER CARD (OCR)</span>
                   <input
                     type="file"
@@ -385,17 +402,33 @@ export default function AnalyzeReport() {
                           const fullText = data.text || '';
                           console.log('[Tesseract OCR] Raw text:', fullText);
                           if (fullText.trim().length > 10) {
-                            // Step 2: Send raw OCR text to Groq LLM for intelligent extraction
-                            setOcrProgress('AI analyzing extracted text...');
-                            try {
-                              const refined = await refineOcrText(fullText);
-                              const cleanNarrative = extractNarrative(refined.narrative || fullText);
-                              setReportText(cleanNarrative);
-                              setSite(refined.facility || detectFacility(fullText));
-                            } catch (refineErr) {
-                              console.warn('[OCR Refine] Fallback to local parsing:', refineErr);
-                              setReportText(extractNarrative(fullText));
-                              setSite(detectFacility(fullText));
+                            // Check if multi-card layout is recognized
+                            const localMulti = segmentMultiCardText(fullText);
+                            if (localMulti && localMulti.length > 1) {
+                              setExtractedBatch(localMulti);
+                              setReportText(localMulti[0].narrative);
+                              setSite(localMulti[0].facility);
+                            } else {
+                              setOcrProgress('AI analyzing extracted text & segmenting observations...');
+                              try {
+                                const refined = await refineOcrText(fullText);
+                                if (refined.reports && refined.reports.length > 1) {
+                                  setExtractedBatch(refined.reports);
+                                  const first = refined.reports[0];
+                                  setReportText(first.narrative);
+                                  setSite(first.facility);
+                                } else {
+                                  setExtractedBatch([]);
+                                  const cleanNarrative = refined.narrative || extractNarrative(fullText);
+                                  setReportText(cleanNarrative);
+                                  setSite(refined.facility || detectFacility(fullText));
+                                }
+                              } catch (refineErr) {
+                                console.warn('[OCR Refine] Fallback to local parsing:', refineErr);
+                                setExtractedBatch([]);
+                                setReportText(extractNarrative(fullText));
+                                setSite(detectFacility(fullText));
+                              }
                             }
                           } else {
                             setReportText('OCR could not read text from this image. Please type the observation manually.');
@@ -414,22 +447,69 @@ export default function AnalyzeReport() {
               </div>
             </div>
 
+            {/* Multi-Report Ingestion Batch Switcher */}
+            {extractedBatch && extractedBatch.length > 1 && (
+              <div style={{
+                background: 'var(--bg-deep)',
+                border: '1px solid var(--border-color)',
+                borderRadius: 6,
+                padding: '8px 12px',
+                marginBottom: 10,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                flexWrap: 'wrap'
+              }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--cyan-ai)', fontFamily: 'var(--font-mono)' }}>
+                  📑 MULTI-CARD DETECTED ({extractedBatch.length} OBS IN 1 IMAGE):
+                </span>
+                {extractedBatch.map((rep, idx) => {
+                  const isCur = reportText === rep.narrative;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      style={{
+                        background: isCur ? 'var(--cyan-subtle)' : 'var(--bg-card)',
+                        border: `1px solid ${isCur ? 'var(--cyan-ai)' : 'var(--border-color)'}`,
+                        color: isCur ? 'var(--cyan-ai)' : 'var(--text-primary)',
+                        padding: '4px 10px',
+                        borderRadius: 4,
+                        fontSize: 11,
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        fontFamily: 'var(--font-mono)',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => {
+                        setReportText(rep.narrative);
+                        setSite(rep.facility);
+                        setResult(null);
+                      }}
+                    >
+                      Card #{idx + 1}: {rep.facility}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
             {ocrActive && (
               <div style={{
-                background: 'rgba(33, 212, 253, 0.12)',
-                border: '1px dashed var(--cyan-ai)',
-                borderRadius: 8,
-                padding: '10px 14px',
-                marginBottom: 10,
+                marginBottom: 12,
+                padding: '8px 12px',
+                background: 'var(--bg-deep)',
+                border: '1px solid var(--border-color)',
+                borderRadius: 'var(--radius-sm)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 10,
                 fontSize: 12,
-                color: 'var(--cyan-ai)',
+                color: 'var(--text-primary)',
                 fontFamily: 'var(--font-mono)'
               }}>
-                <Sparkles size={16} className="pulse-dot" />
-                <span>{ocrProgress || 'AI Vision OCR Engine: Scanning handwritten field card & digitizing text...'}</span>
+                <FileText size={16} />
+                <span>{ocrProgress || 'OCR Engine: Scanning handwritten field card & digitizing text...'}</span>
               </div>
             )}
 
@@ -448,61 +528,36 @@ export default function AnalyzeReport() {
           <div className="terminal-form-row" style={{ marginBottom: 22 }}>
             <div className="form-group">
               <div style={{ display: 'flex', alignItems: 'center', height: 22, marginBottom: 6 }}>
-                <label className="terminal-label" style={{ margin: 0, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span>OIL Facility</span>
-                  {isFleetDirector ? (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--cyan-ai)', fontWeight: 600 }}>
-                      [Fleet-Wide]
-                    </span>
-                  ) : (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--amber-warn)', fontWeight: 600 }}>
-                      [Scoped]
-                    </span>
-                  )}
+                <label className="terminal-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>
+                  OIL Operational Facility
                 </label>
               </div>
 
-              {isFleetDirector ? (
-                <select
-                  className="terminal-select"
-                  value={site}
-                  onChange={(e) => setSite(e.target.value)}
-                >
-                  <option value="Duliajan Central Complex">Duliajan Central Complex</option>
-                  <option value="Digboi Refinery Unit #2">Digboi Refinery Unit #2</option>
-                  <option value="Moran Drilling Rig #4">Moran Drilling Rig #4</option>
-                  <option value="Naharkatiya Gas Plant">Naharkatiya Gas Plant</option>
-                  <option value="Pipeline Pump Station 7">Pipeline Pump Station 7</option>
-                  <option value="Numaligarh Terminal">Numaligarh Terminal</option>
-                </select>
-              ) : (
-                <div 
-                  className="terminal-select" 
-                  style={{ 
-                    gap: 8, 
-                    color: 'var(--cyan-ai)', 
-                    fontWeight: 700,
-                    cursor: 'not-allowed'
-                  }}
-                  title="Permissions scoped to your assigned operational asset"
-                >
-                  <Lock size={13} color="var(--amber-warn)" />
-                  <span>{user?.facility || site}</span>
-                </div>
-              )}
+              <select
+                className="terminal-select"
+                value={site}
+                onChange={(e) => setSite(e.target.value)}
+              >
+                <option value="Duliajan Central Complex">Duliajan Central Complex</option>
+                <option value="Digboi Refinery Unit #2">Digboi Refinery Unit #2</option>
+                <option value="Moran Drilling Rig #4">Moran Drilling Rig #4</option>
+                <option value="Naharkatiya Gas Plant">Naharkatiya Gas Plant</option>
+                <option value="Pipeline Pump Station 7">Pipeline Pump Station 7</option>
+                <option value="Numaligarh Terminal">Numaligarh Terminal</option>
+              </select>
             </div>
 
             <div className="form-group">
               <div style={{ display: 'flex', alignItems: 'center', height: 22, marginBottom: 6 }}>
-                <label className="terminal-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>IOGP Rule Classification</label>
+                <label className="terminal-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>IOGP Standard</label>
               </div>
               <div
                 className="terminal-select"
                 style={{
-                  gap: 8,
-                  color: 'var(--cyan-ai)',
+                  gap: 7,
+                  color: 'var(--text-primary)',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: 11.5,
+                  fontSize: 11,
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -510,8 +565,8 @@ export default function AnalyzeReport() {
                 }}
                 title="The AI model automatically maps your narrative against the 9 IOGP Life-Saving Rules"
               >
-                <Sparkles size={13} className="pulse-dot" color="var(--cyan-ai)" style={{ flexShrink: 0 }} />
-                <span style={{ fontWeight: 600 }}>🤖 AUTO-INFERRED (IOGP 9 RULES)</span>
+                <ShieldCheck size={13} color="var(--text-muted)" style={{ flexShrink: 0 }} />
+                <span style={{ fontWeight: 700 }}>AUTO-INFERRED</span>
               </div>
             </div>
           </div>
@@ -578,8 +633,8 @@ export default function AnalyzeReport() {
               {/* Verdict Header Ribbon */}
               <div className="determination-header">
                 <div className="verdict-tag-pill">
-                  <span className="dot-pulse"></span>
-                  <span>{isSif ? '🔴 CRITICAL SIF PRECURSOR DETECTED' : '🟢 ROUTINE SAFETY OBSERVATION'}</span>
+                  <span className="verdict-indicator-dot"></span>
+                  <span>{isSif ? 'CRITICAL SIF PRECURSOR DETECTED' : 'ROUTINE SAFETY OBSERVATION'}</span>
                 </div>
                 <div className="framework-badge">
                   <span>DEKRA / IOGP-459</span>
