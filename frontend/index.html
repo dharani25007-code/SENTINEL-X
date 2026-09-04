@@ -7,21 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'oil-blue': '#02164F',
-              'oil-orange': '#F37022',
-            },
-            fontFamily: {
-              serif: ['"Times New Roman"', 'Times', 'serif'],
-            }
-          }
-        }
-      }
+      (function() {
+        try {
+          var saved = localStorage.getItem('sentinel_theme') || 'dark';
+          document.documentElement.setAttribute('data-theme', saved);
+        } catch (e) {}
+      })();
     </script>
     <title>SENTINEL-X — Autonomous Safety Precursor Intelligence Engine</title>
   </head>
