@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth, DEMO_PERSONAS } from '../context/AuthContext'
-import { Shield, KeyRound, UserCheck, Building2, User, CheckCircle2, ArrowRight, Zap, Lock, AlertCircle, Sparkles } from 'lucide-react'
+import { Shield, KeyRound, UserCheck, Building2, User, CheckCircle2, ArrowRight, Zap, Lock, AlertCircle } from 'lucide-react'
 
 export default function Auth() {
   const [mode, setMode] = useState('login') // 'login' | 'register'
@@ -132,7 +132,7 @@ export default function Auth() {
             {/* Step 1: Select Verified Personnel Identity */}
             <div className="quick-personas-section">
               <div className="quick-personas-title">
-                <Shield size={14} color="var(--cyan-ai)" />
+                <Shield size={14} color="#1D4ED8" />
                 <span>STEP 1: SELECT VERIFIED PERSONNEL ID:</span>
               </div>
               <div className="personas-grid">
@@ -153,7 +153,7 @@ export default function Auth() {
                       </div>
                       {isSelected && (
                         <div className="persona-selected-indicator">
-                          <CheckCircle2 size={16} color="var(--cyan-ai)" />
+                          <CheckCircle2 size={16} color="#1D4ED8" />
                         </div>
                       )}
                     </button>
@@ -200,7 +200,7 @@ export default function Auth() {
                       onClick={handleAutoFillPass}
                       title="Quick fill for presentation"
                     >
-                      <Sparkles size={11} /> Auto-Fill Demo Passkey
+                      <KeyRound size={11} /> Auto-Fill Demo Passkey
                     </button>
                   )}
                 </div>
