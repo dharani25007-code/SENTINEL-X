@@ -6,7 +6,7 @@ import {
   Cell, Legend
 } from 'recharts'
 
-const COLORS = ['#EF4444', '#F59E0B', '#22D3EE', '#14B8A6', '#22C55E', '#06B6D4']
+const COLORS = ['#F37022', '#1D4ED8', '#00A86B', '#C04500', '#B8B8B8', '#5A5A5C']
 
 const OIL_SITES_NETWORK = [
   { name: 'Duliajan Central Complex', density: '40.5%', risk: 'red', topRule: 'Energy Isolation', trend: '↑ 23%' },
@@ -56,10 +56,10 @@ export default function PatternIntel() {
       </div>
 
       {/* Emerging Risk Notification Banner */}
-      <div className="emerging-risk-banner">
-        <AlertTriangle size={24} color="var(--amber-warn)" />
+      <div className="emerging-risk-banner" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderLeft: '4px solid #F37022', padding: '16px 20px', borderRadius: 'var(--radius-md)', display: 'flex', gap: 14, alignItems: 'center', marginBottom: 20 }}>
+        <AlertTriangle size={24} color="#F37022" />
         <div>
-          <strong style={{ color: 'var(--amber-warn)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontSize: 11 }}>
+          <strong style={{ color: '#F37022', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontSize: 11 }}>
             EMERGING SYSTEMIC RISK IDENTIFIED:
           </strong>
           <p style={{ fontSize: 13.5, color: 'var(--text-primary)', marginTop: 2 }}>
@@ -69,33 +69,36 @@ export default function PatternIntel() {
       </div>
 
       {/* Site Risk Network Topology Nodes */}
-      <div className="card mb-24">
+      <div className="card mb-24" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', padding: '18px 20px', marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-          <h3>OIL Facility Risk Network Nodes</h3>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--cyan-ai)' }}>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-primary)' }}>OIL Facility Risk Network Nodes</h3>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-secondary)' }}>
             TOPOLOGY: 5 ASSETS
           </span>
         </div>
-        <div className="site-network-grid">
+        <div className="site-network-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
           {OIL_SITES_NETWORK.map((node, i) => (
             <div
               key={i}
               className="site-node-card"
               style={{
-                borderColor: selectedSiteNode.name === node.name ? 'var(--cyan-ai)' : undefined,
-                background: selectedSiteNode.name === node.name ? 'var(--bg-card-elevated)' : undefined,
+                borderColor: selectedSiteNode.name === node.name ? '#1D4ED8' : 'var(--border-color)',
+                background: selectedSiteNode.name === node.name ? 'var(--bg-deep)' : 'var(--bg-card)',
+                border: '1px solid',
+                borderRadius: 8,
+                padding: 14,
+                cursor: 'pointer'
               }}
               onClick={() => setSelectedSiteNode(node)}
             >
-              <div className={`site-node-status ${node.risk}`} />
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 6 }}>{node.name}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: node.risk === 'red' ? 'var(--red-critical)' : 'var(--amber-warn)' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: node.risk === 'red' ? '#F37022' : '#F37022' }}>
                 SIF Density: {node.density}
               </div>
               <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-                Primary: <span style={{ color: 'var(--cyan-ai)' }}>{node.topRule}</span>
+                Primary: <span style={{ color: '#FFFFFF' }}>{node.topRule}</span>
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: node.trend.includes('↑') ? 'var(--red-critical)' : 'var(--emerald-safe)', marginTop: 4 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: node.trend.includes('↑') ? '#F37022' : '#00A86B', marginTop: 4 }}>
                 {node.trend} this month
               </div>
             </div>
