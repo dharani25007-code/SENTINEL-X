@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider, useAuth } from './context/AuthContext'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import Sidebar from './components/Sidebar'
 import HeaderBar from './components/HeaderBar'
@@ -8,23 +7,9 @@ import AnalyzeReport from './pages/AnalyzeReport'
 import RiskUniverse from './pages/RiskUniverse'
 import SafetyTimeMachine from './pages/SafetyTimeMachine'
 import InterventionSimulator from './pages/InterventionSimulator'
-import InterventionQueue from './pages/InterventionQueue'
 import LifeSavingRules from './pages/LifeSavingRules'
-import Auth from './pages/Auth'
 
 function AppContent() {
-  const { user } = useAuth()
-
-  // If user is not authenticated, show ONLY the clean standalone Auth page
-  if (!user) {
-    return (
-      <div className="auth-standalone-layout">
-        <Auth />
-      </div>
-    )
-  }
-
-  // Once authenticated, show the full HSE Command Center suite
   return (
     <div className="app-layout">
       <Sidebar />
@@ -38,7 +23,6 @@ function AppContent() {
             <Route path="/timeline" element={<SafetyTimeMachine />} />
             <Route path="/simulator" element={<InterventionSimulator />} />
             <Route path="/rules" element={<LifeSavingRules />} />
-            <Route path="/auth" element={<Auth />} />
           </Routes>
         </main>
       </div>
@@ -49,11 +33,9 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </AuthProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
     </ThemeProvider>
   )
 }
