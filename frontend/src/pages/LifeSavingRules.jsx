@@ -72,7 +72,7 @@ export default function LifeSavingRules() {
       </div>
 
       {/* 3x3 Rules Grid */}
-      <div className="rules-grid mb-24">
+      <div className="rules-grid" style={{ marginBottom: 24 }}>
         {rules.map(rule => {
           const Icon = RULE_ICONS[rule.name] || Shield
           const isSelected = selectedRule?.id === rule.id
@@ -81,18 +81,18 @@ export default function LifeSavingRules() {
           return (
             <div
               key={rule.id}
-              className="rule-card-item"
+              className={`rule-card-item ${isSelected ? 'selected' : ''}`}
               style={{
-                borderColor: isSelected ? 'var(--cyan-ai)' : undefined,
-                background: isSelected ? 'var(--bg-card-elevated)' : undefined,
+                borderColor: isSelected ? '#1D4ED8' : 'var(--border-color)',
+                background: isSelected ? 'var(--bg-deep)' : 'var(--bg-card)',
               }}
               onClick={() => setSelectedRule(rule)}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div className="rule-icon-wrapper" style={{ color: isSelected ? 'var(--cyan-ai)' : 'var(--amber-warn)' }}>
+                <div className="rule-icon-wrapper" style={{ color: isSelected ? '#1D4ED8' : '#F37022', borderColor: isSelected ? '#1D4ED8' : 'var(--border-color)' }}>
                   <Icon size={22} />
                 </div>
-                <span className="rule-count" style={{ fontWeight: 700, color: count > 0 ? 'var(--red-critical)' : 'var(--text-muted)' }}>
+                <span className="rule-count" style={{ fontWeight: 700, color: count > 0 ? '#F37022' : 'var(--text-muted)' }}>
                   {count} SIF Precursors
                 </span>
               </div>
@@ -100,7 +100,7 @@ export default function LifeSavingRules() {
               <div className="rule-description">
                 {rule.description.length > 115 ? rule.description.substring(0, 110) + '...' : rule.description}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontFamily: 'var(--font-mono)', fontSize: 11, color: isSelected ? 'var(--cyan-ai)' : 'var(--text-muted)', marginTop: 'auto', paddingTop: 6 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontFamily: 'var(--font-mono)', fontSize: 11, color: isSelected ? '#1D4ED8' : 'var(--text-muted)', fontWeight: isSelected ? 700 : 500, marginTop: 'auto', paddingTop: 6 }}>
                 <span>VIEW INTELLIGENCE</span>
                 <ArrowRight size={12} />
               </div>
@@ -113,7 +113,7 @@ export default function LifeSavingRules() {
       {selectedRule && (
         <div className="card-elevated">
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-            <div className="rule-icon-wrapper" style={{ width: 52, height: 52, color: 'var(--cyan-ai)' }}>
+            <div className="rule-icon-wrapper" style={{ width: 52, height: 52, color: '#1D4ED8', borderColor: '#1D4ED8' }}>
               <SelectedIcon size={28} />
             </div>
             <div>
@@ -125,7 +125,7 @@ export default function LifeSavingRules() {
           </div>
 
           <div style={{ padding: 18, background: 'var(--bg-deep)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', marginBottom: 22 }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 1, color: 'var(--cyan-ai)', fontWeight: 700, marginBottom: 6 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 1, color: 'var(--text-secondary)', fontWeight: 700, marginBottom: 6 }}>
               IOGP Mandatory Control Requirements
             </div>
             <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--text-primary)' }}>
@@ -141,7 +141,7 @@ export default function LifeSavingRules() {
 
           {!loadingReports && ruleReports.length === 0 && (
             <div className="empty-state" style={{ padding: '30px 0' }}>
-              <Shield size={36} color="var(--cyan-ai)" style={{ opacity: 0.5 }} />
+              <Shield size={36} color="var(--text-muted)" style={{ opacity: 0.5 }} />
               <p>No recent reports logged under this rule</p>
             </div>
           )}
@@ -150,15 +150,15 @@ export default function LifeSavingRules() {
             <div className="alerts-list">
               {ruleReports.map(report => (
                 <div key={report.id} className="alert-card">
-                  <div className="alert-severity critical" />
+                  <div className="alert-severity" style={{ background: '#F37022' }} />
                   <div className="alert-content">
                     <div style={{ fontSize: 13.5, color: 'var(--text-primary)', lineHeight: 1.6, fontWeight: 500 }}>
                       {report.report_text}
                     </div>
                     <div className="alert-meta">
-                      {report.site && <span><MapPin size={12} style={{ display: 'inline', marginRight: 4, color: 'var(--cyan-ai)' }} />{report.site}</span>}
-                      {report.activity && <span><Activity size={12} style={{ display: 'inline', marginRight: 4, color: 'var(--amber-warn)' }} />{report.activity}</span>}
-                      {report.confidence && <span>● Precursor Risk: <strong style={{ color: 'var(--red-critical)' }}>{Math.round(report.confidence * 100)}%</strong></span>}
+                      {report.site && <span><MapPin size={12} style={{ display: 'inline', marginRight: 4, color: 'var(--text-secondary)' }} />{report.site}</span>}
+                      {report.activity && <span><Activity size={12} style={{ display: 'inline', marginRight: 4, color: '#F37022' }} />{report.activity}</span>}
+                      {report.confidence && <span>● Precursor Risk: <strong style={{ color: '#F37022' }}>{Math.round(report.confidence * 100)}%</strong></span>}
                     </div>
                   </div>
                 </div>
