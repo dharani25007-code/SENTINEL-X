@@ -10,14 +10,9 @@ export default function Sidebar() {
       <div className="sidebar-brand">
         <div className="oil-badge">
           <span className="oil-tag">OIL INDIA LIMITED</span>
-          <span className="sih-tag">SIH26165</span>
         </div>
         <h1>SENTINEL-<span>X</span></h1>
         <p>Precursor Intelligence Engine</p>
-        <div className="sidebar-status">
-          <span className="status-dot"></span>
-          <span>AUTONOMOUS SURVEILLANCE • IOGP-459</span>
-        </div>
       </div>
 
       <nav className="sidebar-nav">
