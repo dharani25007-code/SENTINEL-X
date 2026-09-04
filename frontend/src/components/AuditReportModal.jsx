@@ -1,12 +1,10 @@
 import { useLocation } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
 import { Printer, X, FileText } from 'lucide-react'
 
 export default function AuditReportModal({ isOpen, onClose }) {
   if (!isOpen) return null
 
   const location = useLocation()
-  const { user } = useAuth()
 
   const handlePrint = () => {
     window.print()
@@ -47,7 +45,8 @@ export default function AuditReportModal({ isOpen, onClose }) {
         left: 0,
         width: '100vw',
         height: '100vh',
-        backgroundColor: 'rgba(2, 22, 79, 0.75)',
+        backgroundColor: 'rgba(10, 10, 10, 0.85)',
+        backdropFilter: 'blur(4px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
