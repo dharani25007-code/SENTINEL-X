@@ -118,17 +118,17 @@ export default function RiskUniverse() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 24, alignItems: 'start' }}>
         {/* Interactive Universe Canvas */}
-        <div className="universe-container">
+        <div className="universe-container" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 8 }}>
           <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
             {/* Draw Convergence Lines to Center */}
-            <line x1="50%" y1="50%" x2="25%" y2="18%" stroke="rgba(239, 68, 68, 0.5)" strokeWidth="2" strokeDasharray="4" />
-            <line x1="50%" y1="50%" x2="75%" y2="18%" stroke="rgba(239, 68, 68, 0.5)" strokeWidth="2" strokeDasharray="4" />
-            <line x1="50%" y1="50%" x2="18%" y2="52%" stroke="rgba(245, 158, 11, 0.5)" strokeWidth="1.5" />
-            <line x1="50%" y1="50%" x2="82%" y2="52%" stroke="rgba(245, 158, 11, 0.5)" strokeWidth="1.5" />
-            <line x1="50%" y1="50%" x2="28%" y2="84%" stroke="rgba(34, 197, 94, 0.5)" strokeWidth="1" />
-            <line x1="50%" y1="50%" x2="72%" y2="84%" stroke="rgba(34, 197, 94, 0.5)" strokeWidth="1" />
+            <line x1="50%" y1="50%" x2="25%" y2="18%" stroke="rgba(243, 112, 34, 0.6)" strokeWidth="2" strokeDasharray="4" />
+            <line x1="50%" y1="50%" x2="75%" y2="18%" stroke="rgba(243, 112, 34, 0.6)" strokeWidth="2" strokeDasharray="4" />
+            <line x1="50%" y1="50%" x2="18%" y2="52%" stroke="rgba(243, 112, 34, 0.5)" strokeWidth="1.5" />
+            <line x1="50%" y1="50%" x2="82%" y2="52%" stroke="rgba(243, 112, 34, 0.5)" strokeWidth="1.5" />
+            <line x1="50%" y1="50%" x2="28%" y2="84%" stroke="rgba(0, 168, 107, 0.6)" strokeWidth="1.5" />
+            <line x1="50%" y1="50%" x2="72%" y2="84%" stroke="rgba(0, 168, 107, 0.6)" strokeWidth="1.5" />
             {/* Cross Connection between High Risks */}
-            <line x1="25%" y1="18%" x2="75%" y2="18%" stroke="rgba(2, 22, 79, 0.3)" strokeWidth="1.5" strokeDasharray="2" />
+            <line x1="25%" y1="18%" x2="75%" y2="18%" stroke="rgba(243, 112, 34, 0.4)" strokeWidth="1.5" strokeDasharray="2" />
           </svg>
 
           {UNIVERSE_NODES.map((node) => (
@@ -138,12 +138,14 @@ export default function RiskUniverse() {
               style={{
                 left: `${node.x}%`,
                 top: `${node.y}%`,
-                borderColor: selectedNode.id === node.id ? 'var(--cyan-ai)' : undefined,
+                background: 'var(--bg-deep)',
+                borderColor: selectedNode.id === node.id ? '#1D4ED8' : (node.type === 'critical' ? '#F37022' : (node.type === 'simulated' ? '#00A86B' : 'var(--border-color)')),
+                borderRadius: 8
               }}
               onClick={() => setSelectedNode(node)}
             >
               <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>{node.label}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: node.color, marginTop: 4, whiteSpace: 'nowrap' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: (node.type === 'critical' || node.type === 'warning') ? '#F37022' : (node.type === 'simulated' ? '#00A86B' : '#1D4ED8'), marginTop: 4, whiteSpace: 'nowrap' }}>
                 {node.sub}
               </div>
             </div>
@@ -152,29 +154,29 @@ export default function RiskUniverse() {
 
         {/* Selected Precursor Intelligence Drawer */}
         {selectedNode && (
-          <div className="card-elevated">
+          <div className="card-elevated" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 8 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <span className="topic-pill" style={{ margin: 0 }}>FACILITY INTELLIGENCE</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--cyan-ai)' }}>NODE #{selectedNode.id.toUpperCase()}</span>
+              <span className="topic-pill" style={{ margin: 0, background: 'var(--bg-deep)', borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>FACILITY INTELLIGENCE</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-primary)', fontWeight: 700 }}>NODE #{selectedNode.id.toUpperCase()}</span>
             </div>
 
             <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 6 }}>{selectedNode.label}</h3>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11.5, color: selectedNode.color, marginBottom: 18 }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11.5, color: (selectedNode.type === 'critical' || selectedNode.type === 'warning') ? '#F37022' : (selectedNode.type === 'simulated' ? '#00A86B' : 'var(--text-primary)'), marginBottom: 18 }}>
               {selectedNode.sub}
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: 16, background: 'var(--bg-deep)', borderRadius: 0, border: '1px solid var(--border-color)', marginBottom: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: 16, background: 'var(--bg-deep)', borderRadius: 6, border: '1px solid var(--border-color)', marginBottom: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
-                <span style={{ color: 'var(--text-muted)' }}>Assam Operational Facility:</span>
-                <strong style={{ color: 'var(--cyan-ai)' }}>{selectedNode.site}</strong>
+                <span style={{ color: 'var(--text-secondary)' }}>Assam Operational Facility:</span>
+                <strong style={{ color: 'var(--text-primary)' }}>{selectedNode.site}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
-                <span style={{ color: 'var(--text-muted)' }}>High-Risk Task Vector:</span>
+                <span style={{ color: 'var(--text-secondary)' }}>High-Risk Task Vector:</span>
                 <strong style={{ color: 'var(--text-primary)' }}>{selectedNode.activity}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
-                <span style={{ color: 'var(--text-muted)' }}>Precursor Momentum:</span>
-                <strong style={{ color: selectedNode.color, fontFamily: 'var(--font-mono)' }}>{selectedNode.momentum}</strong>
+                <span style={{ color: 'var(--text-secondary)' }}>Precursor Momentum:</span>
+                <strong style={{ color: (selectedNode.type === 'critical' || selectedNode.type === 'warning') ? '#F37022' : '#00A86B', fontFamily: 'var(--font-mono)' }}>{selectedNode.momentum}</strong>
               </div>
             </div>
 
@@ -186,7 +188,7 @@ export default function RiskUniverse() {
             </p>
 
             <div style={{ display: 'flex', gap: 10 }}>
-              <a href="/simulator" className="analyze-btn" style={{ textDecoration: 'none', textAlign: 'center', background: 'var(--cyan-ai)', color: 'var(--btn-primary-text)', fontWeight: 700 }}>
+              <a href="/simulator" className="alert-action-btn" style={{ textDecoration: 'none', textAlign: 'center', background: '#1D4ED8', color: '#FFFFFF', fontWeight: 700, borderRadius: 6, width: '100%', justifyContent: 'center', padding: '12px' }}>
                 Simulate Safety Intervention →
               </a>
             </div>
