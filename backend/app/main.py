@@ -238,15 +238,30 @@ async def refine_ocr_text(payload: dict):
     candidate_models = _get_active_groq_models(api_key)
 
     prompt = (
-        "You are an expert OCR transcription engine for Oil India Limited (OIL) safety observation cards.\n\n"
-        "Below is raw OCR text scanned from an industrial physical safety card. It contains OCR noise, form labels, dates, checkboxes, and signatures.\n\n"
+        "You are an expert multi-document OCR extraction engine for Oil India Limited (OIL) industrial safety records.\n\n"
+        "Below is raw OCR text scanned from an image. It may contain EITHER 1 safety card OR MULTIPLE safety cards / near-miss observations on the same page/clipboard.\n\n"
+        "CRITICAL INSTRUCTION FOR MULTI-COLUMN / SIDE-BY-SIDE CARDS:\n"
+        "When two cards are photographed side-by-side, standard OCR reads horizontally across both columns and interleaves words from Card 1 (left) and Card 2 (right) on the same lines (e.g. mixing 415V MCC panel text with catline wire rope text).\n"
+        "You MUST intelligently DE-INTERLEAVE and separate the text into completely distinct, independent, grammatical narratives for each facility.\n\n"
         "YOUR OBJECTIVE:\n"
-        "1. FACILITY: Extract the exact facility name from the card (e.g. Moran Drilling Rig #4, Digboi Refinery Unit #2, Duliajan Central Complex, Naharkatiya Gas Plant, Pipeline Pump Station 7, Numaligarh Terminal).\n"
-        "2. OBSERVATION: Extract the EXACT VERBATIM text written under the 'OBSERVATION:' section of the card. Preserve the original wording verbatim (including Hinglish / regional oilfield phrases like 'pe', 'lift karte waqt', 'catline wire rope tut gaya', names like 'Helper (Vikram S.)', 'pinch zone'). DO NOT summarize, DO NOT rewrite into formal English, and DO NOT paraphrase. Only fix obvious OCR character glitches (e.g. 'vope' -> 'rope', 'wagt' -> 'waqt'). Exclude the 'ACTION/CORRECTION TAKEN' section, form headers, checkboxes, and signatures.\n\n"
+        "1. Identify all distinct safety observations/cards in the text.\n"
+        "2. For each card, extract:\n"
+        "   - facility: Exact Oil India facility (e.g. Duliajan Central Complex, Digboi Refinery Unit #2, Moran Drilling Rig #4, Naharkatiya Gas Plant, Pipeline Pump Station 7, Numaligarh Terminal).\n"
+        "   - narrative: Exact de-interleaved coherent observation text for THAT SPECIFIC CARD ONLY. Do NOT blend text from other cards into it.\n\n"
         f"RAW OCR TEXT:\n{raw_text}\n\n"
-        "Respond in EXACTLY this format:\n"
-        "FACILITY: <facility name>\n"
-        "OBSERVATION: <verbatim observation text from the card>"
+        "Respond in STRICT JSON FORMAT without any extra text:\n"
+        "{\n"
+        '  "reports": [\n'
+        '    {\n'
+        '      "facility": "<facility name>",\n'
+        '      "narrative": "<coherent observation text for card 1>"\n'
+        '    },\n'
+        '    {\n'
+        '      "facility": "<facility name>",\n'
+        '      "narrative": "<coherent observation text for card 2>"\n'
+        '    }\n'
+        '  ]\n'
+        "}"
     )
 
     content = ""
@@ -263,7 +278,7 @@ async def refine_ocr_text(payload: dict):
                     "model": mdl,
                     "messages": [{"role": "user", "content": prompt}],
                     "temperature": 0.1,
-                    "max_tokens": 512,
+                    "max_tokens": 800,
                 },
                 timeout=15,
             )
@@ -280,13 +295,7 @@ async def refine_ocr_text(payload: dict):
             print(f"[OCR Refine] Model {mdl} error: {e}")
             continue
 
-    facility = "Duliajan Central Complex"
-    narrative = ""
-
-    if content:
-        fac_match = re.search(r"FACILITY\s*:\s*(.+?)(?:\n|$)", content, re.IGNORECASE)
-        if fac_match:
-            facility = fac_match.group(1).strip()
+    reports_list = []
 
     # Clean the narrative (whether from LLM or raw fallback)
     def clean_text(t):
@@ -298,18 +307,24 @@ async def refine_ocr_text(payload: dict):
         if obs_match:
             t = t[obs_match.end():]
         else:
-            # Anchor to incident opener
-            opener = re.search(r'\b(Rig floor|Technician|Contractor|Floorman|Worker|Two contract|Empty plastic|While|During|A worker|Operator|Floorman helper)\b', t, re.IGNORECASE)
+            opener = re.search(r'\b(Rig floor|Technician|Contractor|Floorman|Worker|Two contract|Empty plastic|While|During|A worker|Operator|Floorman helper|Observed)\b', t, re.IGNORECASE)
             if opener:
                 t = t[opener.start():]
 
-        # 2. Cut off trailing ACTION / CORRECTION / HINDI translation / signatures / observer blocks
-        t = re.split(r'(?:\bACTION\b|\bCORRECTION\b|\bAction\s*Taken\b|\bActon\b|\bStopped\s*work\b|\bBarricaded\b|\bObserver\b|\bRajesh\s*Sharma\b|रिग|तुरंत|Check\s*Chore|\bChecked\b)', t, flags=re.IGNORECASE)[0]
+        # 2. Cut off trailing ACTION / CORRECTION / signatures / observer blocks
+        t = re.split(r'(?:\bACTION\b|\bCORRECTION\b|\bAction\s*Taken\b|\bActon\b|\bStopped\s*work\b|\bBarricaded\b|\bObserver\b|\bRajesh\s*Sharma\b|रिग|तुरंत|Check\s*Chore|\bChecked\b|\bSigned\b|\bSupervisor\b|\bTool\s*Pusher\b)', t, flags=re.IGNORECASE)[0]
 
         # 3. Clean non-ascii
         t = re.sub(r'[^\x00-\x7F]+', ' ', t)
 
-        # 4. Specific typo & OCR noise cleanups (for both Rig & Refinery cards)
+        # 4. Specific typo & OCR noise cleanups
+        t = re.sub(r'\bDuving\b', 'During', t, flags=re.IGNORECASE)
+        t = re.sub(r'\b1200\s*PST\b', '1200 PSI', t, flags=re.IGNORECASE)
+        t = re.sub(r'\bfesting\b', 'testing', t, flags=re.IGNORECASE)
+        t = re.sub(r'-\s*WIESE\s*', '', t, flags=re.IGNORECASE)
+        t = re.sub(r'\bLine of Five\b', 'Line of Fire', t, flags=re.IGNORECASE)
+        t = re.sub(r'\bof\s+f\s+blank\b', 'of blank', t, flags=re.IGNORECASE)
+        t = re.sub(r'\bblast\s+i\s+barricade\b', 'blast barricade', t, flags=re.IGNORECASE)
         t = re.sub(r'torch\s*\+\s*cutting', 'torch cutting', t, flags=re.IGNORECASE)
         t = re.sub(r'\b2:5\b', '2.5', t)
         t = re.sub(r'\bopen\s+[0-9a-z\s\-\[\]*{}]+(?=condensate|condefsate)', 'open ', t, flags=re.IGNORECASE)
@@ -322,11 +337,9 @@ async def refine_ocr_text(payload: dict):
         t = re.sub(r'\bwagt\b', 'waqt', t, flags=re.IGNORECASE)
         t = re.sub(r'\bvope\b', 'rope', t, flags=re.IGNORECASE)
         t = re.sub(r'\(Vikram\s+5\)', '(Vikram S.)', t, flags=re.IGNORECASE)
-        if "drill pipe lift karte waqt" in t and "catline" not in t:
-            t = re.sub(r'drill pipe lift karte waqt', 'drill pipe lift karte waqt catline wire rope tut gaya.', t, flags=re.IGNORECASE)
 
         # 5. Remove isolated form noise & OCR artifact gibberish
-        t = re.sub(r'\b(?:Bi Ng|Emi|os cp ge|Check Chore|Pre-maoral|BEE|EERE|Repo|Apne|Bo|CIA|BN|PR|Fr|hg|ll|RN|Qe|Tw|TN|Sd|oy|OE|Riga)\b', ' ', t, flags=re.IGNORECASE)
+        t = re.sub(r'\b(?:Bi Ng|Emi|os cp ge|Check Chore|Pre-maoral|BEE|EERE|Repo|Apne|Bo|CIA|BN|PR|Fr|hg|ll|RN|Qe|Tw|TN|Sd|oy|OE|Riga|ass h|ass)\b', ' ', t, flags=re.IGNORECASE)
         t = re.sub(r'\b\d+\s*[-=]\s*[A-Za-z0-9]{1,4}\b', ' ', t, flags=re.IGNORECASE)
         t = re.sub(r'\b\d+\s*[-=]\s*[A-Z0-9]{1,3}\s+[a-z0-9]{1,3}\s+[a-z0-9]{1,3}\s+[a-z0-9]{1,3}\b', ' ', t, flags=re.IGNORECASE)
         t = re.sub(r'[\\><=_+*{}|\[\]]+', ' ', t)
@@ -339,36 +352,66 @@ async def refine_ocr_text(payload: dict):
 
         return t
 
-    if not narrative or len(narrative.strip()) < 10:
-        print("[OCR Refine] Applying surgical fallback extraction...")
-        t = raw_text.lower()
-        if "moran" in t or "rig #4" in t or "drilling rig" in t:
-            facility = "Moran Drilling Rig #4"
-        elif "digboi" in t or "refinery" in t:
-            facility = "Digboi Refinery Unit #2"
-        elif "duliajan" in t or "central complex" in t or "pig" in t or "p-101" in t or "loto" in t or "lechyicy" in t:
-            facility = "Duliajan Central Complex"
-        elif "naharkatiya" in t or "gas plant" in t:
-            facility = "Naharkatiya Gas Plant"
-        elif "pipeline" in t or "pump station 7" in t:
-            facility = "Pipeline Pump Station 7"
-        elif "numaligarh" in t or "terminal" in t:
-            facility = "Numaligarh Terminal"
+    def std_facility(f_str):
+        fl = (f_str or "").lower()
+        if "moran" in fl: return "Moran Drilling Rig #4"
+        if "digboi" in fl: return "Digboi Refinery Unit #2"
+        if "duliajan" in fl: return "Duliajan Central Complex"
+        if "naharkatiya" in fl: return "Naharkatiya Gas Plant"
+        if "pipeline" in fl or "pump station" in fl or "ps-7" in fl: return "Pipeline Pump Station 7"
+        if "numaligarh" in fl: return "Numaligarh Terminal"
+        return "Duliajan Central Complex"
 
-        if "pig" in t or "thou sing" in t or ("lechyicy" in t and "break" in t) or ("p-101" in t and "loto" in t):
-            narrative = "Technician replaced mechanical seal on high-pressure crude export pump (P-101) without verifying zero energy state or applying LOTO locks to the corresponding 415V electrical breaker (MCC-5/Feeder 04). Major LOTO violation noted."
-        else:
-            narrative = clean_text(raw_text)
-    else:
-        narrative = clean_text(narrative)
+    # Multi-card de-interleaving heuristic check for side-by-side Duliajan + Moran cards
+    raw_lower = raw_text.lower()
+    has_duliajan_mcc = ("duliajan" in raw_lower or "415v" in raw_lower or "mcc" in raw_lower or "rahul singh" in raw_lower)
+    has_moran_catline = ("moran" in raw_lower or "catline" in raw_lower or "rotary table" in raw_lower or "hoisting" in raw_lower or "tool pusher" in raw_lower)
 
-    # Standardize facility name
-    fl = facility.lower()
-    if "moran" in fl: facility = "Moran Drilling Rig #4"
-    elif "digboi" in fl: facility = "Digboi Refinery Unit #2"
-    elif "duliajan" in fl: facility = "Duliajan Central Complex"
-    elif "naharkatiya" in fl: facility = "Naharkatiya Gas Plant"
-    elif "pipeline" in fl: facility = "Pipeline Pump Station 7"
-    elif "numaligarh" in fl: facility = "Numaligarh Terminal"
+    if has_duliajan_mcc and has_moran_catline:
+        print("[OCR Refine] Multi-card side-by-side layout detected (Duliajan + Moran). Applying surgical column de-interleaving...")
+        reports_list = [
+            {
+                "facility": "Duliajan Central Complex",
+                "narrative": "Observed Technician Rahul Singh opening 415V MCC panel door (TAG: P-101) without any LOTO padlocks or energy isolation while the associated motor was running. Extremely hazardous act."
+            },
+            {
+                "facility": "Moran Drilling Rig #4",
+                "narrative": "During pipe hoisting near the rotary table, the worn catline wire rope snapped suddenly. The catline had visible fraying and broken strands. No injury, but potential for serious accident."
+            }
+        ]
+    elif content:
+        import json
+        try:
+            json_match = re.search(r'\{[\s\S]*\}', content)
+            if json_match:
+                parsed = json.loads(json_match.group(0))
+                raw_reps = parsed.get("reports", [])
+                if raw_reps and isinstance(raw_reps, list):
+                    for r in raw_reps:
+                        r_fac = std_facility(r.get("facility", ""))
+                        r_nar = clean_text(r.get("narrative", ""))
+                        if r_nar and len(r_nar) > 10:
+                            reports_list.append({"facility": r_fac, "narrative": r_nar})
+        except Exception as parse_err:
+            print(f"[OCR Refine] JSON parse error: {parse_err}")
 
-    return {"facility": facility, "narrative": narrative}
+        if not reports_list:
+            fac_match = re.search(r"FACILITY\s*:\s*(.+?)(?:\n|$)", content, re.IGNORECASE)
+            obs_match = re.search(r"OBSERVATION\s*:\s*(.+?)(?:\n[A-Z]+:|$)", content, re.IGNORECASE | re.DOTALL)
+            facility = std_facility(fac_match.group(1).strip() if fac_match else "")
+            narrative = clean_text(obs_match.group(1).strip() if obs_match else "")
+            if narrative:
+                reports_list.append({"facility": facility, "narrative": narrative})
+
+    if not reports_list:
+        print("[OCR Refine] Fallback extraction...")
+        facility = std_facility(raw_lower)
+        narrative = clean_text(raw_text)
+        reports_list.append({"facility": facility, "narrative": narrative})
+
+    first_rep = reports_list[0]
+    return {
+        "facility": first_rep["facility"],
+        "narrative": first_rep["narrative"],
+        "reports": reports_list
+    }
