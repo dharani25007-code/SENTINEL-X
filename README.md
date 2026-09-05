@@ -385,20 +385,85 @@ The **International Association of Oil & Gas Producers (IOGP Report 459)** stand
   └─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### 📊 Interactive 5-Layer Architecture Topology (Mermaid)
+
+```mermaid
+flowchart TD
+    subgraph L1["Layer 1: Multi-Modal Ingestion"]
+        A1["📝 Free-Text Web Portal"]
+        A2["📷 Single Card Camera OCR"]
+        A3["📑 Multi-Card Side-by-Side Clipboard"]
+        A4["🏛️ Historical OISD / DGMS Logs"]
+    end
+
+    subgraph L2["Layer 2: API Gateway & Normalization (FastAPI)"]
+        B1["POST /classify  •  POST /ocr  •  POST /ocr/refine"]
+        B2["🧹 Regex Cleaning & Typo Normalization ('wagt'➔'waqt')"]
+        B3["Intelligent De-Interleaving (Splits Mixed Columns)"]
+        B1 --> B2 & B3
+    end
+
+    subgraph L3["Layer 3: Cognitive AI & XAI Reasoning"]
+        C1["⚡ Groq LLM Zero-Shot Classifier (Llama-3.3-70B)"]
+        C2["📐 Dense Vector Embeddings (`all-MiniLM-L6-v2`)"]
+        C3["🎯 Cosine Similarity vs. 9 IOGP Report 459 Rules"]
+        C4["🕳️ Silent Barrier Negative Space Detector"]
+        C5["🔬 LIME Token Perturbation & Feature Weights"]
+        C1 & C2 --> C3 --> C4 --> C5
+    end
+
+    subgraph L4["Layer 4: Persistence & Telemetry Store"]
+        D1[("💾 SQLite Database (WAL Mode)")]
+        D2["📊 12-Year / 14-Month Indexed Telemetry Bins"]
+        D3["📈 SIF Precursor Density Indices (6 OIL Assets)"]
+        D1 --> D2 & D3
+    end
+
+    subgraph L5["Layer 5: Executive Mission Control (React 19)"]
+        E1["📊 SIF Command Center"]
+        E2["🔍 Report Intelligence & DNA"]
+        E3["🌌 3-Hop Risk Universe Graph"]
+        E4["⏳ 30-Day Safety Time Machine"]
+        E5["🧪 Intervention Simulator (-64% Risk)"]
+        E6["📑 1-Click OISD Compliance PDF"]
+    end
+
+    L1 ==> B1
+    B2 & B3 ==> C1 & C2
+    C5 ==> D1
+    D2 & D3 ==> L5
+
+    style L1 fill:#1E293B,stroke:#38BDF8,stroke-width:2px,color:#F8FAFC
+    style L2 fill:#0F172A,stroke:#818CF8,stroke-width:2px,color:#F8FAFC
+    style L3 fill:#1E1B4B,stroke:#A855F7,stroke-width:2px,color:#F8FAFC
+    style L4 fill:#1E293B,stroke:#10B981,stroke-width:2px,color:#F8FAFC
+    style L5 fill:#020617,stroke:#EF4444,stroke-width:2px,color:#F8FAFC
+```
+
 ---
 
 ## 🔄 End-to-End Operational Decision Flowchart
 
 ```mermaid
 flowchart TD
-    Start(["📥 Raw Incident / Near-Miss Text Ingested"]) --> Tokenize["🧹 Text Sanitization & Preprocessing"]
+    %% INGESTION
+    Start(["📥 Raw Incident / Near-Miss Ingested<br/>(Text / Single Card / Multi-Card Paper Sheet)"]) --> OCRCheck{"Is Camera / Scanned Image Uploaded?"}
     
-    Tokenize --> VectorEmbed["📐 Compute 384-Dim Vector Embeddings<br/>(all-MiniLM-L6-v2)"]
-    VectorEmbed --> CosineMatch["🎯 Cosine Similarity Search vs.<br/>9 IOGP Life-Saving Rules"]
+    OCRCheck -- "YES" --> VisionOCR["👁️ Llama 3.2 Vision OCR Ingestion"]
+    VisionOCR --> MultiCheck{"Side-by-Side Cards on Page?"}
+    MultiCheck -- "YES" --> Deinterleave["Intelligent De-Interleaving (`/ocr/refine`)<br/>• Unmixes horizontal text across columns<br/>• Splits distinct cards per facility"]
+    MultiCheck -- "NO" --> Normalize
+    Deinterleave --> Normalize
     
-    Tokenize --> GroqInference["⚡ Groq LLM Zero-Shot Cognitive Classifier<br/>(High-Energy Barrier Analysis)"]
+    OCRCheck -- "NO (Direct Web Text)" --> Normalize["🧹 Text Sanitization & Dialect Normalization<br/>• Hinglish/Assamese Rig Slang ('catline tut gaya')<br/>• Typo Normalization ('wagt'➔'waqt')"]
+
+    Normalize --> VectorEmbed["📐 Compute 384-Dim Vector Embeddings<br/>(`all-MiniLM-L6-v2`)"]
+    VectorEmbed --> CosineMatch["🎯 Cosine Similarity vs.<br/>9 IOGP Life-Saving Rules"]
     
-    CosineMatch & GroqInference --> EvaluateSIF{"⚖️ Verdict Check:<br/>Is SIF Potential Detected?"}
+    Normalize --> GroqInference["⚡ Groq LLM Zero-Shot Cognitive Classifier<br/>(High-Energy Barrier Analysis)"]
+    Normalize --> SilentBarrier["🕳️ Silent Barrier / Negative Space Check<br/>(Detects Omitted Gas Tests & Missing PTWs)"]
+    
+    CosineMatch & GroqInference & SilentBarrier --> EvaluateSIF{"⚖️ Verdict Check:<br/>Is SIF Potential Detected?"}
     
     %% ROUTINE PATH
     EvaluateSIF -- "NO (Routine Housekeeping / PPE Slip)" --> RoutinePath["🟢 Classify as Routine Control<br/>Confidence: 90%+"]
@@ -408,16 +473,16 @@ flowchart TD
     %% SIF PATH
     EvaluateSIF -- "YES (Fatal / High-Energy Precursor)" --> SIFPath["🔴 Classify as SIF-Potential<br/>Flag Life-Threatening Energy Pathway"]
     
-    SIFPath --> XAI["🔬 Run LIME Token Attribution<br/>(Compute SIF Word Importance Weights)"]
+    SIFPath --> XAI["🔬 Run LIME Token Attribution<br/>(Compute Word Importance Weights)"]
     SIFPath --> DNAExtract["🧬 Extract Safety DNA Causal Chain<br/>(Energy + Exposure + Barrier Failure)"]
     SIFPath --> TagRule["🏷️ Auto-Tag to Primary IOGP Life-Saving Rule"]
     
     XAI & DNAExtract & TagRule --> DB_SIF[("💾 Write SIF Record & Vectors to SQLite (WAL)")]
     
-    DB_SIF --> RecalcDensity["📈 Recalculate Site SIF Precursor Density<br/>(Sort Facility Risk Matrix)"]
-    RecalcDensity --> CheckMomentum{"⚠️ 30-Day Momentum Check:<br/>Precursor Rate Acceleration > 25%?"}
+    DB_SIF --> RecalcDensity["📈 Recalculate Site SIF Precursor Density<br/>(Sort 6 OIL Upper Assam Installations)"]
+    RecalcDensity --> CheckMomentum{"⚠️ 30-Day Momentum Check:<br/>Precursor Rate Acceleration > +25%?"}
     
-    CheckMomentum -- "YES (Clustering Detected)" --> TriggerAlert["🚨 Trigger Critical Incident Horizon Alert<br/>(e.g., LOTO Failures at Duliajan)"]
+    CheckMomentum -- "YES (Clustering Detected)" --> TriggerAlert["🚨 Trigger Safety Time Machine Horizon Alert<br/>(e.g., LOTO Failures at Duliajan)"]
     CheckMomentum -- "NO" --> StandardDashboard["🖥️ Update SIF Precursor Trajectory & Rules Breakdown"]
     
     TriggerAlert --> SimulateIntervention["🧪 Launch Counterfactual Barrier Simulator<br/>(Model LOTO / Gas / Zone Compliance Lift)"]
