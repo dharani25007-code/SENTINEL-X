@@ -614,17 +614,6 @@ python -m scripts.import_real_data
 ```
 *Or execute `POST http://localhost:8000/admin/reseed-db` via Swagger UI at `/docs`.*
 
----
-
-## 🎙️ 5-Minute Hackathon Pitch Script
-
-| Timeline | Screen / Module | Core Talking Points |
-|:---|:---|:---|
-| **0:00 - 1:00** | **Command Center (`/`)** | *"Good morning judges. In oil & gas, treating all near-misses equally causes fatal precursors to be buried. Today, we present **SENTINEL-X**, an autonomous safety precursor intelligence engine built specifically for **Oil India Limited** across its 6 Upper Assam installations."* |
-| **1:00 - 2:00** | **Report Intelligence (`/analyze`)** | *"Let's input a raw field log: 'Worker unbolting valve without LOTO'. In under 800ms, our Groq AI decomposes the 4-tier Safety DNA (96% SIF risk), maps IOGP Rule #4 (Energy Isolation), identifies negative space omissions, and runs LIME token attribution."* |
-| **2:00 - 3:00** | **Safety Time Machine (`/timeline`)** | *"Disasters don't happen randomly — they compound. Watch our **Safety Time Machine**: 30 days ago, risk was 14%. As LOTO bypasses clustered at Duliajan, momentum accelerated to 94.6% risk. Sentinel-X catches this temporal drift before energy is released."* |
-| **3:00 - 4:00** | **Intervention Simulator (`/simulator`)** | *"Leadership cannot fix everything simultaneously. In our **Simulator**, Dr. Gogoi drags the LOTO compliance lever to 95%. Our deterministic multi-barrier reliability model mathematically projects a **47.3% reduction in fatal risk**."* |
-| **4:00 - 5:00** | **Risk Universe & PDF Export** | *"Finally, our **Risk Universe** traverses the 3-hop causal graph connecting equipment to contractor failure chains, and with 1 click, we generate an official OISD-156 statutory compliance audit PDF ready for DGMS filing. That is how Sentinel-X saves lives."* |
 
 ---
 
