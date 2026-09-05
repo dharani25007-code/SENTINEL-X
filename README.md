@@ -498,37 +498,6 @@ flowchart TD
     style TriggerAlert fill:#DC2626,stroke:#F37022,stroke-width:3px,color:#FFFFFF
 ```
 
----
-
-## 🎨 Enterprise SCADA Design System & Theme Engine
-
-SENTINEL-X features an industrial, high-contrast control-room aesthetic designed to meet **OISD / IOGP control room requirements** and eliminate eye strain during 24/7 mission-critical operations.
-
-```
-                  ┌─────────────────────────────────────────────────────────┐
-                  │                 DYNAMIC THEME ENGINE                    │
-                  │             [ ☀️ LIGHT ]  ⟷  [ 🌙 DARK ]               │
-                  └────────────┬───────────────────────────────┬────────────┘
-                               │                               │
-             ┌─────────────────┴──────────────┐  ┌─────────────┴─────────────────┐
-             │    ☀️ Technical Light Mode     │  │   🌙 Industrial Obsidian Dark │
-             ├────────────────────────────────┤  ├───────────────────────────────┤
-             │ • Canvas: #FAFAFA (Zinc-50)    │  │ • Canvas: #050B0E (Obsidian)  │
-             │ • Cards: #FFFFFF (Pure White)  │  │ • Cards: #0F1F27 (Deep Slate) │
-             │ • Borders: 1px solid #E2E8F0   │  │ • Borders: 1px solid #1E293B  │
-             │ • Text: #0F172A (Slate-900)    │  │ • Text: #F8FAFC (Slate-50)    │
-             │ • Action Blue: #2563EB         │  │ • Action Blue: #3B82F6        │
-             │ • Safety Orange: #F37022       │  │ • Safety Orange: #FB923C      │
-             │ • Badges: Solid High-Contrast  │  │ • Badges: Solid High-Contrast │
-             └────────────────────────────────┘  └───────────────────────────────┘
-```
-
-### Key Design System Principles:
-1. **No Neon / No Gimmick Pulse Animations**: Replaced distracting box-shadow glows and CSS pulse animations with crisp, flat borders and solid color tags.
-2. **WCAG AAA Contrast Standards**: Telemetry status pills (`CRITICAL SIF`, `ACTIVE WARNING`, `SAFE BASELINE`) and classification tags feature deep text contrast on solid backgrounds in both Light and Dark modes.
-3. **Dual-Color Bar Chart Palette**: Replaced monochrome bar charts with **Action Blue (`#2563EB`)** for standard rules and **Safety Orange (`#F37022`)** for the top SIF rule.
-4. **Instant Theme Switching (`ThemeContext.jsx`)**: Toggles between Obsidian Dark and Technical Light without page reloads, persisting preference in `localStorage`.
-5. **1-Click OISD Compliance Audit PDF Export**: Generates publication-ready regulatory audit reports with formal Oil India Limited letterhead, facility risk rankings, and sign-off blocks.
 
 ---
 
